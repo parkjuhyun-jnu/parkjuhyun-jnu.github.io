@@ -5,9 +5,9 @@
     "semesterCount": 10,
     "firstSemester": "2022학년도 1학기",
     "latestSemester": "2026학년도 2학기",
-    "openedCount": 36,
-    "uniqueCourseCount": 20,
-    "totalStudents": 623
+    "openedCount": 35,
+    "uniqueCourseCount": 19,
+    "totalStudents": 551
   },
   "byCourse": [
     {
@@ -104,16 +104,6 @@
       "semesters": [
         "2023-2",
         "2022-2"
-      ]
-    },
-    {
-      "title": "핵심취·창업전략",
-      "code": "UNV5086",
-      "level": "교양",
-      "count": 1,
-      "students": 72,
-      "semesters": [
-        "2026-2"
       ]
     },
     {
@@ -233,9 +223,9 @@
       "year": 2026,
       "term": 2,
       "label": "2026학년도 2학기",
-      "courseCount": 3,
-      "students": 88,
-      "hours": 8,
+      "courseCount": 2,
+      "students": 16,
+      "hours": 6,
       "courses": [
         {
           "title": "AI독서리터러시",
@@ -267,29 +257,6 @@
           "when": "월 09:00–10:50 · 수 09:00–10:50",
           "hours": 4,
           "lab": true
-        },
-        {
-          "title": "핵심취·창업전략",
-          "code": "UNV5086",
-          "section": "7",
-          "level": "교양",
-          "room": "사회대별관11호",
-          "capacity": 100,
-          "enrolled": 72,
-          "mode": "",
-          "slots": [
-            {
-              "day": "수",
-              "periods": [
-                8,
-                9
-              ],
-              "time": "16:00–17:50"
-            }
-          ],
-          "when": "수 16:00–17:50",
-          "hours": 2,
-          "lab": false
         },
         {
           "title": "메타데이터와아카이빙연구",

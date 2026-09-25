@@ -114,6 +114,13 @@ def norm_mode(v: str) -> str:
     return s
 
 
+# 강의 이력에 넣지 않을 과목 (교과목 코드)
+# 시간표에는 잡히지만 본인 강의로 세지 않는 과목을 여기에 적습니다.
+EXCLUDE_CODES = {
+    "UNV5086",   # 핵심취·창업전략 (교양)
+}
+
+
 # 실습 과목으로 볼지 손으로 정하고 싶을 때 (교과목 코드: True/False)
 LAB_OVERRIDE = {
     # "LIS4059": True,
@@ -220,6 +227,7 @@ def merge(blocks):
         c["lab"] = is_lab(c["code"], c["hours"])
         out.append(c)
 
+    out = [c for c in out if c["code"] not in EXCLUDE_CODES]
     out.sort(key=lambda c: ({"학부": 0, "교양": 1, "대학원": 2}.get(c["level"], 3), c["title"]))
     return out
 
