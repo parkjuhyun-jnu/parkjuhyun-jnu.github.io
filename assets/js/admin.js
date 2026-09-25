@@ -167,7 +167,9 @@
     document.getElementById('stat-class').textContent = String(rows.filter((r) => r.visibility === 'class').length);
 
     const list = filtered();
-    el.status.textContent = `${list.length}건 표시 중 (전체 ${rows.length}건)`;
+    const gone = list.filter((r) => r.deleted_at).length;
+    el.status.textContent = `${list.length}건 표시 중 (전체 ${rows.length}건)`
+      + (gone ? ` · 그중 학생이 지운 것 ${gone}건` : '');
 
     if (!list.length) {
       el.works.innerHTML = `<div class="empty" style="grid-column:1/-1">
@@ -176,9 +178,26 @@
     }
 
     const titleOf = (id) => (courses.find((c) => c.id === id) || {}).title || id;
-    el.works.innerHTML = list
+    // 학생이 지운 것은 목록 끝으로 모아 둡니다.
+    const ordered = list.slice().sort((a, b) => (a.deleted_at ? 1 : 0) - (b.deleted_at ? 1 : 0));
+    el.works.innerHTML = ordered
       .map((r) => workCard(r, { admin: true, courseTitle: titleOf(r.course_id) }))
       .join('');
+
+    el.works.querySelectorAll('.restore-btn').forEach((b) => {
+      b.addEventListener('click', async () => {
+        b.disabled = true;
+        try {
+          await API.restoreSubmission(b.dataset.id);
+          const row = rows.find((r) => r.id === b.dataset.id);
+          if (row) row.deleted_at = null;
+          paint();
+        } catch (err) {
+          alert('되살리지 못했습니다: ' + (err.message || err));
+          b.disabled = false;
+        }
+      });
+    });
 
     el.works.querySelectorAll('.vis-select').forEach((s) => {
       s.addEventListener('change', async () => {
@@ -200,7 +219,7 @@
       b.addEventListener('click', async () => {
         const id = b.dataset.id;
         const row = rows.find((r) => r.id === id);
-        if (!confirm(`"${row ? row.title : ''}" 을(를) 삭제할까요?\n올린 파일도 함께 지워지며 되돌릴 수 없습니다.`)) return;
+        if (!confirm(`"${row ? row.title : ''}" 을(를) 완전히 지울까요?\n올린 파일까지 함께 사라지며 되돌릴 수 없습니다.`)) return;
         b.disabled = true;
         try {
           await API.removeSubmission(id);
@@ -216,13 +235,14 @@
 
   el.exportBtn.addEventListener('click', () => {
     const list = filtered();
-    const head = ['과목', '제목', '이름', '학번', '설명', '공개범위', '파일명', '링크', '제출일시'];
+    const head = ['과목', '제목', '이름', '학번', '설명', '공개범위', '상태', '파일명', '링크', '제출일시'];
     const titleOf = (id) => (courses.find((c) => c.id === id) || {}).title || id;
     const q = (v) => `"${String(v ?? '').replaceAll('"', '""')}"`;
     const lines = [head.map(q).join(',')].concat(
       list.map((r) => [
         titleOf(r.course_id), r.title, r.author_name, r.student_no, r.description,
-        r.visibility, r.file_name, r.link_url, r.created_at,
+        r.visibility, r.deleted_at ? '학생이 지움' : '정상',
+        r.file_name, r.link_url, r.created_at,
       ].map(q).join(','))
     );
     // 엑셀에서 한글이 깨지지 않도록 BOM 을 붙입니다.

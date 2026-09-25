@@ -435,6 +435,24 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
   font-size: .72rem; font-weight: 700; padding: .16rem .5rem; border-radius: 5px;
   background: var(--surface-2); color: var(--ink-faint);
 }
+.badge-gone {
+  font-size: .72rem; font-weight: 700; padding: .16rem .5rem; border-radius: 5px;
+  background: color-mix(in srgb, var(--danger) 13%, transparent); color: var(--danger);
+}
+/* 학생이 지운 결과물 — 관리 화면에서만 보입니다. */
+.work--gone { opacity: .62; }
+.work--gone:hover { opacity: 1; }
+
+/* 올린 본인이 지울 때 쓰는 작은 칸 */
+.selfdel {
+  border-top: 1px solid var(--line-soft); margin-top: .5rem; padding-top: .6rem;
+  display: flex; flex-direction: column; gap: .45rem;
+}
+.selfdel__row { display: flex; gap: .4rem; }
+.selfdel__row input {
+  flex: 1; min-width: 0; padding: .34rem .5rem; font-size: .85rem;
+}
+.selfdel__msg { margin: 0; min-height: 1.1em; }
 
 .empty {
   text-align: center; padding: 3rem 1rem; color: var(--ink-faint);
@@ -478,6 +496,9 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 /* ---------- 11-b. 강의 이력 ---------- */
 /* 연도 한 줄에 1학기·2학기를 나란히 */
 .years { display: grid; gap: 0; }
+/* 오래된 연도는 접어 두고 '더 보기' 단추로 펼칩니다. */
+.years .year--hidden { display: none; }
+.years--all .year--hidden { display: grid; }
 .year {
   display: grid; grid-template-columns: 4.4rem 1fr; gap: .2rem 1.1rem;
   padding: 1.1rem 0; border-top: 1px solid var(--line-soft);

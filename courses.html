@@ -71,9 +71,13 @@
       <div class="section-head">
         <p class="eyebrow">HISTORY</p>
         <h2>학기별 강의 이력</h2>
-        <p>왼쪽이 1학기, 오른쪽이 2학기입니다.</p>
+        <p>왼쪽이 1학기, 오른쪽이 2학기입니다. 최근 두 해만 펼쳐 두었습니다.</p>
       </div>
       <div class="years" id="history"></div>
+      <div id="history-more-row" style="display:none; margin-top:1.1rem">
+        <button class="btn btn--ghost btn--sm" type="button"
+                id="history-toggle" aria-controls="history" aria-expanded="false"></button>
+      </div>
       <p class="small muted" id="history-note" style="margin-top:1.2rem"></p>
     </div>
   </section>
@@ -210,9 +214,11 @@
       </div>`;
     };
 
+    // 최근 해와 직전 해만 펼쳐 두고, 나머지는 단추를 눌러야 보이게 합니다.
+    const RECENT = 2;
     const years = [...byYear.keys()].sort((a, b) => b - a);
-    document.getElementById('history').innerHTML = years.map((y) => `
-      <div class="year">
+    document.getElementById('history').innerHTML = years.map((y, i) => `
+      <div class="year${i >= RECENT ? ' year--hidden' : ''}">
         <div class="year__no">${esc(y)}</div>
         <div class="year__terms">
           ${termBlock(byYear.get(y)[1], 1)}
@@ -220,8 +226,33 @@
         </div>
       </div>`).join('');
 
+    setupMore(years.slice(RECENT));
+
     document.getElementById('history-note').textContent =
       `강의시간표 ${teaching.semesters.length}건에서 자동으로 만든 기록입니다. (갱신 ${teaching['생성일'] || ''})`;
+  }
+
+  /** 접어 둔 지난 연도를 단추로 펼치고 접습니다. */
+  function setupMore(hidden) {
+    if (!hidden.length) return;
+    const row = document.getElementById('history-more-row');
+    const btn = document.getElementById('history-toggle');
+    const box = document.getElementById('history');
+
+    const span = hidden.length === 1
+      ? `${hidden[0]}년`
+      : `${hidden[hidden.length - 1]}–${hidden[0]}년`;
+    const label = (open) => open
+      ? '지난 이력 접기'
+      : `지난 이력 더 보기 (${span} · ${hidden.length}개 연도)`;
+
+    row.style.display = '';
+    btn.textContent = label(false);
+    btn.addEventListener('click', () => {
+      const open = box.classList.toggle('years--all');
+      btn.textContent = label(open);
+      btn.setAttribute('aria-expanded', String(open));
+    });
   }
 
   function renderRank(byCourse) {

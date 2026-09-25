@@ -66,6 +66,20 @@ create table if not exists public.submissions (
 create index if not exists submissions_course_idx  on public.submissions (course_id, created_at desc);
 create index if not exists submissions_public_idx  on public.submissions (visibility, created_at desc);
 
+-- 학생이 스스로 지운 결과물에는 지운 시각을 남깁니다.
+-- 방문자에게는 사라지지만 관리 화면에서는 보이고, 되살릴 수 있습니다.
+alter table public.submissions add column if not exists deleted_at timestamptz;
+
+-- 올릴 때 받는 본인 확인용 비밀번호. 원문이 아니라 해시만 담습니다.
+-- 이 표에는 접근 규칙을 하나도 두지 않았습니다. 그래서 브라우저에서는
+-- 어떤 방법으로도 들여다볼 수 없고, 아래 security definer 함수만 이 표를 다룹니다.
+create table if not exists public.submission_keys (
+  submission_id uuid primary key references public.submissions(id) on delete cascade,
+  pw_hash       text not null,
+  fails         smallint not null default 0,      -- 연달아 틀린 횟수
+  locked_until  timestamptz                       -- 너무 자주 틀리면 잠시 막습니다
+);
+
 
 -- ── 3. 도우미 함수 ──────────────────────────────────────────────────────────
 
@@ -122,8 +136,8 @@ returns void
 language plpgsql security definer set search_path = public, extensions
 as $$
 begin
-  if length(coalesce(p_code, '')) < 6 then
-    raise exception '수업 코드는 6자 이상으로 정해 주세요.';
+  if length(coalesce(p_code, '')) < 4 then
+    raise exception '수업 코드는 4자 이상으로 정해 주세요.';
   end if;
   update public.courses
      set code_hash = crypt(p_code, gen_salt('bf'))
@@ -134,9 +148,115 @@ begin
 end;
 $$;
 
+-- 결과물 올리기. 제출물과 비밀번호를 한꺼번에 넣습니다.
+create or replace function public.create_submission(
+  p_course_id   text,
+  p_title       text,
+  p_author      text,
+  p_student_no  text,
+  p_description text,
+  p_link_url    text,
+  p_file_path   text,
+  p_file_name   text,
+  p_file_size   bigint,
+  p_visibility  text,
+  p_password    text
+)
+returns public.submissions
+language plpgsql security definer set search_path = public, extensions
+as $$
+declare
+  v_row public.submissions;
+begin
+  if not public.has_access(p_course_id) then
+    raise exception '수업 코드를 먼저 확인해 주세요.';
+  end if;
+  if length(coalesce(btrim(p_author), '')) = 0 then
+    raise exception '이름을 입력해 주세요.';
+  end if;
+  if length(coalesce(btrim(p_password), '')) < 4 then
+    raise exception '비밀번호는 4자 이상으로 정해 주세요.';
+  end if;
+
+  insert into public.submissions (
+    course_id, title, author_name, student_no, description,
+    link_url, file_path, file_name, file_size, visibility, owner_id
+  ) values (
+    p_course_id,
+    btrim(p_title),
+    btrim(p_author),
+    nullif(btrim(coalesce(p_student_no,  '')), ''),
+    nullif(btrim(coalesce(p_description, '')), ''),
+    nullif(btrim(coalesce(p_link_url,    '')), ''),
+    nullif(btrim(coalesce(p_file_path,   '')), ''),
+    nullif(btrim(coalesce(p_file_name,   '')), ''),
+    p_file_size,
+    case when p_visibility = 'public' then 'public' else 'class' end,
+    auth.uid()
+  )
+  returning * into v_row;
+
+  insert into public.submission_keys (submission_id, pw_hash)
+  values (v_row.id, crypt(btrim(p_password), gen_salt('bf')));
+
+  return v_row;
+end;
+$$;
+
+-- 올린 본인이 지우기. 이름과 비밀번호가 둘 다 맞아야 합니다.
+-- 실제로 지우지 않고 '지운 시각'만 남기므로, 교수는 관리 화면에서 되살릴 수 있습니다.
+create or replace function public.delete_own_submission(
+  p_id uuid, p_name text, p_password text
+)
+returns boolean
+language plpgsql security definer set search_path = public, extensions
+as $$
+declare
+  v_sub public.submissions;
+  v_key public.submission_keys;
+  v_ok  boolean;
+begin
+  select * into v_sub from public.submissions where id = p_id and deleted_at is null;
+  if not found then
+    raise exception '이미 지워졌거나 찾을 수 없는 결과물입니다.';
+  end if;
+
+  select * into v_key from public.submission_keys where submission_id = p_id;
+  if not found then
+    raise exception '이 결과물에는 비밀번호가 없습니다. 담당 교수에게 말씀해 주세요.';
+  end if;
+
+  if v_key.locked_until is not null and v_key.locked_until > now() then
+    raise exception '여러 번 틀렸습니다. 10분쯤 뒤에 다시 시도해 주세요.';
+  end if;
+
+  -- 이름은 띄어쓰기와 대소문자를 무시하고 견줍니다.
+  v_ok := replace(lower(btrim(coalesce(p_name, ''))), ' ', '')
+          = replace(lower(btrim(v_sub.author_name)), ' ', '')
+      and v_key.pw_hash = crypt(coalesce(p_password, ''), v_key.pw_hash);
+
+  if not v_ok then
+    update public.submission_keys
+       set fails = fails + 1,
+           locked_until = case when fails + 1 >= 5
+                               then now() + interval '10 minutes' end
+     where submission_id = p_id;
+    return false;
+  end if;
+
+  update public.submissions set deleted_at = now() where id = p_id;
+  update public.submission_keys set fails = 0, locked_until = null
+   where submission_id = p_id;
+  return true;
+end;
+$$;
+
 grant execute on function public.is_admin()                        to anon, authenticated;
 grant execute on function public.has_access(text)                  to anon, authenticated;
 grant execute on function public.unlock_course(text, text)         to anon, authenticated;
+grant execute on function public.delete_own_submission(uuid, text, text) to anon, authenticated;
+grant execute on function public.create_submission(
+  text, text, text, text, text, text, text, text, bigint, text, text) to anon, authenticated;
 
 
 -- ── 4. 접근 규칙 켜기 ───────────────────────────────────────────────────────
@@ -144,6 +264,7 @@ alter table public.courses       enable row level security;
 alter table public.admins        enable row level security;
 alter table public.course_access enable row level security;
 alter table public.submissions   enable row level security;
+alter table public.submission_keys enable row level security;   -- 규칙을 두지 않음 = 아무도 직접 못 봄
 
 
 -- ── 5. 접근 규칙 ────────────────────────────────────────────────────────────
@@ -166,20 +287,18 @@ create policy "내 해제 기록만" on public.course_access
 drop policy if exists "제출물 읽기" on public.submissions;
 create policy "제출물 읽기" on public.submissions
   for select using (
-    visibility = 'public'
-    or public.is_admin()
-    or (visibility = 'class' and public.has_access(course_id))
-    or (owner_id is not null and owner_id = auth.uid())
+    public.is_admin()
+    or (deleted_at is null and (
+          visibility = 'public'
+          or (visibility = 'class' and public.has_access(course_id))
+          or (owner_id is not null and owner_id = auth.uid())
+       ))
   );
 
--- 제출물 올리기: 그 과목의 코드를 푼 사람만. 비공개로는 올릴 수 없습니다.
+-- 제출물 올리기는 정책을 두지 않습니다.
+-- 아래 create_submission() 함수로만 들어올 수 있게 해서,
+-- 비밀번호 없이 올라오는 제출물이 생기지 않도록 막습니다.
 drop policy if exists "제출물 올리기" on public.submissions;
-create policy "제출물 올리기" on public.submissions
-  for insert with check (
-    public.has_access(course_id)
-    and visibility in ('class', 'public')
-    and owner_id = auth.uid()
-  );
 
 -- 공개 범위 바꾸기: 관리자만
 drop policy if exists "제출물 수정" on public.submissions;
@@ -257,7 +376,7 @@ create policy "제출 파일 삭제" on storage.objects
 
 -- ── 8. 과목과 수업 코드 등록 ────────────────────────────────────────────────
 -- id 는 사이트의 data/courses.json 에 적은 id 와 똑같아야 합니다.
--- 코드는 6자 이상, 수업 시간에만 알려 주세요.
+-- 코드는 4자 이상, 수업 시간에만 알려 주세요.
 --
 --   insert into public.courses (id, title, term, code_hash)
 --   values ('ai-reading-2026-2', 'AI독서리터러시', '2026학년도 2학기', 'x')

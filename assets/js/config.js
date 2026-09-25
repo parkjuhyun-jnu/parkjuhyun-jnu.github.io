@@ -16,8 +16,8 @@
 
 window.SITE_CONFIG = {
   supabase: {
-    url: '',
-    anonKey: '',
+    url: 'https://wwcdkknimiyhesjcehgg.supabase.co',
+    anonKey: 'sb_publishable_e1C6O6u55ZLV1vJSOqrx5A_vE_hQFU1',
   },
 
   /** 파일이 저장될 Supabase Storage 버킷 이름 (schema.sql 과 같아야 합니다) */

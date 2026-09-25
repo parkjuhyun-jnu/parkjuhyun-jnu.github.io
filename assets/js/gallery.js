@@ -153,7 +153,62 @@
     }
     const titleOf = (id) => (courses.find((c) => c.id === id) || {}).title || '';
     worksEl.innerHTML = rows
-      .map((r) => workCard(r, { courseTitle: showCourse ? titleOf(r.course_id) : '' }))
+      .map((r) => workCard(r, {
+        courseTitle: showCourse ? titleOf(r.course_id) : '',
+        selfDelete: true,
+      }))
       .join('');
+    bindSelfDelete();
+  }
+
+  /* ---------- 올린 본인이 지우기 ---------- */
+
+  /** 카드마다 '지우기' 단추와 이름·비밀번호 칸을 묶습니다. */
+  function bindSelfDelete() {
+    worksEl.querySelectorAll('.selfdel-open').forEach((btn) => {
+      const card = btn.closest('.work');
+      const form = card && card.querySelector('.selfdel');
+      if (!form) return;
+
+      btn.addEventListener('click', () => {
+        form.hidden = false;
+        btn.style.display = 'none';
+        form.querySelector('input[name="name"]').focus();
+      });
+
+      form.querySelector('[data-cancel]').addEventListener('click', () => {
+        form.reset();
+        form.querySelector('.selfdel__msg').textContent = '';
+        form.hidden = true;
+        btn.style.display = '';
+      });
+
+      form.addEventListener('submit', (e) => onSelfDelete(e, form));
+    });
+  }
+
+  async function onSelfDelete(e, form) {
+    e.preventDefault();
+    const msg = form.querySelector('.selfdel__msg');
+    const go = form.querySelector('button[type="submit"]');
+    const name = form.querySelector('input[name="name"]').value;
+    const pw = form.querySelector('input[name="pw"]').value;
+
+    const fail = (text) => { msg.textContent = text; msg.style.color = 'var(--danger)'; };
+
+    if (!name.trim() || !pw) { fail('이름과 비밀번호를 모두 넣어 주세요.'); return; }
+
+    go.disabled = true;
+    msg.style.color = '';
+    msg.textContent = '확인 중…';
+    try {
+      const ok = await API.deleteOwn(form.dataset.id, name, pw);
+      if (ok) { load(); return; }
+      fail('이름이나 비밀번호가 맞지 않습니다.');
+    } catch (err) {
+      fail(err.message || '지우지 못했습니다.');
+    } finally {
+      go.disabled = false;
+    }
   }
 })();

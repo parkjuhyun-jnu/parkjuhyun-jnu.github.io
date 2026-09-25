@@ -128,6 +128,7 @@ const API = (() => {
       const admin = isDemoAdmin();
       return demoAll()
         .filter((r) => r.course_id === courseId)
+        .filter((r) => admin || !r.deleted_at)
         .filter((r) => admin || r.visibility === 'public' || (unlocked && r.visibility === 'class'))
         .sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     }
@@ -148,7 +149,7 @@ const API = (() => {
   async function listPublic(limit = 60) {
     if (MODE === 'demo') {
       return demoAll()
-        .filter((r) => r.visibility === 'public')
+        .filter((r) => !r.deleted_at && r.visibility === 'public')
         .sort((a, b) => (a.created_at < b.created_at ? 1 : -1))
         .slice(0, limit);
     }
@@ -183,6 +184,7 @@ const API = (() => {
    * @param {string} p.author    이름
    * @param {string} p.studentNo 학번(선택)
    * @param {string} p.description 설명(선택)
+   * @param {string} p.password  본인 확인용 비밀번호 (나중에 스스로 지울 때 씁니다)
    * @param {string} p.linkUrl   링크 제출일 때
    * @param {File}   p.file      파일 제출일 때
    * @param {'class'|'public'} p.visibility
@@ -205,6 +207,10 @@ const API = (() => {
       const rows = demoAll();
       const row = {
         ...base,
+        // 데모는 이 브라우저에만 남는 연습용이라 비밀번호를 그대로 둡니다.
+        // 진짜 저장(Supabase)에서는 해시만 서버에 남고 원문은 어디에도 남지 않습니다.
+        pw: String(p.password || '').trim(),
+        deleted_at: null,
         id: 'demo-' + Math.random().toString(36).slice(2, 10),
         file_name: p.file ? p.file.name : null,
         file_size: p.file ? p.file.size : null,
@@ -235,18 +241,60 @@ const API = (() => {
       if (upErr) throw upErr;
     }
 
-    const { data, error } = await supa
-      .from('submissions')
-      .insert({
-        ...base,
-        file_path: filePath,
-        file_name: p.file ? p.file.name : null,
-        file_size: p.file ? p.file.size : null,
-      })
-      .select()
-      .single();
-    if (error) throw error;
+    // 제출물과 비밀번호를 한 번에 넣습니다.
+    // 표에 직접 넣는 길은 막아 두었기 때문에, 비밀번호 없는 제출물은 생기지 않습니다.
+    const { data, error } = await supa.rpc('create_submission', {
+      p_course_id:   base.course_id,
+      p_title:       base.title,
+      p_author:      base.author_name,
+      p_student_no:  base.student_no,
+      p_description: base.description,
+      p_link_url:    base.link_url,
+      p_file_path:   filePath,
+      p_file_name:   p.file ? p.file.name : null,
+      p_file_size:   p.file ? p.file.size : null,
+      p_visibility:  base.visibility,
+      p_password:    String(p.password || ''),
+    });
+    if (error) {
+      // 글이 안 들어갔는데 파일만 남는 일이 없도록 치웁니다.
+      if (filePath) await supa.storage.from(CFG.bucket).remove([filePath]).catch(() => {});
+      throw error;
+    }
     return data;
+  }
+
+  /* ---------- 올린 본인이 지우기 ---------- */
+
+  /**
+   * 이름과 비밀번호가 둘 다 맞아야 지워집니다.
+   * 방문자 화면에서는 사라지지만 실제로는 '지운 시각'만 남으므로,
+   * 담당 교수가 관리 페이지에서 되살릴 수 있습니다.
+   * @returns {Promise<boolean>} 맞지 않으면 false
+   */
+  async function deleteOwn(id, name, password) {
+    const same = (a, b) =>
+      String(a || '').trim().toLowerCase().replace(/\s+/g, '') ===
+      String(b || '').trim().toLowerCase().replace(/\s+/g, '');
+
+    if (MODE === 'demo') {
+      const rows = demoAll();
+      const row = rows.find((r) => r.id === id && !r.deleted_at);
+      if (!row) throw new Error('이미 지워졌거나 찾을 수 없는 결과물입니다.');
+      if (!same(name, row.author_name) || String(password || '') !== String(row.pw || '')) {
+        return false;
+      }
+      row.deleted_at = new Date().toISOString();
+      demoSave(rows);
+      return true;
+    }
+
+    const supa = await getClient();
+    const { data, error } = await supa.rpc('delete_own_submission', {
+      p_id: id, p_name: String(name || ''), p_password: String(password || ''),
+    });
+    if (error) throw error;
+    return data === true;
   }
 
   function readAsDataUrl(file) {
@@ -318,6 +366,19 @@ const API = (() => {
     if (error) throw error;
   }
 
+  /** 학생이 지운 결과물을 되살립니다 (관리자 전용). */
+  async function restoreSubmission(id) {
+    if (MODE === 'demo') {
+      const rows = demoAll();
+      const row = rows.find((r) => r.id === id);
+      if (row) { row.deleted_at = null; demoSave(rows); }
+      return;
+    }
+    const supa = await getClient();
+    const { error } = await supa.from('submissions').update({ deleted_at: null }).eq('id', id);
+    if (error) throw error;
+  }
+
   async function removeSubmission(id) {
     if (MODE === 'demo') {
       demoSave(demoAll().filter((r) => r.id !== id));
@@ -354,8 +415,9 @@ const API = (() => {
     mode: MODE,
     listCourses, getCourse,
     isUnlocked, unlock, lock,
-    listSubmissions, listPublic, createSubmission,
-    signIn, signOut, currentAdmin, listAll, setVisibility, removeSubmission,
+    listSubmissions, listPublic, createSubmission, deleteOwn,
+    signIn, signOut, currentAdmin, listAll, setVisibility,
+    removeSubmission, restoreSubmission,
     setSetting,
     clearDemo,
   };

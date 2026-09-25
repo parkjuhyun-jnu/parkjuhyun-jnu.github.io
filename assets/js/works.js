@@ -60,9 +60,12 @@ function openButton(row) {
  * @param {Object} row
  * @param {Object} [opt]
  * @param {boolean} [opt.admin]  관리자 조작 단추를 함께 그릴지
+ * @param {boolean} [opt.selfDelete] 올린 본인이 지울 수 있는 단추를 붙일지
  * @param {string}  [opt.courseTitle] 과목 이름을 함께 보여 줄 때
  */
 function workCard(row, opt = {}) {
+  const gone = Boolean(row.deleted_at);
+
   const badge = row.visibility === 'public'
     ? '<span class="badge-public">모두 공개</span>'
     : row.visibility === 'private'
@@ -79,11 +82,27 @@ function workCard(row, opt = {}) {
         <option value="public"  ${row.visibility === 'public' ? 'selected' : ''}>모두 공개</option>
         <option value="private" ${row.visibility === 'private' ? 'selected' : ''}>비공개</option>
       </select>
-      <button class="btn btn--sm btn--danger del-btn" data-id="${esc(row.id)}" type="button">삭제</button>
+      ${gone ? `<button class="btn btn--sm btn--ghost restore-btn" data-id="${esc(row.id)}" type="button">되살리기</button>` : ''}
+      <button class="btn btn--sm btn--danger del-btn" data-id="${esc(row.id)}" type="button">${gone ? '완전 삭제' : '삭제'}</button>
     </div>` : '';
 
+  // 올린 본인이 지우는 칸. 이름과 비밀번호가 둘 다 맞아야 합니다.
+  const selfDelete = (opt.selfDelete && !gone) ? `
+    <form class="selfdel" data-id="${esc(row.id)}" hidden>
+      <p class="small muted mb-0">올릴 때 적은 이름과 비밀번호를 넣어 주세요.</p>
+      <div class="selfdel__row">
+        <input type="text" name="name" placeholder="이름" autocomplete="off">
+        <input type="password" name="pw" placeholder="비밀번호" autocomplete="off">
+      </div>
+      <div class="selfdel__row">
+        <button class="btn btn--danger btn--sm" type="submit">지우기</button>
+        <button class="btn btn--ghost btn--sm" type="button" data-cancel>취소</button>
+      </div>
+      <p class="small selfdel__msg" role="status"></p>
+    </form>` : '';
+
   return `
-  <article class="work">
+  <article class="work${gone ? ' work--gone' : ''}">
     <div class="work__thumb">${thumbHtml(row)}</div>
     <div class="work__body">
       ${opt.courseTitle ? `<span class="small" style="color:var(--gold); font-weight:700">${esc(opt.courseTitle)}</span>` : ''}
@@ -92,9 +111,16 @@ function workCard(row, opt = {}) {
       ${row.description ? `<p class="work__desc">${esc(row.description)}</p>` : ''}
       <div class="work__foot">
         ${badge}
+        ${gone ? `<span class="badge-gone">학생이 지움 · ${esc(fmtDate(row.deleted_at))}</span>` : ''}
         <span class="small muted">${esc(row.file_name || (row.link_url ? '링크' : ''))}${esc(size)}</span>
       </div>
-      <div class="work__foot" style="padding-top:.3rem">${openButton(row)}</div>
+      <div class="work__foot" style="padding-top:.3rem">
+        ${openButton(row)}
+        ${(opt.selfDelete && !gone)
+          ? `<button class="btn btn--ghost btn--sm selfdel-open" data-id="${esc(row.id)}" type="button">지우기</button>`
+          : ''}
+      </div>
+      ${selfDelete}
       ${adminControls}
     </div>
   </article>`;
