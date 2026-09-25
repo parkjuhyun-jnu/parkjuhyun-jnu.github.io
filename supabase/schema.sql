@@ -12,6 +12,7 @@
 
 
 -- ── 1. 확장 ────────────────────────────────────────────────────────────────
+-- pgcrypto 는 대개 이미 깔려 있습니다. 없을 때만 설치합니다.
 create extension if not exists pgcrypto with schema extensions;
 
 
@@ -99,7 +100,7 @@ begin
     raise exception '접속 세션이 없습니다. 페이지를 새로 고친 뒤 다시 시도해 주세요.';
   end if;
 
-  select (c.code_hash = extensions.crypt(p_code, c.code_hash))
+  select (c.code_hash = crypt(p_code, c.code_hash))
     into v_ok
     from public.courses c
    where c.id = p_course_id and c.is_open;
@@ -125,7 +126,7 @@ begin
     raise exception '수업 코드는 6자 이상으로 정해 주세요.';
   end if;
   update public.courses
-     set code_hash = extensions.crypt(p_code, extensions.gen_salt('bf'))
+     set code_hash = crypt(p_code, gen_salt('bf'))
    where id = p_course_id;
   if not found then
     raise exception '그런 과목이 없습니다: %', p_course_id;
