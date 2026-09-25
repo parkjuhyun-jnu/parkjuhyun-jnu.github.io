@@ -127,8 +127,8 @@
         <h2>학술논문</h2>
         <p>전체 <strong id="pub-count">46</strong>편은 연구 페이지에서 주제별로 찾아볼 수 있습니다.</p>
       </div>
-      <ul class="pub-list" id="recent-pubs">
-        <li><span class="pub-title muted">불러오는 중…</span></li>
+      <ul class="pub-grid" id="recent-pubs">
+        <li><p class="pub-grid__title muted">불러오는 중…</p></li>
       </ul>
       <div style="margin-top:1.6rem">
         <a class="btn btn--ghost" href="research.html">논문 전체 보기 →</a>
@@ -183,24 +183,23 @@ fetch('data/publications.json')
     if (count) count.textContent = String(data.items.length);
     // 연도가 적힌 것을 최신순으로 먼저, 연도 미기재는 뒤로
     const sorted = data.items.slice().sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
-    const five = sorted.slice(0, 5);
-    list.innerHTML = five.map((p) => {
+    // 2단 두 줄에 딱 맞게 네 편만 보여 줍니다.
+    const recent = sorted.slice(0, 4);
+    list.innerHTML = recent.map((p) => {
       const t = data.themes[p.theme];
       return `<li>
-        <span class="pub-title">
-          ${esc(p.title)}
-          <span class="pub-cite">${esc(p.journal || '')}</span>
-        </span>
-        <span class="pub-meta">
-          <span class="pub-year">${esc(p.year || '')}</span>
+        <p class="pub-grid__title">${esc(p.title)}</p>
+        <p class="pub-grid__meta">
+          <span class="pub-grid__year">${esc(p.year || '')}</span>
+          ${p.journal ? `<span>${esc(p.journal)}</span>` : ''}
           <span class="tag tag--${esc(p.theme)}">${esc(t ? t.label : '')}</span>
-        </span>
+        </p>
       </li>`;
     }).join('');
   })
   .catch(() => {
     const list = document.getElementById('recent-pubs');
-    if (list) list.innerHTML = '<li><span class="pub-title muted">논문 목록을 불러오지 못했습니다.</span></li>';
+    if (list) list.innerHTML = '<li><p class="pub-grid__title muted">논문 목록을 불러오지 못했습니다.</p></li>';
   });
 
 // 진입 카드의 숫자는 데이터에서 그때그때 읽습니다(손으로 고칠 필요 없음).

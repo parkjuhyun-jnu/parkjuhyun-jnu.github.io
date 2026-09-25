@@ -386,6 +386,26 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
   .pub-list .pub-meta { flex-direction: row; align-items: center; }
 }
 
+/* 첫 화면 논문 미리보기 — 2단, 한 항목당 두 줄 */
+.pub-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 2rem;
+}
+.pub-grid li {
+  padding: .85rem 0; border-top: 1px solid var(--line-soft); min-width: 0;
+}
+.pub-grid__title {
+  margin: 0; font-size: .97rem; line-height: 1.5; font-weight: 500;
+}
+.pub-grid__meta {
+  margin: .25rem 0 0; font-size: .84rem; color: var(--ink-faint);
+  display: flex; align-items: center; gap: .4rem; flex-wrap: wrap;
+}
+.pub-grid__year { font-weight: 700; color: var(--ink-soft); }
+.pub-grid .tag { font-size: .72rem; padding: .1rem .42rem; }
+
+@media (max-width: 720px) { .pub-grid { grid-template-columns: 1fr; gap: 0; } }
+
 /* ---------- 9. 결과물 갤러리 ---------- */
 .gallery-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); }
 .work {
