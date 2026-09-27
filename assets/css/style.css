@@ -608,11 +608,34 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 .act__when { margin-left: auto; font-size: .84rem; color: var(--ink-faint); white-space: nowrap; }
 @media (max-width: 560px) { .act__when { margin-left: 0; width: 100%; } }
 
+/* 2단으로 접어 세로 길이를 줄입니다. 왼쪽 단을 다 읽고 오른쪽으로 넘어갑니다. */
+.act--2 { column-count: 2; column-gap: 2.4rem; }
+.act--2 li {
+  break-inside: avoid;
+  border-top: 1px solid var(--line-soft);   /* 단마다 첫 줄에도 선이 보이도록 */
+  border-bottom: 0;
+}
+@media (max-width: 760px) {
+  .act--2 { column-count: 1; }
+  .act--2 li:last-child { border-bottom: 1px solid var(--line-soft); }
+}
+
 .award {
   display: flex; gap: 1rem; align-items: flex-start;
   padding: 1rem .1rem; border-bottom: 1px solid var(--line-soft);
 }
 .award:first-of-type { border-top: 1px solid var(--line-soft); }
+
+.awards--2 { column-count: 2; column-gap: 2.4rem; }
+.awards--2 .award {
+  break-inside: avoid;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 0;
+}
+@media (max-width: 760px) {
+  .awards--2 { column-count: 1; }
+  .awards--2 .award:last-child { border-bottom: 1px solid var(--line-soft); }
+}
 .award__year {
   flex: none; width: 3.6rem; font-family: var(--font-serif);
   font-size: 1.05rem; font-weight: 700; color: var(--gold);
