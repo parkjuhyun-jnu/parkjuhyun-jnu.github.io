@@ -10,6 +10,10 @@
 -- ============================================================================
 
 
+-- crypt() 를 스키마 없이 부를 수 있도록 이 실행에 한해 경로를 잡아 둡니다.
+set search_path = public, extensions;
+
+
 -- ── 1. 관리자 등록 ──────────────────────────────────────────────────────────
 -- 위에서 만든 계정을 관리자로 올립니다. 이 줄이 있어야 관리 페이지가 열립니다.
 insert into public.admins (user_id, email)
@@ -36,15 +40,19 @@ select public.set_course_code('metadata-2026-2',   '2662');
 
 
 -- ── 4. 확인 ─────────────────────────────────────────────────────────────────
--- 아래 두 줄을 실행해 결과가 제대로 나오는지 보세요.
-
--- 관리자 1명이 나와야 합니다.
-select email as 관리자 from public.admins;
-
--- 과목 2개가 나오고, 코드있음 이 모두 true 여야 합니다.
-select id as 과목id, title as 과목명, term as 학기,
-       (code_hash <> 'x') as 코드있음, is_open as 제출열림
-  from public.courses order by id;
+-- SQL Editor 는 마지막 결과 하나만 보여 주므로, 한 줄에 모아서 보여 줍니다.
+-- 아래 결과를 그대로 보여 주시면 무엇이 빠졌는지 바로 알 수 있습니다.
+select
+  (select count(*) from public.admins)                          as 관리자수,
+  coalesce((select string_agg(email, ', ') from public.admins),
+           '(없음)')                                             as 관리자,
+  (select count(*) from public.courses)                         as 과목수,
+  coalesce((select string_agg(
+              id || ' → ' ||
+              case when code_hash = crypt('2662', code_hash)
+                   then '2662 맞음' else '2662 아님' end,
+              '  |  ' order by id)
+            from public.courses), '(없음)')                      as 수업코드확인;
 
 
 -- ============================================================================
