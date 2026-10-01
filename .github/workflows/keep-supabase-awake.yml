@@ -1,10 +1,8 @@
 # Supabase 무료 플랜은 7일 동안 접속이 없으면 프로젝트가 잠깁니다.
 # 3일에 한 번 가볍게 한 번 찔러서 잠기지 않게 합니다.
 #
-# 쓰기 전에 GitHub 저장소에 값 두 개를 등록하세요.
-#   Settings → Secrets and variables → Actions → New repository secret
-#     SUPABASE_URL       예) https://abcdefgh.supabase.co
-#     SUPABASE_ANON_KEY  anon 키
+# 접속 주소와 공개키는 사이트가 쓰는 assets/js/config.js 에서 그대로 읽습니다.
+# (둘 다 원래 브라우저에 공개되는 값이라 따로 숨겨 둘 필요가 없습니다.)
 name: Supabase 깨워 두기
 
 on:
@@ -16,20 +14,21 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Supabase 에 접속해 보기
-        env:
-          URL: ${{ secrets.SUPABASE_URL }}
-          KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
+          URL=$(sed -nE "s/^[[:space:]]*url:[[:space:]]*'([^']+)'.*/\1/p" assets/js/config.js | head -1)
+          KEY=$(sed -nE "s/^[[:space:]]*anonKey:[[:space:]]*'([^']+)'.*/\1/p" assets/js/config.js | head -1)
           if [ -z "$URL" ] || [ -z "$KEY" ]; then
-            echo "SUPABASE_URL / SUPABASE_ANON_KEY 가 등록되지 않아 건너뜁니다."
+            echo "config.js 에 Supabase 주소나 공개키가 없습니다. 연결 전이라면 정상입니다."
             exit 0
           fi
+          echo "접속할 곳: $URL"
           code=$(curl -s -o /dev/null -w '%{http_code}' \
-            "$URL/rest/v1/submissions?select=id&limit=1" \
-            -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
+            "$URL/rest/v1/site_settings?select=key&limit=1" -H "apikey: $KEY")
           echo "응답 코드: $code"
           case "$code" in
-            2*|4*) echo "프로젝트가 살아 있습니다."; exit 0 ;;
-            *)     echo "응답이 이상합니다. 대시보드를 확인해 주세요."; exit 1 ;;
+            2*) echo "프로젝트가 살아 있습니다."; exit 0 ;;
+            *)  echo "응답이 이상합니다. Supabase 대시보드에서 프로젝트가 잠겼는지 확인해 주세요."; exit 1 ;;
           esac
