@@ -163,12 +163,17 @@
 
   /* ---------- 올린 본인이 지우기 ---------- */
 
-  /** 카드마다 '지우기' 단추와 이름·비밀번호 칸을 묶습니다. */
+  /** 카드마다 '지우기' 단추와 이름·삭제 암호 칸을 묶습니다. */
   function bindSelfDelete() {
     worksEl.querySelectorAll('.selfdel-open').forEach((btn) => {
       const card = btn.closest('.work');
       const form = card && card.querySelector('.selfdel');
       if (!form) return;
+
+      const pinEl = form.querySelector('input[name="pin"]');
+      pinEl.addEventListener('input', () => {
+        pinEl.value = pinEl.value.replace(/\D/g, '').slice(0, 4);
+      });
 
       btn.addEventListener('click', () => {
         form.hidden = false;
@@ -192,19 +197,19 @@
     const msg = form.querySelector('.selfdel__msg');
     const go = form.querySelector('button[type="submit"]');
     const name = form.querySelector('input[name="name"]').value;
-    const pw = form.querySelector('input[name="pw"]').value;
+    const pin = form.querySelector('input[name="pin"]').value;
 
     const fail = (text) => { msg.textContent = text; msg.style.color = 'var(--danger)'; };
 
-    if (!name.trim() || !pw) { fail('이름과 비밀번호를 모두 넣어 주세요.'); return; }
+    if (!name.trim() || !/^\d{4}$/.test(pin)) { fail('이름과 삭제 암호(숫자 4자리)를 넣어 주세요.'); return; }
 
     go.disabled = true;
     msg.style.color = '';
     msg.textContent = '확인 중…';
     try {
-      const ok = await API.deleteOwn(form.dataset.id, name, pw);
+      const ok = await API.deleteOwn(form.dataset.id, name, pin);
       if (ok) { load(); return; }
-      fail('이름이나 비밀번호가 맞지 않습니다.');
+      fail('이름이나 삭제 암호가 맞지 않습니다.');
     } catch (err) {
       fail(err.message || '지우지 못했습니다.');
     } finally {

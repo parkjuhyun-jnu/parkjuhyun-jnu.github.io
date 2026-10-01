@@ -118,14 +118,15 @@
           </div>
 
           <div class="field">
-            <label for="pw">비밀번호 <span style="color:var(--danger)">*</span></label>
-            <input type="password" id="pw" maxlength="40" autocomplete="new-password"
-                   placeholder="4자 이상">
+            <label for="pin">삭제 암호 <span class="muted small">(숫자 4자리)</span>
+              <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="pin" class="pin" inputmode="numeric"
+                   autocomplete="off" placeholder="숫자 4자리">
             <p class="hint">
-              <strong>내가 올린 것을 나중에 지울 때</strong> 쓰는 비밀번호입니다.
-              위에 적은 이름과 이 비밀번호가 둘 다 맞아야 지울 수 있습니다.
+              <strong>내가 올린 것을 나중에 지울 때</strong> 쓰는 숫자 네 자리입니다.
+              위에 적은 이름과 이 암호가 둘 다 맞아야 지울 수 있습니다.
+              생일이나 1234처럼 남이 짐작하기 쉬운 숫자는 피해 주세요.
               잊어버렸다면 담당 교수에게 말씀해 주세요.
-              <strong>다른 곳에서 쓰는 비밀번호는 넣지 마세요.</strong>
             </p>
           </div>
 

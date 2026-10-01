@@ -456,6 +456,12 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 }
 .selfdel__msg { margin: 0; min-height: 1.1em; }
 
+/* 숫자 삭제 암호 칸. type="password" 가 아니어서 브라우저가 계정 비밀번호로
+   착각하지 않습니다(비밀번호 재사용 경고가 뜨지 않음). 입력한 숫자는 ●로 가립니다. */
+.pin { -webkit-text-security: disc; letter-spacing: .3em; font-variant-numeric: tabular-nums; }
+.pin::placeholder { letter-spacing: normal; }
+#pin { max-width: 11rem; }
+
 .empty {
   text-align: center; padding: 3rem 1rem; color: var(--ink-faint);
   border: 1px dashed var(--line); border-radius: var(--radius); background: var(--surface);

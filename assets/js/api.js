@@ -342,6 +342,21 @@ const API = (() => {
     return ok ? user : null;
   }
 
+  /** 로그인한 관리자의 비밀번호를 바꿉니다. */
+  async function changePassword(newPassword) {
+    if (MODE === 'demo') return;            // 데모에는 실제 계정이 없습니다
+    const supa = await getClient();
+    const { error } = await supa.auth.updateUser({ password: newPassword });
+    if (!error) return;
+    // 자주 나오는 영어 오류는 우리말로 바꿔 보여 줍니다.
+    const ko = {
+      same_password: '지금 쓰는 비밀번호와 다른 것으로 정해 주세요.',
+      weak_password: '너무 쉬운 비밀번호입니다. 더 길고 복잡하게 정해 주세요.',
+      reauthentication_needed: '보안을 위해 로그아웃했다가 다시 로그인한 뒤 바꿔 주세요.',
+    };
+    throw new Error(ko[error.code] || error.message);
+  }
+
   /** 모든 과목의 모든 제출물 (관리자 전용 — 권한은 서버가 확인) */
   async function listAll() {
     if (MODE === 'demo') {
@@ -418,7 +433,7 @@ const API = (() => {
     listCourses, getCourse,
     isUnlocked, unlock, lock,
     listSubmissions, listPublic, createSubmission, deleteOwn,
-    signIn, signOut, currentAdmin, listAll, setVisibility,
+    signIn, signOut, currentAdmin, changePassword, listAll, setVisibility,
     removeSubmission, restoreSubmission,
     setSetting,
     clearDemo,

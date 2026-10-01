@@ -97,6 +97,28 @@
         <p class="small" id="set-msg" style="margin:.6rem 0 0; min-height:1.1em"></p>
       </div>
 
+      <!-- 관리자 비밀번호 바꾸기 -->
+      <div class="card" style="margin-bottom:1.8rem">
+        <h3 style="font-size:1rem">관리자 비밀번호 바꾸기</h3>
+        <p class="small muted" style="margin:.3rem 0 .9rem">
+          다른 사이트에서 쓰지 않는 비밀번호로 정해 주세요. 8자 이상이어야 합니다.
+          바꾼 뒤에도 지금 로그인은 그대로 유지됩니다.</p>
+        <form id="pw-form" class="row" style="gap:.6rem; align-items:flex-end; max-width:620px">
+          <!-- 비밀번호 관리자가 어느 계정의 비밀번호인지 알 수 있도록 넣어 둡니다 -->
+          <input type="text" id="pw-user" autocomplete="username" style="display:none" tabindex="-1" aria-hidden="true">
+          <div class="field" style="flex:1 1 180px; margin:0">
+            <label for="new-pw">새 비밀번호</label>
+            <input type="password" id="new-pw" autocomplete="new-password" minlength="8">
+          </div>
+          <div class="field" style="flex:1 1 180px; margin:0">
+            <label for="new-pw2">한 번 더</label>
+            <input type="password" id="new-pw2" autocomplete="new-password" minlength="8">
+          </div>
+          <button class="btn btn--sm" type="submit" style="flex:none">바꾸기</button>
+        </form>
+        <p class="small" id="pw-msg" style="margin:.6rem 0 0; min-height:1.1em"></p>
+      </div>
+
       <!-- 소개 페이지 내용 편집 -->
       <div class="card" style="margin-bottom:1.8rem">
         <div class="row" style="justify-content:space-between; align-items:flex-start">

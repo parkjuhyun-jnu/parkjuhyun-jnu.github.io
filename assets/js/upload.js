@@ -21,7 +21,7 @@
     title: document.getElementById('title'),
     author: document.getElementById('author'),
     studentno: document.getElementById('studentno'),
-    pw: document.getElementById('pw'),
+    pin: document.getElementById('pin'),
     desc: document.getElementById('desc'),
     msg: document.getElementById('msg'),
     submit: document.getElementById('submit'),
@@ -35,6 +35,11 @@
   el.fileHint.textContent =
     `최대 ${CFG.maxFileMB}MB · ${CFG.allowedExt.join(', ')}`;
   el.file.accept = CFG.allowedExt.map((e) => '.' + e).join(',');
+
+  // 삭제 암호 칸에는 숫자만, 네 자리까지만 들어가게 합니다.
+  el.pin.addEventListener('input', () => {
+    el.pin.value = el.pin.value.replace(/\D/g, '').slice(0, 4);
+  });
 
   init();
 
@@ -135,8 +140,8 @@
   function validate() {
     if (!el.title.value.trim()) return '제목을 입력해 주세요.';
     if (!el.author.value.trim()) return '이름을 입력해 주세요.';
-    if (el.pw.value.trim().length < 4) {
-      return '비밀번호를 4자 이상으로 정해 주세요. 나중에 이 결과물을 지울 때 씁니다.';
+    if (!/^\d{4}$/.test(el.pin.value)) {
+      return '삭제 암호를 숫자 네 자리로 정해 주세요. 나중에 이 결과물을 지울 때 씁니다.';
     }
 
     if (kind() === 'file') {
@@ -173,7 +178,7 @@
         author: el.author.value,
         studentNo: el.studentno.value,
         description: el.desc.value,
-        password: el.pw.value,
+        password: el.pin.value,
         file: kind() === 'file' ? el.file.files[0] : null,
         linkUrl: kind() === 'link' ? el.link.value : '',
         visibility: document.querySelector('input[name="visibility"]:checked').value,
@@ -189,7 +194,7 @@
           <p class="muted">${esc(course ? course.title : '')} · ${esc(row.title)}</p>
           <p class="small muted">공개 범위: ${row.visibility === 'public' ? '모두에게 공개' : '수업 안에서만'}</p>
           <p class="small" style="color:var(--ink-soft); margin-top:.9rem">
-            지우고 싶을 때는 갤러리에서 <strong>이름과 비밀번호</strong>를 넣으면 됩니다.
+            지우고 싶을 때는 갤러리에서 <strong>이름과 삭제 암호</strong>를 넣으면 됩니다.
           </p>
           <div class="row" style="justify-content:center; margin-top:1.4rem">
             <a class="btn" href="gallery.html?course=${encodeURIComponent(el.course.value)}">갤러리에서 확인</a>

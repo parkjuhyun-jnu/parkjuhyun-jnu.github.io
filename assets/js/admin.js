@@ -73,6 +73,7 @@
     el.adminSection.style.display = '';
     el.who.textContent = `${admin.email || '관리자'} 로 로그인됨 · ${API.mode === 'demo' ? '데모 모드' : 'Supabase 연결됨'}`;
     initSettings();
+    initPassword(admin);
     ActivitiesEditor.init();
     load();
   }
@@ -112,6 +113,48 @@
         off: '수강생 수를 숨겼습니다. 수업 페이지를 새로 고치면 사라집니다.',
       });
     }
+  }
+
+  /* ---------- 관리자 비밀번호 바꾸기 ---------- */
+  function initPassword(admin) {
+    const form = document.getElementById('pw-form');
+    if (!form) return;
+    const msg = document.getElementById('pw-msg');
+    const user = document.getElementById('pw-user');
+    if (user) user.defaultValue = user.value = admin.email || '';
+
+    const say = (text, ok) => {
+      msg.textContent = text;
+      msg.style.color = ok ? 'var(--ok)' : 'var(--danger)';
+    };
+
+    if (API.mode === 'demo') {
+      form.querySelectorAll('input, button').forEach((x) => { x.disabled = true; });
+      msg.textContent = '데모 모드에는 바꿀 계정이 없습니다. Supabase 를 붙이면 쓸 수 있습니다.';
+      return;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const a = document.getElementById('new-pw');
+      const b = document.getElementById('new-pw2');
+      if (a.value.length < 8) { say('8자 이상으로 정해 주세요.'); return; }
+      if (a.value !== b.value) { say('두 칸의 비밀번호가 서로 다릅니다.'); return; }
+
+      const btn = form.querySelector('button');
+      btn.disabled = true;
+      msg.style.color = '';
+      msg.textContent = '바꾸는 중…';
+      try {
+        await API.changePassword(a.value);
+        form.reset();
+        say('바꿨습니다. 다음 로그인부터 새 비밀번호를 쓰세요.', true);
+      } catch (err) {
+        say('바꾸지 못했습니다. ' + (err.message || err));
+      } finally {
+        btn.disabled = false;
+      }
+    });
   }
 
   /** 체크박스 하나를 설정 값에 묶습니다. */

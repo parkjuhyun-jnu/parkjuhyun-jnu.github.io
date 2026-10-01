@@ -86,13 +86,14 @@ function workCard(row, opt = {}) {
       <button class="btn btn--sm btn--danger del-btn" data-id="${esc(row.id)}" type="button">${gone ? '완전 삭제' : '삭제'}</button>
     </div>` : '';
 
-  // 올린 본인이 지우는 칸. 이름과 비밀번호가 둘 다 맞아야 합니다.
+  // 올린 본인이 지우는 칸. 이름과 삭제 암호(숫자 4자리)가 둘 다 맞아야 합니다.
   const selfDelete = (opt.selfDelete && !gone) ? `
     <form class="selfdel" data-id="${esc(row.id)}" hidden>
-      <p class="small muted mb-0">올릴 때 적은 이름과 비밀번호를 넣어 주세요.</p>
+      <p class="small muted mb-0">올릴 때 적은 이름과 삭제 암호(숫자 4자리)를 넣어 주세요.</p>
       <div class="selfdel__row">
         <input type="text" name="name" placeholder="이름" autocomplete="off">
-        <input type="password" name="pw" placeholder="비밀번호" autocomplete="off">
+        <input type="text" name="pin" class="pin" inputmode="numeric"
+               placeholder="삭제 암호" autocomplete="off">
       </div>
       <div class="selfdel__row">
         <button class="btn btn--danger btn--sm" type="submit">지우기</button>
