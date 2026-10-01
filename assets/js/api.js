@@ -128,7 +128,7 @@ const API = (() => {
       const admin = isDemoAdmin();
       return demoAll()
         .filter((r) => r.course_id === courseId)
-        .filter((r) => admin || !r.deleted_at)
+        .filter((r) => !r.deleted_at)        // 지운 것은 관리 페이지에서만 봅니다
         .filter((r) => admin || r.visibility === 'public' || (unlocked && r.visibility === 'class'))
         .sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     }
@@ -138,6 +138,7 @@ const API = (() => {
       .from('submissions')
       .select('*')
       .eq('course_id', courseId)
+      .is('deleted_at', null)   // 관리자로 로그인해 있어도 갤러리에는 지운 것을 띄우지 않습니다
       .order('created_at', { ascending: false });
     if (error) throw error;
 
@@ -158,6 +159,7 @@ const API = (() => {
       .from('submissions')
       .select('*')
       .eq('visibility', 'public')
+      .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(limit);
     if (error) throw error;
