@@ -106,6 +106,8 @@
 
 /* ---------- 2. 기본 ---------- */
 *, *::before, *::after { box-sizing: border-box; }
+/* hidden 속성은 다른 display 지정보다 항상 이기도록 합니다. */
+[hidden] { display: none !important; }
 
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
