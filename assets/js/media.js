@@ -35,9 +35,16 @@
   const typeInfo = (key) => (DATA.types && DATA.types[key]) || { label: key || '기타' };
   const typeTag = (key) => `<span class="tag tag--m-${esc(key)}">${esc(typeInfo(key).label)}</span>`;
 
-  /** 2022-08-15 → 2022.08.15 / 2022-08 → 2022.08 */
-  function fmtMediaDate(d) {
-    return String(d || '').split('-').join('.');
+  /** 화면에 보일 날짜. dateLabel 이 있으면 그대로(예: 2007–2020), 없으면 2022-08-15 → 2022.08.15 */
+  function fmtMediaDate(x) {
+    if (x.dateLabel) return String(x.dateLabel);
+    return String(x.date || '').split('-').join('.');
+  }
+
+  /** 아직 확인하지 못한 내용이 있는 항목에 붙는 작은 꼬리표 */
+  function checkTag(x) {
+    if (!x.check) return '';
+    return `<span class="tag tag--check" title="확인할 것: ${esc(x.check)}">확인 중</span>`;
   }
 
   /** 유튜브 주소면 영상 ID를 돌려줍니다. */
@@ -54,9 +61,10 @@
     return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : '';
   }
 
-  /** 매체 · 역할 · 장소 를 한 줄로 */
+  /** 매체 · 역할 · 장소 를 한 줄로. 주최를 아직 모르면 '주최 확인 중' 으로 적습니다. */
   function whereOf(x) {
-    return [x.outlet, x.role, x.place].filter(Boolean).join(' · ');
+    const outlet = x.outlet || (x.check && x.check.includes('주최') ? '주최 확인 중' : '');
+    return [outlet, x.role, x.place].filter(Boolean).join(' · ');
   }
 
   function titleHtml(x) {
@@ -68,11 +76,22 @@
 
   function extraLinks(x) {
     const links = [];
-    if (x.image) links.push(`<a href="${esc(x.image)}" target="_blank" rel="noopener">포스터·사진 보기</a>`);
+    // 포스터·사진 링크는 그림 파일이 실제로 있을 때만 보이게 합니다(revealImageLinks).
+    if (x.image) links.push(`<a class="media-image-link" href="${esc(x.image)}" target="_blank" rel="noopener" hidden>포스터·사진 보기</a>`);
     (x.links || []).forEach((l) => {
       if (l && l.url) links.push(`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label || '관련 링크')}</a>`);
     });
-    return links.length ? `<span class="media-links">${links.join('<span aria-hidden="true"> · </span>')}</span>` : '';
+    // 링크 사이의 가운뎃점은 CSS 가 보이는 링크 사이에만 넣습니다.
+    return links.length ? `<span class="media-links">${links.join('')}</span>` : '';
+  }
+
+  /** 그림 파일이 아직 없으면 '포스터·사진 보기' 링크를 숨겨 둡니다. */
+  function revealImageLinks(root) {
+    root.querySelectorAll('a.media-image-link[hidden]').forEach((a) => {
+      const img = new Image();
+      img.onload = () => { a.hidden = false; };
+      img.src = a.getAttribute('href');
+    });
   }
 
   /* ---------- 위쪽 숫자 ---------- */
@@ -109,7 +128,7 @@
       return `<article class="media-card">
         ${media}
         <div class="media-card__body">
-          <div class="row" style="gap:.4rem">${typeTag(x.type)}<span class="small muted">${esc(fmtMediaDate(x.date))}</span></div>
+          <div class="row" style="gap:.4rem">${typeTag(x.type)}<span class="small muted">${esc(fmtMediaDate(x))}</span>${checkTag(x)}</div>
           <h3 class="media-card__title">${titleHtml(x)}</h3>
           <p class="small muted mb-0">${esc(whereOf(x))}</p>
           ${x.subtitle ? `<p class="small media-card__sub">${esc(x.subtitle)}</p>` : ''}
@@ -117,6 +136,7 @@
         </div>
       </article>`;
     }).join('');
+    revealImageLinks(document.getElementById('featured'));
   }
 
   /* ---------- 예정 ---------- */
@@ -125,6 +145,7 @@
     if (!soon.length) return;
     document.getElementById('upcoming-wrap').style.display = '';
     document.getElementById('upcoming').innerHTML = soon.map(itemHtml).join('');
+    revealImageLinks(document.getElementById('upcoming'));
   }
 
   /* ---------- 필터 ---------- */
@@ -165,8 +186,9 @@
         ${links ? `<span class="pub-cite">${links}</span>` : ''}
       </span>
       <span class="pub-meta">
-        <span class="pub-year">${esc(fmtMediaDate(x.date))}</span>
+        <span class="pub-year">${esc(fmtMediaDate(x))}</span>
         ${typeTag(x.type)}
+        ${checkTag(x)}
       </span>
     </li>`;
   }
@@ -175,7 +197,7 @@
   function render() {
     const rows = DATA.items.filter((x) => {
       const typeOk = activeType === 'all' || x.type === activeType;
-      const hay = `${x.title} ${x.outlet || ''} ${x.subtitle || ''}`.toLowerCase();
+      const hay = `${x.title} ${x.outlet || ''} ${x.role || ''} ${x.subtitle || ''}`.toLowerCase();
       const textOk = !query || hay.includes(query);
       return typeOk && textOk;
     });
@@ -200,5 +222,6 @@
         <h3 class="media-year__head">${esc(y)} <span class="small muted" style="font-weight:500">${list.length}건</span></h3>
         <ul class="pub-list">${list.map(itemHtml).join('')}</ul>
       </section>`).join('');
+    revealImageLinks(archiveEl);
   }
 })();

@@ -762,6 +762,17 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 .media-card__sub { color: var(--ink-soft); margin: .3rem 0 0; }
 .media-links a { color: var(--navy); font-weight: 600; }
 .media-links a:hover { text-decoration: underline; }
+/* 보이는 링크 사이에만 가운뎃점을 넣습니다(숨겨진 포스터 링크는 건너뜀). */
+.media-links a:not([hidden]) ~ a:not([hidden])::before {
+  content: "·"; display: inline-block; margin: 0 .45em; color: var(--ink-faint); font-weight: 400;
+}
+
+/* 날짜·주최 등을 아직 확인하지 못한 항목 */
+.tag--check {
+  color: var(--ink-faint); background: transparent;
+  border: 1px dashed color-mix(in srgb, var(--ink-faint) 60%, transparent);
+  font-weight: 500; cursor: help;
+}
 
 .media-year + .media-year { margin-top: 1.6rem; }
 .media-year__head {
