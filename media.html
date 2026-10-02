@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>미디어·강연 | 박주현</title>
+<meta name="description" content="박주현 부교수의 방송 출연, 언론 인터뷰·보도, 기고, 강연·연수, 토론회 기록.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">MEDIA &amp; TALKS</p>
+      <h1 style="font-family:var(--font-serif)">미디어·강연</h1>
+      <p style="max-width:58ch; font-size:1.05rem; color:var(--ink-soft)">
+        연구실 바깥에서 한 말과 글입니다. 방송과 언론에 나온 것, 신문·잡지에 쓴 글,
+        교사·사서를 만난 강연과 연수, 국회와 정부의 토론회를 한 곳에 모았습니다.
+      </p>
+      <div class="stat-row media-stats" id="media-stats" style="margin-top:2rem"></div>
+    </div>
+  </section>
+
+  <!-- 대표 -->
+  <section class="section" id="featured-wrap" style="padding-top:0; display:none">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">FEATURED</p>
+        <h2>대표 출연·강연</h2>
+      </div>
+      <div class="media-featured" id="featured"></div>
+    </div>
+  </section>
+
+  <!-- 예정 -->
+  <section class="section" id="upcoming-wrap" style="padding-top:0; display:none">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">UPCOMING</p>
+        <h2>예정</h2>
+      </div>
+      <ul class="pub-list" id="upcoming"></ul>
+    </div>
+  </section>
+
+  <!-- 전체 목록 -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">ARCHIVE</p>
+        <h2>전체 기록 <span class="muted" style="font-size:.6em; font-weight:500">전체 <span id="total">0</span>건</span></h2>
+        <p>구분으로 추리거나 제목·매체로 찾아볼 수 있습니다.</p>
+      </div>
+
+      <div class="pub-toolbar" id="filters" role="group" aria-label="구분 필터">
+        <input type="text" id="search" placeholder="제목·매체로 검색…" aria-label="제목·매체 검색">
+      </div>
+
+      <p class="small muted" id="result-count" aria-live="polite"></p>
+      <div id="archive"><p class="small muted">불러오는 중…</p></div>
+    </div>
+  </section>
+
+  <!-- 문의 -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="card card--flat" style="background:var(--navy-wash); border-color:color-mix(in srgb, var(--navy) 22%, transparent)">
+        <p class="eyebrow">CONTACT</p>
+        <h3 style="font-family:var(--font-serif); margin-bottom:.4rem">인터뷰·강연 문의</h3>
+        <p class="mb-0" style="max-width:60ch">
+          독서 리터러시, 정보미디어 리터러시, 학교도서관과 사서교사 정책에 관한 인터뷰와
+          교사·사서·학부모 대상 강연 요청은 <a href="mailto:park51566@jnu.ac.kr">park51566@jnu.ac.kr</a>로 보내 주세요.
+          마감이 있으면 함께 알려 주시면 맞춰 드리겠습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/media.js"></script>
+</body>
+</html>

@@ -22,6 +22,7 @@
       <a href="about.html">소개</a>
       <a href="research.html">연구</a>
       <a href="courses.html">수업</a>
+      <a href="media.html">미디어</a>
       <a href="gallery.html">결과물</a>
       <a href="surveys.html">설문</a>
       <button class="theme-toggle" type="button"></button>
@@ -155,15 +156,17 @@
     </div>
   </section>
 
-  <!-- 토론회·워크숍·세미나 -->
-  <section class="section" id="seminar-wrap" style="display:none">
+  <!-- 토론회·강연·언론 활동은 미디어 페이지로 옮겼습니다. -->
+  <section class="section" style="padding-top:0">
     <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">SEMINARS</p>
-        <h2>토론회·워크숍·세미나</h2>
-        <p id="seminar-sub"></p>
+      <div class="card card--flat">
+        <p class="eyebrow">MEDIA &amp; TALKS</p>
+        <h3 style="font-family:var(--font-serif); margin-bottom:.4rem">토론회·강연·언론 활동</h3>
+        <p class="small muted" style="max-width:60ch">
+          국회·정부 토론회 발제, 교사·사서 연수와 특강, 방송 출연과 언론 보도는
+          <a href="media.html">미디어·강연</a> 페이지에 따로 모았습니다.
+        </p>
       </div>
-      <ul class="pub-list" id="seminars"></ul>
     </div>
   </section>
 
@@ -328,29 +331,6 @@
     .catch(() => {
       document.getElementById('proj-sub').textContent = '연구 과제를 불러오지 못했습니다.';
     });
-
-  // 토론회·워크숍·세미나 — data/seminars.json 이 비어 있으면 구역 자체를 숨깁니다.
-  fetch('data/seminars.json')
-    .then((r) => r.json())
-    .then(({ items }) => {
-      if (!items || !items.length) return;
-      document.getElementById('seminar-wrap').style.display = '';
-      document.getElementById('seminar-sub').textContent = `${items.length}건`;
-      document.getElementById('seminars').innerHTML = items.map((x) => {
-        const where = [x.host, x.place, x.role].filter(Boolean).join(' · ');
-        return `<li>
-          <span class="pub-title">
-            ${esc(x.title)}
-            ${where ? `<span class="pub-cite">${esc(where)}</span>` : ''}
-          </span>
-          <span class="pub-meta">
-            <span class="pub-year">${esc(x.date || '')}</span>
-            ${x.kind ? `<span class="tag">${esc(x.kind)}</span>` : ''}
-          </span>
-        </li>`;
-      }).join('');
-    })
-    .catch(() => { /* 파일이 없으면 구역을 숨긴 채 둡니다 */ });
 
   function render() {
     const rows = DATA.items.filter((p) => {

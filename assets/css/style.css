@@ -735,3 +735,37 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   html { scroll-behavior: auto; }
 }
+
+/* ---------- 13. 미디어·강연 페이지 ---------- */
+/* 구분 꼬리표 색: 방송(남색) · 보도(청록) · 기고(금색) · 강연(초록) · 토론회(보라) */
+.tag--m-tv    { color: var(--t-mil);     border-color: color-mix(in srgb, var(--t-mil) 30%, transparent);     background: color-mix(in srgb, var(--t-mil) 9%, transparent); }
+.tag--m-news  { color: var(--t-library); border-color: color-mix(in srgb, var(--t-library) 30%, transparent); background: color-mix(in srgb, var(--t-library) 9%, transparent); }
+.tag--m-press { color: var(--gold);      border-color: color-mix(in srgb, var(--gold) 34%, transparent);      background: var(--gold-wash); }
+.tag--m-talk  { color: var(--t-reading); border-color: color-mix(in srgb, var(--t-reading) 30%, transparent); background: color-mix(in srgb, var(--t-reading) 9%, transparent); }
+.tag--m-forum { color: var(--t-policy);  border-color: color-mix(in srgb, var(--t-policy) 30%, transparent);  background: color-mix(in srgb, var(--t-policy) 9%, transparent); }
+
+.media-featured { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.media-card {
+  display: flex; flex-direction: column; overflow: hidden; min-width: 0;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.media-card__thumb { aspect-ratio: 16 / 9; background: var(--surface-2); overflow: hidden; }
+.media-card__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 포스터는 세로가 길어 잘라 내지 않고 통째로 보여 줍니다. */
+.media-card__thumb--poster { aspect-ratio: auto; max-height: 420px; display: flex; justify-content: center; }
+.media-card__thumb--poster img { width: auto; max-width: 100%; height: auto; max-height: 420px; object-fit: contain; }
+.media-card__body { padding: 1.1rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: .35rem; }
+.media-card__title { font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.45; margin: .2rem 0 0; }
+.media-card__title a { color: var(--ink); }
+.media-card__title a:hover { color: var(--navy); }
+.media-card__sub { color: var(--ink-soft); margin: .3rem 0 0; }
+.media-links a { color: var(--navy); font-weight: 600; }
+.media-links a:hover { text-decoration: underline; }
+
+.media-year + .media-year { margin-top: 1.6rem; }
+.media-year__head {
+  font-family: var(--font-serif); font-size: 1.15rem; color: var(--navy);
+  display: flex; align-items: baseline; gap: .5rem; margin-bottom: .2rem;
+}
+.media-stats .card div:first-child { font-variant-numeric: tabular-nums; }
