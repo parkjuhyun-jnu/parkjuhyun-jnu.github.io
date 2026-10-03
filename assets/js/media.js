@@ -225,3 +225,26 @@
     revealImageLinks(archiveEl);
   }
 })();
+
+/* 약력 '복사' 단추 */
+(function () {
+  const status = document.getElementById('copy-status');
+  document.querySelectorAll('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const el = document.getElementById(btn.dataset.copy);
+      if (!el) return;
+      try {
+        await navigator.clipboard.writeText(el.textContent.trim());
+        if (status) status.textContent = '복사했습니다.';
+      } catch {
+        // 복사가 막힌 환경에서는 글을 선택해 두어 직접 복사할 수 있게 합니다.
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        if (status) status.textContent = '글을 선택해 두었습니다. Ctrl+C로 복사해 주세요.';
+      }
+    });
+  });
+})();

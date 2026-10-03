@@ -22,11 +22,26 @@
     "출처: 2020 이병목 참사서상 공적명세서·공모 서류, Google Drive 발표 자료, 신문 기사, 제58회 전국도서관대회 안내문(2026.10 정리)"
   ],
   "types": {
-    "tv":    { "label": "방송·영상",  "desc": "TV·라디오·유튜브 출연" },
-    "news":  { "label": "인터뷰·보도", "desc": "나를 다룬 기사" },
-    "press": { "label": "기고·칼럼",  "desc": "신문·잡지에 쓴 글" },
-    "talk":  { "label": "강연·연수",  "desc": "특강, 교사·사서 연수, 컨설팅" },
-    "forum": { "label": "토론회·발표", "desc": "국회·정부 토론회와 정책협의회, 도서관·교육 대회 발표" }
+    "tv": {
+      "label": "방송·영상",
+      "desc": "TV·라디오·유튜브 출연"
+    },
+    "news": {
+      "label": "인터뷰·보도",
+      "desc": "나를 다룬 기사"
+    },
+    "press": {
+      "label": "기고·칼럼",
+      "desc": "신문·잡지에 쓴 글"
+    },
+    "talk": {
+      "label": "강연·연수",
+      "desc": "특강, 교사·사서 연수, 컨설팅"
+    },
+    "forum": {
+      "label": "토론회·발표",
+      "desc": "국회·정부 토론회와 정책협의회, 도서관·교육 대회 발표"
+    }
   },
   "items": [
     {
@@ -85,8 +100,14 @@
       "subtitle": "발제 「학교도서관에서의 미디어와 정보 리터러시 교육」. 학교도서관진흥법에 미디어교육·정보활용교육을 명시해 사서교사가 디지털 미디어 교육까지 맡는 제도를 제안했습니다.",
       "image": "assets/img/media/2021-08-20-mil-forum-poster.jpg",
       "links": [
-        { "label": "교육플러스 기사", "url": "https://www.edpl.co.kr/news/articleView.html?idxno=2301" },
-        { "label": "경기신문 기사", "url": "https://www.kgnews.co.kr/news/article.html?no=663392" }
+        {
+          "label": "교육플러스 기사",
+          "url": "https://www.edpl.co.kr/news/articleView.html?idxno=2301"
+        },
+        {
+          "label": "경기신문 기사",
+          "url": "https://www.kgnews.co.kr/news/article.html?no=663392"
+        }
       ],
       "featured": true
     },
@@ -188,14 +209,6 @@
       "title": "기관담당자가 느낀 동화동무 씨동무",
       "outlet": "(사)어린이도서연구회 『동화읽는어른』",
       "role": "기고"
-    },
-    {
-      "date": "2014-03",
-      "type": "press",
-      "title": "미국 학교도서관의 사서교사와 보조직원의 업무 분담",
-      "outlet": "『학교도서관저널』 2014년 3월호",
-      "role": "기고",
-      "check": "게재 여부"
     },
     {
       "date": "2014",
