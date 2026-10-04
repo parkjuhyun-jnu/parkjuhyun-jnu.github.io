@@ -29,6 +29,7 @@
           <li><a href="about.html">소개</a></li>
           <li><a href="research.html">연구</a></li>
           <li><a href="courses.html">수업</a></li>
+          <li><a href="advising.html">대학원·지도</a></li>
           <li><a href="media.html">미디어·강연</a></li>
           <li><a href="gallery.html">결과물 갤러리</a></li>
           <li><a href="surveys.html">설문</a></li>

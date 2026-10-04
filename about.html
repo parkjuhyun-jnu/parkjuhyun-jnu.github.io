@@ -301,7 +301,7 @@ Promise.all([
       `${esc(s.firstSemester)}부터 ${esc(s.semesterCount)}개 학기 동안 ` +
       `${esc(s.uniqueCourseCount)}개 과목을 ${esc(s.openedCount)}번 열었습니다` +
       (showN === true ? ` (누적 수강 ${esc(s.totalStudents)}명)` : '') + '. ' +
-      `학기별 전체 이력은 <a href="courses.html">수업 페이지</a>에 있습니다.`;
+      `학기별 전체 이력은 <a href="courses.html">수업 페이지</a>에, 대학원 지도 안내는 <a href="advising.html">대학원·지도</a>에 있습니다.`;
 
     if (!sem) { box.innerHTML = '<p class="muted">등록된 과목이 없습니다.</p>'; return; }
 
