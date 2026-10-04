@@ -19,7 +19,7 @@
     "",
     "날짜가 오늘보다 뒤면 자동으로 '예정' 구역에 따로 나옵니다. 예정이 없으면 그 구역은 숨겨집니다.",
     "",
-    "출처: 2020 이병목 참사서상 공적명세서·공모 서류, Google Drive 발표 자료, 신문 기사, 제58회 전국도서관대회 안내문, 전대신문(2026.10 정리)"
+    "출처: 2020 이병목 참사서상 공적명세서·공모 서류, Google Drive 발표 자료, 신문 기사, 제58회 전국도서관대회 안내문, 전대신문, 본인 제공 포스터·기사(2026.10 정리)"
   ],
   "types": {
     "tv": {
@@ -60,7 +60,8 @@
       "outlet": "SBS 뉴스토리",
       "role": "출연",
       "subtitle": "독서교육의 효과와 학교도서관 사서교사 부족 문제, 그 해법을 다룬 시사 프로그램",
-      "url": "https://news.sbs.co.kr/news/endPage.do?news_id=N1007730057"
+      "url": "https://news.sbs.co.kr/news/endPage.do?news_id=N1007730057",
+      "featured": true
     },
     {
       "date": "2025-04-08",
@@ -112,10 +113,10 @@
       "date": "2021-08-20",
       "type": "forum",
       "title": "학생들의 미디어 및 정보활용능력 향상을 위한 정책토론회",
-      "outlet": "강득구·도종환·박정·한무경 국회의원 공동주최",
-      "place": "국회",
-      "role": "발제 · 한국도서관협회 학교도서관위원장",
-      "subtitle": "발제 「학교도서관에서의 미디어와 정보 리터러시 교육」. 학교도서관진흥법에 미디어교육·정보활용교육을 명시해 사서교사가 디지털 미디어 교육까지 맡는 제도를 제안했습니다.",
+      "outlet": "국회의원 강득구·도종환·박정·한무경 주최 · 한국도서관협회 등 주관",
+      "place": "교사노동조합연맹 사무실 · 유튜브 생중계",
+      "role": "주제발표 · 한국도서관협회 학교도서관위원장",
+      "subtitle": "주제발표 「학교도서관에서의 미디어와 정보 리터러시 교육」. 학교도서관진흥법에 미디어교육·정보활용교육을 명시해 사서교사가 디지털 미디어 교육까지 맡는 제도를 제안했습니다.",
       "image": "assets/img/media/2021-08-20-mil-forum-poster.jpg",
       "links": [
         {
@@ -298,6 +299,95 @@
       "role": "기고",
       "subtitle": "광주광역시교육청 독서신문, 광주교육신문에도 기사 제공",
       "check": "기간·편수"
+    },
+    {
+      "date": "2025-11-14",
+      "type": "news",
+      "title": "전남대학교 문헌정보학과 대학(원)생, \"광주-전남지역 대학에 갑질하고 차별하는 교육부 폐지해야\"",
+      "outlet": "NGTV",
+      "role": "학과 관련 보도",
+      "subtitle": "전남대 교육대학원 사서교육전공 신설 요청(2022~2025)을 교육부가 거부한 데 맞서 학과 학생들이 연 시위 보도",
+      "url": "http://www.ngtv.tv/news/articleView.html?idxno=119665"
+    },
+    {
+      "date": "2024-05-31",
+      "type": "forum",
+      "title": "디지털 신기술 기반 디지털 독서교육 방안 모색",
+      "outlet": "2024 대한민국 글로컬 미래교육박람회 세미나 「디지털 미래교육과 독서」 · 신구도서관재단",
+      "place": "여수 엑스포 컨벤션센터",
+      "role": "발표",
+      "image": "assets/img/media/2024-05-31-glocal-expo-poster.jpg"
+    },
+    {
+      "date": "2024-04-05",
+      "type": "press",
+      "title": "[도서관 수업] 미디어 정보 리터러시 교육과정을 확대해야",
+      "outlet": "월간 『새교육』(한국교육신문사)",
+      "role": "기고",
+      "subtitle": "2022 개정 교육과정의 디지털 소양을 국제기구의 리터러시 틀과 견주어 풀이",
+      "url": "https://www.hangyo.com/news/article.html?no=101318"
+    },
+    {
+      "date": "2024-01-17",
+      "type": "forum",
+      "title": "몽골 문화자원관리 실태와 현황 그리고 시스템 구축의 필요성",
+      "outlet": "ACC 문화자원 관리 및 활용 ODA 포럼 「문화자원 ODA를 통한 쌍방향 지속가능 발전 방안 모색」 · 국립아시아문화전당",
+      "place": "국립아시아문화전당 국제회의실",
+      "role": "발표",
+      "image": "assets/img/media/2024-01-17-acc-oda-forum-poster.jpg"
+    },
+    {
+      "date": "2023-12-21",
+      "type": "press",
+      "title": "[기고] 나의 삶과 기본권 유지에 부합하는 선거해야",
+      "outlet": "무등일보",
+      "role": "기고",
+      "subtitle": "총선을 앞두고 미디어 정보 리터러시로 정치 광고와 조작 정보를 따져 보자는 제안",
+      "url": "https://m.mdilbo.com/detail/AjBTxA/709119"
+    },
+    {
+      "date": "2022-12-13",
+      "type": "forum",
+      "title": "독서 리터러시 증진을 위한 사서교사 배치 방안",
+      "outlet": "「사서교사 확충 및 처우개선을 통한 독서교육 증진 방안마련 세미나」 · 국회의원 권은희 주최",
+      "place": "국회의원회관 제8간담회의실",
+      "role": "토론",
+      "subtitle": "사서교사 배치율을 50%로 높이려면 해마다 303명을 늘려야 한다고 제안",
+      "image": "assets/img/media/2022-12-13-teacher-librarian-seminar-poster.jpg",
+      "links": [
+        {
+          "label": "교육플러스 기사",
+          "url": "https://www.edpl.co.kr/news/articleView.html?idxno=7819"
+        }
+      ],
+      "featured": true
+    },
+    {
+      "date": "2022-09-21",
+      "type": "forum",
+      "title": "도서관의 힘과 독서교육 — 사서교사 제도 및 역할을 중심으로",
+      "outlet": "국회 책 읽는 의원모임 국회포럼",
+      "place": "국회도서관 소회의실",
+      "role": "발제",
+      "image": "assets/img/media/2022-09-21-reading-caucus-forum-poster.jpg",
+      "featured": true
+    },
+    {
+      "date": "2021-10-13",
+      "type": "press",
+      "title": "[사서교사의 메타리터러시] ⑪ BTS 유엔 연설문 파헤치니…'재미 업! 흥미 업! 관심 업!'",
+      "outlet": "교육플러스",
+      "role": "기고 · 광주 수문초 사서교사",
+      "subtitle": "BTS 유엔 연설로 정보·메시지를 분석하고 출처를 평가한 수업 사례",
+      "url": "https://www.edpl.co.kr/news/articleView.html?idxno=2956"
+    },
+    {
+      "date": "2021-06-24",
+      "type": "press",
+      "title": "[기고] 우리나라 디지털 리터러시의 현주소",
+      "outlet": "한국교육신문",
+      "role": "기고 · 한국사서교사협의회 회장",
+      "url": "https://www.hangyo.com/news/article.html?no=94090"
     }
   ]
 }
