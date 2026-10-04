@@ -859,3 +859,62 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 .kci-table table { border-collapse: collapse; margin-top: .6rem; font-variant-numeric: tabular-nums; }
 .kci-table th, .kci-table td { padding: .25rem .9rem; border-bottom: 1px solid var(--line-soft); text-align: right; }
 .kci-table th:first-child, .kci-table td:first-child { text-align: left; }
+
+/* ---------- 15. 이력서(CV) — 관리자 전용, 인쇄해 PDF로 저장 ---------- */
+.cv-bar { border-bottom: 1px solid var(--line); background: var(--surface); position: sticky; top: 0; z-index: 5; }
+.cv-bar__inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: .7rem; }
+.cv-opt { display: inline-flex; gap: .35rem; align-items: center; }
+.cv { max-width: 820px; padding-block: 2.4rem 4rem; font-size: .93rem; line-height: 1.6; }
+.cv-head { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; align-items: flex-end;
+  border-bottom: 2px solid var(--ink); padding-bottom: .9rem; margin-bottom: 1.4rem; }
+.cv-head h1 { font-family: var(--font-serif); font-size: 1.9rem; margin: 0 0 .2rem; }
+.cv-head h1 span { font-size: .55em; font-weight: 500; color: var(--ink-soft); margin-left: .4rem; }
+.cv-head p { margin: 0; }
+.cv-contact { font-size: .85rem; color: var(--ink-soft); text-align: right; }
+.cv-sec { margin-top: 1.5rem; break-inside: auto; }
+.cv-sec h2 { font-size: 1.05rem; margin: 0 0 .55rem; padding-bottom: .25rem; border-bottom: 1px solid var(--line); break-after: avoid; }
+.cv-n { font-size: .8em; font-weight: 500; color: var(--ink-faint); }
+.cv-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: .3rem; }
+.cv-rows li { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: .8rem; break-inside: avoid; }
+.cv-when { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.cv-sub { display: block; font-size: .85em; color: var(--ink-faint); }
+.cv-note { margin: 0 0 .5rem; font-size: .85rem; color: var(--ink-soft); }
+.cv-pubs { margin: 0; padding-left: 2.2rem; display: grid; gap: .35rem; }
+.cv-pubs li { break-inside: avoid; padding-left: .2rem; }
+.cv-doi { font-size: .82em; color: var(--ink-faint); word-break: break-all; }
+.cv-foot { margin-top: 2rem; font-size: .8rem; color: var(--ink-faint); text-align: right; }
+@media (max-width: 560px) {
+  .cv-rows li { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .cv-contact { text-align: left; }
+}
+@media print {
+  @page { size: A4; margin: 16mm 15mm; }
+  .no-print { display: none !important; }
+  body.cv-page {
+    background: #fff !important; color: #111 !important;
+    --ink: #111; --ink-soft: #444; --ink-faint: #666; --line: #bbb; --surface: #fff;
+  }
+  .cv { padding: 0; max-width: none; font-size: 9.6pt; }
+  .cv a { color: inherit; }
+}
+
+/* ---------- 16. 연구자 링크 줄, 메뉴의 EN ---------- */
+.id-links { display: flex; flex-wrap: wrap; gap: .4rem; margin: -.3rem 0 0; }
+.id-links a {
+  display: inline-flex; align-items: center; padding: .25rem .7rem; border-radius: 999px;
+  border: 1px solid var(--line); color: var(--ink-soft); text-decoration: none;
+}
+.id-links a:hover { border-color: var(--navy); color: var(--navy); text-decoration: none; }
+.nav .nav-en { font-size: .8rem; font-weight: 700; letter-spacing: .04em; }
+
+/* ---------- 17. 영어 페이지 ---------- */
+.en-hero { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 1.6rem; align-items: start; }
+.en-hero h1 { margin-bottom: .4rem; }
+.en-role { color: var(--ink-soft); margin: 0; }
+.en-photo { width: 150px; height: auto; border-radius: var(--radius); border: 1px solid var(--line); }
+@media (max-width: 560px) { .en-hero { grid-template-columns: minmax(0, 1fr) 96px; gap: 1rem; } .en-photo { width: 96px; } }
+.en-pubs { margin: 0; padding-left: 1.6rem; display: grid; gap: .9rem; }
+.en-pubs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1rem; padding-left: .2rem; }
+.en-pubs__title { grid-column: 1; font-weight: 500; }
+.en-pubs li > .small { grid-column: 1; }
+.en-pubs__cites { grid-column: 2; grid-row: 1 / span 2; font-weight: 700; color: var(--navy); white-space: nowrap; font-variant-numeric: tabular-nums; }

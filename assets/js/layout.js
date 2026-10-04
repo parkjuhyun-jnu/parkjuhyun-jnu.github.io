@@ -38,7 +38,9 @@
         <h4>외부 링크</h4>
         <ul class="small">
           <li><a href="https://list.jnu.ac.kr/" target="_blank" rel="noopener">전남대 문헌정보학과</a></li>
+          <li><a href="https://scholar.google.com/citations?user=GnkejtMAAAAJ" target="_blank" rel="noopener">Google Scholar</a></li>
           <li><a href="https://www.kci.go.kr/" target="_blank" rel="noopener">KCI 한국학술지인용색인</a></li>
+          <li><a href="en.html" lang="en">English</a></li>
           <li><a href="admin.html">관리자</a></li>
         </ul>
       </div>

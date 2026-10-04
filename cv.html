@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이력서(CV) | 박주현</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="cv-page">
+
+<!--
+  이력서(CV) — 관리자로 로그인했을 때만 내용을 그립니다.
+  사이트의 자료 파일(소개 페이지 약력, activities, projects, publications, books, teaching, media)을
+  모아 한 장으로 엮으므로, 자료를 고치면 CV도 저절로 최신이 됩니다.
+  'PDF로 저장' 단추는 브라우저 인쇄 창을 엽니다. 대상에서 'PDF로 저장'을 고르면 됩니다.
+-->
+
+<header class="cv-bar no-print">
+  <div class="wrap cv-bar__inner">
+    <a href="admin.html" class="small">← 관리 페이지</a>
+    <span class="row" style="gap:.5rem">
+      <label class="small cv-opt"><input type="checkbox" id="opt-media" checked> 미디어·강연 포함</label>
+      <button class="btn btn--sm" type="button" id="print" disabled>PDF로 저장</button>
+    </span>
+  </div>
+</header>
+
+<main class="wrap cv" id="cv">
+  <p class="muted" id="cv-status">확인하는 중…</p>
+</main>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/settings.js"></script>
+<script>
+(async function () {
+  const box = document.getElementById('cv');
+  const status = document.getElementById('cv-status');
+
+  const admin = await API.currentAdmin().catch(() => null);
+  if (!admin) {
+    status.innerHTML = '관리자로 로그인해야 볼 수 있는 페이지입니다. <a href="admin.html">관리 페이지에서 로그인</a>한 뒤 다시 열어 주세요.';
+    return;
+  }
+
+  const json = (u) => fetch(u).then((r) => r.json());
+  const [aboutHtml, actSaved, actFile, projects, pubs, links, books, teaching, media] = await Promise.all([
+    fetch('about.html').then((r) => r.text()),
+    readSetting('activities', null),
+    json('data/activities.json'),
+    json('data/projects.json'),
+    json('data/publications.json'),
+    json('data/pub-links.json').catch(() => ({ items: [] })),
+    json('data/books.json'),
+    json('data/teaching.json'),
+    json('data/media.json'),
+  ]).catch((e) => { status.textContent = '자료를 불러오지 못했습니다.'; throw e; });
+
+  const act = (actSaved && typeof actSaved === 'object') ? actSaved : actFile;
+
+  // 학력·경력은 소개 페이지에 적힌 것을 그대로 읽어 옵니다(한 곳에서만 고치면 되도록).
+  const doc = new DOMParser().parseFromString(aboutHtml, 'text/html');
+  const careerLists = Array.from(doc.querySelectorAll('h3')).reduce((m, h) => {
+    const ul = h.nextElementSibling;
+    if (ul && ul.matches('ul.act')) m[h.textContent.trim()] = Array.from(ul.querySelectorAll('li')).map((li) => ({
+      org: li.querySelector('.act__org')?.textContent.trim() || '',
+      role: li.querySelector('.act__role')?.textContent.trim() || '',
+      when: li.querySelector('.act__when')?.textContent.trim().replace(/\s+/g, ' ') || '',
+    }));
+    return m;
+  }, {});
+
+  // '2025 —' 처럼 끝이 열린 기간에는 '현재'를 바로 잇습니다.
+  const period = (x) => {
+    const p = String(x.period || '').trim();
+    if (!x.current || /현재/.test(p)) return p;
+    return /[—–-]$/.test(p) ? `${p} 현재` : (p ? `${p} · 현재` : '현재');
+  };
+  const ym = (y, m) => `${y || ''}${m ? '.' + String(m).padStart(2, '0') : ''}`;
+  const fmtMonth = (d) => d ? d.slice(0, 7).replace('-', '.') : '';
+  const rows = (list, f) => `<ul class="cv-rows">${list.map(f).join('')}</ul>`;
+  const row = (when, main, sub) => `<li><span class="cv-when">${esc(when)}</span><span>${main}${sub ? `<span class="cv-sub">${sub}</span>` : ''}</span></li>`;
+  const sec = (title, body, n) => body ? `<section class="cv-sec"><h2>${esc(title)}${n ? ` <span class="cv-n">${n}</span>` : ''}</h2>${body}</section>` : '';
+  const bold = (authors) => esc(authors).replace(/박주현/g, '<strong>박주현</strong>');
+
+  const linkMap = new Map((links.items || []).map((e) => [e.title, e]));
+  const papers = pubs.items.slice().sort((a, b) => (b.year - a.year) || ((b.month || 0) - (a.month || 0)));
+  const cites = papers.map((p) => p.citations || 0).sort((a, b) => b - a);
+  const h = cites.filter((n, i) => n >= i + 1).length;
+
+  const projList = (projects.projects || []).filter((p) => !p.hide)
+    .sort((a, b) => String(b.start).localeCompare(String(a.start)));
+
+  const levelOrder = { '학부': 0, '대학원': 1, '교양': 2 };
+  const courses = (teaching.byCourse || []).slice()
+    .sort((a, b) => (levelOrder[a.level] ?? 9) - (levelOrder[b.level] ?? 9) || b.count - a.count);
+
+  const mediaTypes = media.types || {};
+  const mediaItems = (media.items || []).filter((x) => x.date && x.title)
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const today = new Date().toISOString().slice(0, 10);
+
+  function render() {
+    const withMedia = document.getElementById('opt-media').checked;
+    box.innerHTML = `
+      <header class="cv-head">
+        <div>
+          <h1>박주현 <span lang="en">Juhyeon Park</span></h1>
+          <p>전남대학교 사회과학대학 문헌정보학과 부교수</p>
+        </div>
+        <p class="cv-contact">
+          park51566@jnu.ac.kr · 062-530-2662<br>
+          광주광역시 북구 용봉로 77 전남대학교 사회과학대학 355호<br>
+          parkjuhyun-jnu.github.io
+        </p>
+      </header>
+
+      ${sec('학력', rows(careerLists['학력'] || [], (x) => row(x.when, esc(x.org), esc(x.role))))}
+      ${sec('경력', rows(careerLists['경력'] || [], (x) => row(x.when, esc(x.org), esc(x.role))))}
+      ${sec('수상', rows(act.awards || [], (w) => row(w.year, `${esc(w.title)}, ${esc(w.org)}`, w.note ? esc(w.note) : '')))}
+      ${sec('학회·사회 활동', rows([
+        ...(careerLists['현재 직책'] || []).map((x) => ({ org: x.org, role: x.role, period: x.when })),
+        ...(act.societies || []), ...(act.committees || []),
+      ], (x) => row(period(x), esc(x.org), esc(x.role))))}
+
+      ${sec('학술논문', `
+        <p class="cv-note">KCI 등재 ${papers.length}편 · 총 피인용 ${cites.reduce((s, n) => s + n, 0)}회 · H지수 ${h} (KCI 기준)</p>
+        <ol class="cv-pubs" reversed>${papers.map((p) => {
+          const vol = [p.volume, p.issue ? `(${p.issue})` : ''].filter(Boolean).join('');
+          const doi = linkMap.get(p.title)?.doi;
+          return `<li>${bold(p.authors)} (${esc(p.year)}). ${esc(p.title)}. 『${esc(p.journal)}』, ${esc(vol)}${p.pages ? ', ' + esc(p.pages) : ''}.${doi ? ` <span class="cv-doi">doi:${esc(doi)}</span>` : ''}</li>`;
+        }).join('')}</ol>`, papers.length)}
+
+      ${sec('저역서', rows(books.items || [], (b) => row(ym(b.year, b.month), esc(b.title),
+        [b.publisher, b.authors ? '공저 ' + b.authors : ''].filter(Boolean).map(esc).join(' · '))), (books.items || []).length)}
+
+      ${sec('연구과제', rows(projList, (p) => row(`${fmtMonth(p.start)}–${fmtMonth(p.end)}${p.end && p.end >= today ? ' (진행)' : ''}`,
+        esc(p.title), [p.agency, p.program, p.role, p.lead ? '연구책임 ' + p.lead : ''].filter(Boolean).map(esc).join(' · '))), projList.length)}
+
+      ${sec('강의', `
+        <p class="cv-note">전남대학교 ${esc(teaching.summary?.firstSemester || '')}부터 ${esc(teaching.summary?.semesterCount || '')}개 학기 · ${esc(teaching.summary?.uniqueCourseCount || '')}개 과목</p>
+        ${rows(courses, (c) => row(c.level, esc(c.title), `${c.count}회 개설`))}`)}
+
+      ${withMedia ? sec('미디어·강연', rows(mediaItems, (x) => row(x.dateLabel || String(x.date).split('-').join('.'),
+        esc(x.title), [mediaTypes[x.type]?.label, x.outlet, x.role].filter(Boolean).map(esc).join(' · '))), mediaItems.length) : ''}
+
+      <p class="cv-foot">${new Date().toISOString().slice(0, 10).split('-').join('.')} 기준</p>`;
+    document.title = `CV_박주현_${today.slice(0, 7)}`;   // 'PDF로 저장' 때 파일 이름이 됩니다
+  }
+
+  render();
+  document.getElementById('opt-media').addEventListener('change', render);
+  const btn = document.getElementById('print');
+  btn.disabled = false;
+  btn.addEventListener('click', () => window.print());
+})();
+</script>
+</body>
+</html>
