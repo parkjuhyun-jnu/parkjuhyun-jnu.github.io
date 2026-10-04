@@ -11,8 +11,20 @@
   const lockBtn   = document.getElementById('lock-btn');
   const uploadEl  = document.getElementById('upload-link');
 
+  const themeEl   = document.getElementById('theme-filters');
+
   let courses = [];
   let current = param('course');
+  let activeTheme = param('theme') || 'all';
+
+  // 과목의 theme(data/courses.json)으로 결과물을 주제별로 묶습니다.
+  const THEME_LABEL = {
+    reading: '독서 리터러시',
+    mil: '정보미디어 리터러시',
+    school: '학교도서관',
+    policy: '정책·법령',
+    library: '도서관·정보조직',
+  };
 
   if (API.mode === 'demo') {
     const banner = document.getElementById('demo-banner');
@@ -79,10 +91,12 @@
           ? `모두 공개된 결과물 ${rows.length}건`
           : '';
         lockBtn.style.display = 'none';
-        renderRows(rows, true);
+        buildThemeFilters(rows);
+        renderRows(filterByTheme(rows), true);
         return;
       }
 
+      themeEl.hidden = true;
       const course = courses.find((c) => c.id === current);
       const unlocked = API.isUnlocked(current);
       lockBtn.style.display = unlocked ? '' : 'none';
@@ -139,6 +153,45 @@
         btn.disabled = false;
       }
     });
+  }
+
+  /* ---------- 주제 필터 ---------- */
+  const themeOf = (row) => (courses.find((c) => c.id === row.course_id) || {}).theme || '';
+
+  function filterByTheme(rows) {
+    return activeTheme === 'all' ? rows : rows.filter((r) => themeOf(r) === activeTheme);
+  }
+
+  function buildThemeFilters(rows) {
+    const counts = {};
+    rows.forEach((r) => { const t = themeOf(r); if (t) counts[t] = (counts[t] || 0) + 1; });
+    const keys = Object.keys(THEME_LABEL).filter((k) => counts[k]);
+    if (keys.length < 2) { themeEl.hidden = true; activeTheme = 'all'; return; }
+    if (activeTheme !== 'all' && !counts[activeTheme]) activeTheme = 'all';
+
+    themeEl.innerHTML = '';
+    [['all', '전체 주제', rows.length], ...keys.map((k) => [k, THEME_LABEL[k], counts[k]])].forEach(([key, label, n]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip';
+      b.dataset.theme = key;
+      b.textContent = `${label} ${n}`;
+      b.setAttribute('aria-pressed', String(key === activeTheme));
+      b.addEventListener('click', () => {
+        activeTheme = key;
+        const url = new URL(location.href);
+        if (key === 'all') url.searchParams.delete('theme'); else url.searchParams.set('theme', key);
+        history.replaceState(null, '', url);
+        themeEl.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.theme === key)));
+        const shown = filterByTheme(rows);
+        statusEl.textContent = key === 'all'
+          ? `모두 공개된 결과물 ${rows.length}건`
+          : `${label} 결과물 ${shown.length}건 (전체 ${rows.length}건)`;
+        renderRows(shown, true);
+      });
+      themeEl.appendChild(b);
+    });
+    themeEl.hidden = false;
   }
 
   function renderRows(rows, showCourse) {
