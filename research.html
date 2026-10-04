@@ -189,9 +189,15 @@
   const searchEl = document.getElementById('search');
   const countEl = document.getElementById('result-count');
 
-  fetch('data/publications.json')
-    .then((r) => r.json())
-    .then((data) => {
+  // 논문 링크(KCI·DOI)는 따로 둔 pub-links.json 에서 제목으로 이어 붙입니다.
+  // publications.json 은 KCI 엑셀에서 자동으로 다시 만들어지기 때문입니다.
+  Promise.all([
+    fetch('data/publications.json').then((r) => r.json()),
+    fetch('data/pub-links.json').then((r) => r.json()).catch(() => ({ items: [] })),
+  ])
+    .then(([data, extra]) => {
+      const byTitle = new Map((extra.items || []).map((e) => [e.title, e]));
+      data.items.forEach((p) => { p.links = byTitle.get(p.title) || {}; });
       DATA = data;
       // 연도가 적힌 것을 최신순으로 먼저, 연도 미기재는 뒤로 (원래 순서 유지)
       DATA.items.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
@@ -352,10 +358,17 @@
       const t = DATA.themes[p.theme];
       const vol = [p.volume, p.issue ? `(${p.issue})` : ''].filter(Boolean).join('');
       const where = [p.journal, vol, p.pages].filter(Boolean).join(' ');
+      const L = p.links || {};
+      const links = [
+        L.kci ? `<a href="https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=${encodeURIComponent(L.kci)}" target="_blank" rel="noopener" aria-label="KCI에서 보기: ${esc(p.title)}">KCI</a>` : '',
+        L.doi ? `<a href="https://doi.org/${esc(L.doi)}" target="_blank" rel="noopener" aria-label="DOI로 보기: ${esc(p.title)}">DOI</a>` : '',
+        L.pdf ? `<a href="${esc(L.pdf)}" target="_blank" rel="noopener" aria-label="원문 PDF: ${esc(p.title)}">PDF</a>` : '',
+      ].filter(Boolean).join('');
       return `<li>
         <span class="pub-title">
           ${esc(p.title)}
           <span class="pub-cite">${esc(p.authors)}${where ? ' · ' + esc(where) : ''}</span>
+          ${links ? `<span class="pub-cite"><span class="media-links">${links}</span></span>` : ''}
         </span>
         <span class="pub-meta">
           <span class="pub-year">${esc(p.year || '')}${p.month ? '.' + String(p.month).padStart(2, '0') : ''}</span>
