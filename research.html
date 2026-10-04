@@ -43,21 +43,43 @@
 
       <div class="stat-row" style="margin-top:2rem">
         <div class="card card--flat" style="text-align:center">
-          <div style="font-size:1.9rem; font-weight:700; color:var(--navy)">46</div>
+          <div class="stat-num" id="st-papers">46</div>
           <div class="small muted">KCI 등재 논문</div>
         </div>
         <div class="card card--flat" style="text-align:center">
-          <div style="font-size:1.9rem; font-weight:700; color:var(--navy)">307</div>
+          <div class="stat-num" id="st-cites">307</div>
           <div class="small muted">총 피인용</div>
         </div>
         <div class="card card--flat" style="text-align:center">
-          <div style="font-size:1.9rem; font-weight:700; color:var(--navy)">10</div>
+          <div class="stat-num" id="st-h">10</div>
           <div class="small muted">H지수</div>
         </div>
       </div>
-      <p class="small muted" style="margin-top:.7rem">
-        한국학술지인용색인(KCI) 기준 · 평균 피인용 7.1회
+      <p class="small muted" style="margin-top:.7rem" id="st-note">
+        한국학술지인용색인(KCI) 기준
       </p>
+
+      <!-- KCI 통계: publications.json 에서 계산합니다 -->
+      <div class="kci-stats" id="kci-stats" hidden>
+        <figure class="kci-fig">
+          <figcaption class="kci-fig__cap">연도별 논문 수</figcaption>
+          <div class="kci-years" id="kci-years" role="img"></div>
+          <div class="kci-years__axis" id="kci-years-axis" aria-hidden="true"></div>
+          <div class="kci-tip" id="kci-tip" hidden></div>
+        </figure>
+        <figure class="kci-fig">
+          <figcaption class="kci-fig__cap">주제별 논문 수 <span class="muted">· 피인용</span></figcaption>
+          <ul class="kci-themes" id="kci-themes"></ul>
+        </figure>
+        <figure class="kci-fig kci-fig--wide">
+          <figcaption class="kci-fig__cap">많이 인용된 논문</figcaption>
+          <ol class="kci-top" id="kci-top"></ol>
+        </figure>
+        <details class="kci-table small">
+          <summary>표로 보기</summary>
+          <table id="kci-table"><thead><tr><th scope="col">연도</th><th scope="col">논문</th><th scope="col">피인용</th></tr></thead><tbody></tbody></table>
+        </details>
+      </div>
     </div>
   </section>
 
@@ -199,6 +221,7 @@
       const byTitle = new Map((extra.items || []).map((e) => [e.title, e]));
       data.items.forEach((p) => { p.links = byTitle.get(p.title) || {}; });
       DATA = data;
+      renderKciStats(data);
       // 연도가 적힌 것을 최신순으로 먼저, 연도 미기재는 뒤로 (원래 순서 유지)
       DATA.items.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
       document.getElementById('total').textContent = String(data.items.length);
@@ -208,6 +231,91 @@
     .catch(() => {
       listEl.innerHTML = '<li><span class="pub-title muted">논문 목록을 불러오지 못했습니다.</span></li>';
     });
+
+  /* KCI 통계 — 숫자 카드, 연도별 막대, 주제별 막대, 많이 인용된 논문 */
+  function renderKciStats(data) {
+    const items = data.items;
+    const cites = items.map((p) => Number(p.citations) || 0).sort((a, b) => b - a);
+    const total = cites.reduce((s, n) => s + n, 0);
+    const h = cites.filter((n, i) => n >= i + 1).length;
+    document.getElementById('st-papers').textContent = String(items.length);
+    document.getElementById('st-cites').textContent = String(total);
+    document.getElementById('st-h').textContent = String(h);
+    // 출처 문구의 날짜는 KCI 엑셀 파일 이름(…-YYYYMMDD.xlsx)에서 읽습니다.
+    const m = String(data['출처'] || '').match(/(\d{4})(\d{2})(\d{2})/);
+    const asOf = m ? ` · ${m[1]}.${m[2]}.${m[3]} 기준` : '';
+    document.getElementById('st-note').textContent =
+      `한국학술지인용색인(KCI) 저자 실적으로 계산${asOf} · 논문 1편당 평균 피인용 ${(total / (items.length || 1)).toFixed(1)}회`;
+
+    // 연도별 논문 수: 빈 해도 0으로 칸을 둡니다.
+    const years = items.map((p) => Number(p.year)).filter(Boolean);
+    if (!years.length) return;
+    const y0 = Math.min(...years), y1 = Math.max(...years);
+    const rows = [];
+    for (let y = y0; y <= y1; y += 1) {
+      const list = items.filter((p) => Number(p.year) === y);
+      rows.push({ y, n: list.length, c: list.reduce((s, p) => s + (Number(p.citations) || 0), 0) });
+    }
+    const maxN = Math.max(...rows.map((r) => r.n));
+    const yearsEl = document.getElementById('kci-years');
+    yearsEl.setAttribute('aria-label', `연도별 논문 수, ${y0}년부터 ${y1}년까지. 가장 많은 해는 ${maxN}편.`);
+    yearsEl.innerHTML = rows.map((r) => `
+      <div class="kci-years__col" tabindex="0" data-tip="${r.y}년 · 논문 ${r.n}편 · 피인용 ${r.c}회">
+        ${r.n === maxN ? `<span class="kci-years__val">${r.n}</span>` : ''}
+        <span class="kci-years__bar" style="height:${r.n ? Math.max(4, (r.n / maxN) * 100) : 0}%"></span>
+      </div>`).join('');
+    // 축 눈금은 처음·끝과 5년 단위만
+    document.getElementById('kci-years-axis').innerHTML = rows.map((r) =>
+      `<span>${(r.y === y0 || r.y === y1 || r.y % 5 === 0) ? `’${String(r.y).slice(2)}` : ''}</span>`).join('');
+
+    const tip = document.getElementById('kci-tip');
+    const fig = yearsEl.closest('.kci-fig');
+    const show = (col) => {
+      tip.textContent = col.dataset.tip;
+      tip.hidden = false;
+      const f = fig.getBoundingClientRect(), b = col.getBoundingClientRect();
+      const half = tip.offsetWidth / 2;
+      const x = Math.min(Math.max(b.left - f.left + b.width / 2, half), f.width - half);
+      tip.style.left = `${x}px`;
+      yearsEl.querySelectorAll('.kci-years__col').forEach((c) => c.classList.toggle('is-on', c === col));
+    };
+    const hide = () => { tip.hidden = true; yearsEl.querySelectorAll('.is-on').forEach((c) => c.classList.remove('is-on')); };
+    yearsEl.querySelectorAll('.kci-years__col').forEach((col) => {
+      col.addEventListener('mouseenter', () => show(col));
+      col.addEventListener('focus', () => show(col));
+      col.addEventListener('blur', hide);
+    });
+    yearsEl.addEventListener('mouseleave', hide);
+
+    // 주제별
+    const themes = Object.entries(data.themes || {}).map(([key, t]) => {
+      const list = items.filter((p) => p.theme === key);
+      return { label: t.label, n: list.length, c: list.reduce((s, p) => s + (Number(p.citations) || 0), 0) };
+    }).filter((t) => t.n).sort((a, b) => b.n - a.n);
+    const maxT = Math.max(...themes.map((t) => t.n));
+    document.getElementById('kci-themes').innerHTML = themes.map((t) => `
+      <li>
+        <span class="kci-themes__label">${esc(t.label)}</span>
+        <span class="kci-themes__track"><span class="kci-themes__bar" style="width:${(t.n / maxT) * 100}%"></span></span>
+        <span class="kci-themes__num">${t.n}편 <span class="muted">· ${t.c}</span></span>
+      </li>`).join('');
+
+    // 많이 인용된 논문 5편
+    const top = items.slice().sort((a, b) => (b.citations || 0) - (a.citations || 0)).slice(0, 5);
+    const kciUrl = (p) => p.links && p.links.kci
+      ? `https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=${encodeURIComponent(p.links.kci)}` : '';
+    document.getElementById('kci-top').innerHTML = top.map((p, i) => `
+      <li>
+        <span class="kci-top__rank">${i + 1}</span>
+        <span class="kci-top__title">${kciUrl(p) ? `<a href="${kciUrl(p)}" target="_blank" rel="noopener">${esc(p.title)}</a>` : esc(p.title)}
+          <span class="small muted">${esc(p.journal)} · ${esc(p.year)}</span></span>
+        <span class="kci-top__num">${esc(p.citations)}<span class="small muted">회</span></span>
+      </li>`).join('');
+
+    document.querySelector('#kci-table tbody').innerHTML = rows.map((r) =>
+      `<tr><td>${r.y}</td><td>${r.n}</td><td>${r.c}</td></tr>`).join('');
+    document.getElementById('kci-stats').hidden = false;
+  }
 
   function buildFilters() {
     const counts = {};
