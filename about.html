@@ -308,7 +308,7 @@ Promise.all([
     const LEVEL_CLASS = { '학부': 'ug', '대학원': 'grad', '교양': 'ge' };
     box.innerHTML = sem.courses.map((c) => `
       <article class="card course-card">
-        <span class="course-card__term">${esc(sem.label)} · 진행 중</span>
+        <span class="course-card__term">${esc(sem.label)}${semesterState(sem.id) === 'now' ? ' · 진행 중' : ''}</span>
         <h3 class="course-card__title">${esc(c.title)}</h3>
         <p class="small muted mb-0">
           <span class="tag tag--${LEVEL_CLASS[c.level] || 'ug'}">${esc(c.level)}</span>

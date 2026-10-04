@@ -83,6 +83,23 @@ function currentTheme() {
   return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
+/* ---------- 학기 ---------- */
+/**
+ * 학기 id('2026-2')가 오늘 기준으로 진행 중인지 계산합니다.
+ * 1학기는 3월~8월, 2학기는 9월~다음 해 2월로 봅니다.
+ * 시간표를 늦게 갱신해도 지난 학기를 '진행 중'으로 보여 주지 않기 위해서입니다.
+ * @returns {'now'|'past'|'future'|''}
+ */
+function semesterState(id, today = new Date()) {
+  const m = String(id || '').match(/^(\d{4})-([12])$/);
+  if (!m) return '';
+  const y = Number(m[1]);
+  const start = m[2] === '1' ? new Date(y, 2, 1) : new Date(y, 8, 1);
+  const end = m[2] === '1' ? new Date(y, 8, 1) : new Date(y + 1, 2, 1);
+  if (today < start) return 'future';
+  return today < end ? 'now' : 'past';
+}
+
 /* ---------- 헤더 동작 ---------- */
 function initHeader() {
   // 현재 페이지 메뉴에 표시

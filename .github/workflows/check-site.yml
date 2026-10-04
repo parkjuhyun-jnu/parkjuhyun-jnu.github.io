@@ -1,0 +1,27 @@
+# 사이트 점검 — tools/check-site.py 를 돌립니다.
+# 올릴 때마다: 깨진 내부 링크, 날짜 없는 미디어 기록, 논문 링크 누락 등을 확인합니다.
+# 매주 월요일: 기사·영상·DOI 같은 바깥 링크가 아직 열리는지도 확인합니다.
+# 실패하면 GitHub 이 저장소 주인에게 알림 메일을 보냅니다. 사이트 배포는 막지 않습니다.
+name: 사이트 점검
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 1'   # 매주 월요일 (한국시간 오전 9시)
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 내부 점검
+        if: github.event_name == 'push'
+        run: python3 tools/check-site.py
+      - name: 바깥 링크까지 점검
+        if: github.event_name != 'push'
+        run: python3 tools/check-site.py --external

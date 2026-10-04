@@ -157,10 +157,13 @@
 
   function renderCurrent(sem, details) {
     if (!sem) return;
+    // 시간표가 아직 새 학기로 갱신되지 않았으면 '지난 학기'로 알립니다.
+    const state = semesterState(sem.id);
+    const when = state === 'past' ? '가장 최근 학기 · ' : state === 'future' ? '다음 학기 · ' : '';
     document.getElementById('current-title').textContent = sem.label;
-    document.getElementById('current-sub').textContent = showN
+    document.getElementById('current-sub').textContent = when + (showN
       ? `${sem.courseCount}과목 · 수강생 ${sem.students}명`
-      : `${sem.courseCount}과목`;
+      : `${sem.courseCount}과목`);
 
     document.getElementById('current-list').innerHTML = sem.courses.map((c) => {
       const d = detailFor(c, sem.id, details);

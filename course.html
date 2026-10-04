@@ -81,7 +81,7 @@
     <section class="section">
       <div class="wrap">
         <p class="small"><a href="courses.html">← 수업 목록</a></p>
-        <span class="course-card__term">${esc(c.term)}${c.current ? ' · 진행 중' : ''}</span>
+        <span class="course-card__term">${esc(c.term)}${(c.semester ? semesterState(c.semester) === 'now' : c.current) ? ' · 진행 중' : ''}</span>
         <h1 style="font-family:var(--font-serif); margin-top:.3rem">${esc(c.title)}</h1>
         <p class="muted" style="margin-bottom:1.4rem">${esc(c.target || '')}${c.schedule ? ' · ' + esc(c.schedule) : ''}</p>
         <p style="max-width:60ch; font-size:1.05rem; color:var(--ink-soft)">${esc(c.summary || '')}</p>

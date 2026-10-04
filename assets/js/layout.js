@@ -46,11 +46,32 @@
       </div>
     </div>
     <div class="site-footer__bottom">
-      <span>&copy; <span data-year>2026</span> 박주현. All rights reserved.</span>
+      <span>&copy; <span data-year>2026</span> 박주현. All rights reserved.<span id="last-updated"></span></span>
       <span>학생 결과물의 저작권은 각 학생에게 있습니다.</span>
     </div>
   </div>
 </footer>`;
+
+  // 마지막 갱신일: 저장소의 가장 최근 커밋 날짜를 GitHub 에서 읽어 옵니다.
+  // 한 번 읽으면 이 탭에서는 다시 묻지 않습니다(요청 횟수 제한 때문).
+  (async function lastUpdated() {
+    const el = document.getElementById('last-updated');
+    if (!el) return;
+    let date = '';
+    try { date = sessionStorage.getItem('lastUpdated') || ''; } catch { /* 저장소를 못 써도 괜찮습니다 */ }
+    if (!date) {
+      try {
+        const r = await fetch('https://api.github.com/repos/parkjuhyun-jnu/parkjuhyun-jnu.github.io/commits?sha=main&per_page=1');
+        if (!r.ok) return;
+        const [c] = await r.json();
+        date = (c && c.commit && c.commit.committer && c.commit.committer.date) || '';
+        try { sessionStorage.setItem('lastUpdated', date); } catch { /* 무시 */ }
+      } catch { return; }
+    }
+    if (!date) return;
+    const d = new Date(date);
+    el.textContent = ` · 마지막 갱신 ${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+  })();
 
   // common.js 의 연도 채우기가 이미 끝났을 수 있으므로 여기서도 한 번 채웁니다.
   document.querySelectorAll('[data-year]').forEach((el) => {
