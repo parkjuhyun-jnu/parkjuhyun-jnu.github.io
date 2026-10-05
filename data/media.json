@@ -70,8 +70,7 @@
       "outlet": "교육부·한국교육학술정보원 「2025년 제1차 학교도서관·독서교육 정책협의회」",
       "place": "오송",
       "role": "발표",
-      "subtitle": "17개 시·도교육청 학교도서관·독서교육 담당자에게 두 정책연구의 결과와 시사점을 공유",
-      "featured": true
+      "subtitle": "17개 시·도교육청 학교도서관·독서교육 담당자에게 두 정책연구의 결과와 시사점을 공유"
     },
     {
       "date": "2022-08-15",
@@ -388,6 +387,34 @@
       "outlet": "한국교육신문",
       "role": "기고 · 한국사서교사협의회 회장",
       "url": "https://www.hangyo.com/news/article.html?no=94090"
+    },
+    {
+      "date": "2026-02-06",
+      "type": "forum",
+      "title": "사서교사 양성과정의 문제점과 개선 방안",
+      "outlet": "「AI시대 독서인문교육 진흥을 위한 토론회」 · 국회의원 김영호·김문수·정성국·강경숙 주최, 한국학교도서관협의회 등 주관",
+      "place": "국회의원회관 제4간담회의실 · 한국도서관협회 유튜브 생중계",
+      "role": "주제발표",
+      "image": "assets/img/media/2026-02-06-reading-humanities-forum-poster.jpg",
+      "featured": true
+    },
+    {
+      "date": "2024-05-30",
+      "type": "forum",
+      "title": "미디어 정보 리터러시 교육과정",
+      "outlet": "2024 대한민국 글로컬 미래교육박람회 포럼 「글로컬 미래교육, 전남의 미래교육 그 중심 전남공공도서관」 · 전라남도교육청나주도서관",
+      "place": "여수세계박람회장 기념관 그랜드홀",
+      "role": "주제발표",
+      "image": "assets/img/media/2024-05-30-glocal-library-forum-poster.jpg"
+    },
+    {
+      "date": "2023-11-09",
+      "type": "forum",
+      "title": "기록물 수집의 기준 및 활용방안",
+      "outlet": "5·18기록물 홍보 학술포럼 · 5·18민주화운동기록관",
+      "place": "5·18민주화운동기록관 다목적강당",
+      "role": "토론 (제1부 기록물 수집 원칙 및 절차)",
+      "image": "assets/img/media/2023-11-09-518-archives-forum-poster.jpg"
     }
   ]
 }

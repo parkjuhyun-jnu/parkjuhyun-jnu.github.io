@@ -23,6 +23,7 @@
       document.getElementById('total').textContent = String(DATA.items.length);
       renderStats();
       renderFeatured();
+      renderPosters();
       renderUpcoming();
       buildFilters();
       render();
@@ -137,6 +138,24 @@
       </article>`;
     }).join('');
     revealImageLinks(document.getElementById('featured'));
+  }
+
+  /* ---------- 포스터 모음 ---------- */
+  function renderPosters() {
+    const list = DATA.items.filter((x) => x.image);
+    if (!list.length) return;
+    const box = document.getElementById('posters');
+    box.innerHTML = list.map((x) => `
+      <li>
+        <a href="${esc(x.image)}" target="_blank" rel="noopener">
+          <img src="${esc(x.image)}" alt="${esc(x.title)} 포스터" loading="lazy" width="700" height="1000"
+               onerror="this.closest('li').remove()">
+          <span class="poster-wall__date">${esc(fmtMediaDate(x))}</span>
+          <span class="poster-wall__title">${esc(x.title)}</span>
+        </a>
+      </li>`).join('');
+    document.getElementById('poster-count').textContent = String(list.length);
+    document.getElementById('posters-wrap').hidden = false;
   }
 
   /* ---------- 예정 ---------- */
