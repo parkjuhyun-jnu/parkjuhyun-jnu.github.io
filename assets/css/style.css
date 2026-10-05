@@ -744,21 +744,24 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 .tag--m-talk  { color: var(--t-reading); border-color: color-mix(in srgb, var(--t-reading) 30%, transparent); background: color-mix(in srgb, var(--t-reading) 9%, transparent); }
 .tag--m-forum { color: var(--t-policy);  border-color: color-mix(in srgb, var(--t-policy) 30%, transparent);  background: color-mix(in srgb, var(--t-policy) 9%, transparent); }
 
-.media-featured { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.media-featured { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); align-items: start; }
+/* 대표 카드는 작은 가로형: 왼쪽에 작은 그림, 오른쪽에 날짜·제목·매체 한 줄 */
 .media-card {
-  display: flex; flex-direction: column; overflow: hidden; min-width: 0;
+  display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: .85rem; align-items: start;
+  padding: .8rem .9rem; min-width: 0;
   background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); box-shadow: var(--shadow);
+  border-radius: 12px; box-shadow: var(--shadow);
 }
-.media-card__thumb { aspect-ratio: 16 / 9; background: var(--surface-2); overflow: hidden; }
-.media-card__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-/* 포스터는 세로가 길어 잘라 내지 않고 통째로 보여 줍니다. */
-.media-card__thumb--poster { aspect-ratio: auto; max-height: 320px; display: flex; justify-content: center; }
-.media-card__thumb--poster img { width: auto; max-width: 100%; height: auto; max-height: 320px; object-fit: contain; }
-.media-card__body { padding: 1.1rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: .35rem; }
-.media-card__title { font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.45; margin: .2rem 0 0; }
+.media-card--text { grid-template-columns: minmax(0, 1fr); }
+.media-card__thumb { width: 64px; height: 80px; border-radius: 6px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--line-soft); }
+.media-card__thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.media-card__thumb a { display: block; height: 100%; }
+.media-card__body { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+.media-card__title { font-family: var(--font-serif); font-size: .98rem; line-height: 1.4; margin: .1rem 0 0;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .media-card__title a { color: var(--ink); }
 .media-card__title a:hover { color: var(--navy); }
+.media-card__where { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .media-card__sub { color: var(--ink-soft); margin: .3rem 0 0; }
 .media-links a { color: var(--navy); font-weight: 600; }
 .media-links a:hover { text-decoration: underline; }

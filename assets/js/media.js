@@ -75,10 +75,11 @@
       : t;
   }
 
-  function extraLinks(x) {
+  function extraLinks(x, opt = {}) {
     const links = [];
     // 포스터·사진 링크는 그림 파일이 실제로 있을 때만 보이게 합니다(revealImageLinks).
-    if (x.image) links.push(`<a class="media-image-link" href="${esc(x.image)}" target="_blank" rel="noopener" hidden>포스터·사진 보기</a>`);
+    // 대표 카드는 작은 그림을 누르면 포스터가 열리므로 이 링크를 뺍니다(opt.noImage).
+    if (x.image && !opt.noImage) links.push(`<a class="media-image-link" href="${esc(x.image)}" target="_blank" rel="noopener" hidden>포스터·사진 보기</a>`);
     (x.links || []).forEach((l) => {
       if (l && l.url) links.push(`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label || '관련 링크')}</a>`);
     });
@@ -119,21 +120,24 @@
     document.getElementById('featured-wrap').style.display = '';
     document.getElementById('featured').innerHTML = picks.map((x) => {
       const thumb = thumbOf(x);
-      const isPoster = Boolean(x.image);
+      // 포스터는 작은 미리보기만(아래 '포스터 모음'에 크게 있음). 누르면 원본이 열립니다.
+      const href = x.image || x.url || '';
       const media = thumb
-        ? `<div class="media-card__thumb${isPoster ? ' media-card__thumb--poster' : ''}">
-             <img src="${esc(thumb)}" alt="${esc(x.title)}${isPoster ? ' 포스터' : ' 영상 썸네일'}" loading="lazy"
-                  onerror="this.closest('.media-card__thumb').remove()">
+        ? `<div class="media-card__thumb">
+             ${href ? `<a href="${esc(href)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">` : ''}
+             <img src="${esc(thumb)}" alt="" loading="lazy"
+                  onerror="this.closest('.media-card').classList.add('media-card--text'); this.closest('.media-card__thumb').remove()">
+             ${href ? '</a>' : ''}
            </div>`
         : '';
-      return `<article class="media-card">
+      const links = extraLinks(x, { noImage: true });
+      return `<article class="media-card${thumb ? '' : ' media-card--text'}">
         ${media}
         <div class="media-card__body">
           <div class="row" style="gap:.4rem">${typeTag(x.type)}<span class="small muted">${esc(fmtMediaDate(x))}</span>${checkTag(x)}</div>
-          <h3 class="media-card__title">${titleHtml(x)}</h3>
-          <p class="small muted mb-0">${esc(whereOf(x))}</p>
-          ${x.subtitle ? `<p class="small media-card__sub">${esc(x.subtitle)}</p>` : ''}
-          ${extraLinks(x) ? `<p class="small mb-0" style="margin-top:.5rem">${extraLinks(x)}</p>` : ''}
+          <h3 class="media-card__title" title="${esc(x.title)}">${titleHtml(x)}</h3>
+          <p class="small muted media-card__where" title="${esc(whereOf(x))}">${esc(whereOf(x))}</p>
+          ${links ? `<p class="small mb-0">${links}</p>` : ''}
         </div>
       </article>`;
     }).join('');
