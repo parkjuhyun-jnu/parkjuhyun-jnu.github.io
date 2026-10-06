@@ -102,6 +102,18 @@ function semesterState(id, today = new Date()) {
 
 /* ---------- 헤더 동작 ---------- */
 function initHeader() {
+  // 맨 위 메뉴 오른쪽에 '관리자 로그인' 자물쇠 단추를 붙입니다(모든 한국어 페이지 공통).
+  const navEl = $('.nav');
+  if (navEl && !navEl.querySelector('.nav-admin') && document.documentElement.lang !== 'en') {
+    const a = document.createElement('a');
+    a.href = 'admin.html';
+    a.className = 'nav-admin';
+    a.title = '관리자 로그인';
+    a.setAttribute('aria-label', '관리자 로그인');
+    a.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><span class="nav-admin__label">관리자 로그인</span>';
+    navEl.insertBefore(a, navEl.querySelector('.theme-toggle'));
+  }
+
   // 현재 페이지 메뉴에 표시
   const here = location.pathname.split('/').pop() || 'index.html';
   $$('.nav a').forEach((a) => {

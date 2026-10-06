@@ -932,3 +932,18 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 .poster-wall__date { font-size: .78rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
 .poster-wall__title { font-size: .85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 @media (max-width: 420px) { .poster-wall { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; } }
+
+/* ---------- 19. 메뉴의 관리자 로그인 단추 ---------- */
+.nav .nav-admin {
+  display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0;
+  border: 1px solid var(--line); border-radius: 9px; color: var(--ink-soft); flex: none;
+}
+.nav .nav-admin:hover { background: var(--surface-2); color: var(--ink); text-decoration: none; }
+.nav .nav-admin[aria-current="page"] { color: var(--navy); border-color: var(--navy); background: var(--navy-wash); }
+.nav-admin__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 800px) {
+  /* 펼친 휴대폰 메뉴에서는 글자와 함께 한 줄로 */
+  .nav .nav-admin { display: flex; gap: .5rem; align-items: center; width: auto; height: auto;
+    border: 0; border-radius: 0; padding: .72rem .6rem; }
+  .nav-admin__label { position: static; width: auto; height: auto; overflow: visible; clip: auto; font-size: 1rem; }
+}
