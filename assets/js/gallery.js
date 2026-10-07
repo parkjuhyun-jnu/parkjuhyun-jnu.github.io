@@ -37,6 +37,9 @@
     });
   }
 
+  let isAdmin = false;   // 관리자는 '공개 범위' 단추로 바로 바꿉니다
+  API.currentAdmin().then((a) => { isAdmin = Boolean(a); }).catch(() => {});
+
   init();
 
   async function init() {
@@ -212,6 +215,7 @@
       }))
       .join('');
     bindSelfDelete();
+    bindVisibility();
   }
 
   /* ---------- 올린 본인이 지우기 ---------- */
@@ -228,20 +232,58 @@
         pinEl.value = pinEl.value.replace(/\D/g, '').slice(0, 4);
       });
 
-      btn.addEventListener('click', () => {
-        form.hidden = false;
-        btn.style.display = 'none';
-        form.querySelector('input[name="name"]').focus();
-      });
+      btn.addEventListener('click', () => openForm(card, 'delete'));
 
       form.querySelector('[data-cancel]').addEventListener('click', () => {
         form.reset();
         form.querySelector('.selfdel__msg').textContent = '';
         form.hidden = true;
-        btn.style.display = '';
+        card.querySelectorAll('.selfdel-open, .selfvis-open').forEach((b) => { b.style.display = ''; });
       });
 
       form.addEventListener('submit', (e) => onSelfDelete(e, form));
+    });
+  }
+
+  /** 본인 확인 칸을 '지우기' 또는 '공개 범위 바꾸기' 용도로 엽니다. */
+  function openForm(card, mode) {
+    const form = card.querySelector('.selfdel');
+    const vis = card.querySelector('.selfvis-open');
+    form.dataset.mode = mode;
+    const go = form.querySelector('button[type="submit"]');
+    if (mode === 'visibility') {
+      const toPublic = vis.dataset.to === 'public';
+      go.textContent = toPublic ? '모두 공개로 바꾸기' : '수업 공개로 바꾸기';
+      go.className = 'btn btn--sm';
+      form.querySelector('.selfdel__lead').textContent = toPublic
+        ? '모두 공개로 바꾸면 수업 코드가 없는 사람도 볼 수 있습니다. 올릴 때 적은 이름과 삭제 암호를 넣어 주세요.'
+        : '수업 공개로 바꾸면 수업 코드를 아는 사람만 볼 수 있습니다. 올릴 때 적은 이름과 삭제 암호를 넣어 주세요.';
+    } else {
+      go.textContent = '지우기';
+      go.className = 'btn btn--danger btn--sm';
+      form.querySelector('.selfdel__lead').textContent = '올릴 때 적은 이름과 삭제 암호(숫자 4자리)를 넣어 주세요.';
+    }
+    form.querySelector('.selfdel__msg').textContent = '';
+    form.hidden = false;
+    card.querySelectorAll('.selfdel-open, .selfvis-open').forEach((b) => { b.style.display = 'none'; });
+    form.querySelector('input[name="name"]').focus();
+  }
+
+  function bindVisibility() {
+    worksEl.querySelectorAll('.selfvis-open').forEach((btn) => {
+      const card = btn.closest('.work');
+      btn.addEventListener('click', async () => {
+        if (!isAdmin) { openForm(card, 'visibility'); return; }
+        // 관리자는 확인 없이 바로 바꿉니다.
+        btn.disabled = true;
+        try {
+          await API.setVisibility(btn.dataset.id, btn.dataset.to);
+          load();
+        } catch (err) {
+          alert(err.message || '바꾸지 못했습니다.');
+          btn.disabled = false;
+        }
+      });
     });
   }
 
@@ -260,11 +302,14 @@
     msg.style.color = '';
     msg.textContent = '확인 중…';
     try {
-      const ok = await API.deleteOwn(form.dataset.id, name, pin);
+      const card = form.closest('.work');
+      const ok = form.dataset.mode === 'visibility'
+        ? await API.setOwnVisibility(form.dataset.id, name, pin, card.querySelector('.selfvis-open').dataset.to)
+        : await API.deleteOwn(form.dataset.id, name, pin);
       if (ok) { load(); return; }
       fail('이름이나 삭제 암호가 맞지 않습니다.');
     } catch (err) {
-      fail(err.message || '지우지 못했습니다.');
+      fail(err.message || (form.dataset.mode === 'visibility' ? '바꾸지 못했습니다.' : '지우지 못했습니다.'));
     } finally {
       go.disabled = false;
     }

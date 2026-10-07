@@ -285,6 +285,36 @@ const API = (() => {
     return data;
   }
 
+  /**
+   * 올린 본인이 공개 범위를 바꿉니다(수업 공개 ↔ 모두 공개). 이름과 삭제 암호가 맞아야 합니다.
+   * @returns {Promise<boolean>} 맞지 않으면 false
+   */
+  async function setOwnVisibility(id, name, password, visibility) {
+    const same = (a, b) =>
+      String(a || '').trim().toLowerCase().replace(/\s+/g, '') ===
+      String(b || '').trim().toLowerCase().replace(/\s+/g, '');
+    if (MODE === 'demo') {
+      const rows = demoAll();
+      const row = rows.find((r) => r.id === id && !r.deleted_at);
+      if (!row) throw new Error('이미 지워졌거나 찾을 수 없는 결과물입니다.');
+      if (!same(name, row.author_name) || String(password || '') !== String(row.pw || '')) return false;
+      row.visibility = visibility === 'public' ? 'public' : 'class';
+      demoSave(rows);
+      return true;
+    }
+    const supa = await getClient();
+    const { data, error } = await supa.rpc('set_own_visibility', {
+      p_id: id, p_name: String(name || ''), p_password: String(password || ''), p_visibility: visibility,
+    });
+    if (error) {
+      if (/set_own_visibility|could not find the function/i.test(error.message || '')) {
+        throw new Error('아직 서버에 이 기능이 켜지지 않았습니다. 담당 교수에게 말씀해 주세요.');
+      }
+      throw error;
+    }
+    return data === true;
+  }
+
   /** 권한 오류를 '수업 코드를 다시 확인해 주세요'로 바꾸고, 브라우저의 해제 기억도 지웁니다. */
   function friendly(err, courseId) {
     const msg = String((err && err.message) || err || '');
@@ -469,7 +499,7 @@ const API = (() => {
     listCourses, getCourse,
     isUnlocked, verifyUnlock, unlock, lock,
     listSubmissions, listPublic, createSubmission, deleteOwn,
-    signIn, signOut, currentAdmin, changePassword, listAll, setVisibility,
+    signIn, signOut, currentAdmin, changePassword, listAll, setVisibility, setOwnVisibility,
     removeSubmission, restoreSubmission,
     setSetting,
     clearDemo,

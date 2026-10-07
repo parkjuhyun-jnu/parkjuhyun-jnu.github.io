@@ -89,7 +89,7 @@ function workCard(row, opt = {}) {
   // 올린 본인이 지우는 칸. 이름과 삭제 암호(숫자 4자리)가 둘 다 맞아야 합니다.
   const selfDelete = (opt.selfDelete && !gone) ? `
     <form class="selfdel" data-id="${esc(row.id)}" hidden>
-      <p class="small muted mb-0">올릴 때 적은 이름과 삭제 암호(숫자 4자리)를 넣어 주세요.</p>
+      <p class="small muted mb-0 selfdel__lead">올릴 때 적은 이름과 삭제 암호(숫자 4자리)를 넣어 주세요.</p>
       <div class="selfdel__row">
         <input type="text" name="name" placeholder="이름" autocomplete="off">
         <input type="text" name="pin" class="pin" inputmode="numeric"
@@ -117,6 +117,10 @@ function workCard(row, opt = {}) {
       </div>
       <div class="work__foot" style="padding-top:.3rem">
         ${openButton(row)}
+        ${(opt.selfDelete && !gone && row.visibility !== 'private')
+          ? `<button class="btn btn--ghost btn--sm selfvis-open" data-id="${esc(row.id)}" type="button"
+                     data-to="${row.visibility === 'public' ? 'class' : 'public'}">${row.visibility === 'public' ? '수업 공개로' : '모두 공개로'}</button>`
+          : ''}
         ${(opt.selfDelete && !gone)
           ? `<button class="btn btn--ghost btn--sm selfdel-open" data-id="${esc(row.id)}" type="button">지우기</button>`
           : ''}
