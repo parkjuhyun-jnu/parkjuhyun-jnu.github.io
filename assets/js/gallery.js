@@ -98,7 +98,7 @@
 
       themeEl.hidden = true;
       const course = courses.find((c) => c.id === current);
-      const unlocked = API.isUnlocked(current);
+      const unlocked = await API.verifyUnlock(current);
       lockBtn.style.display = unlocked ? '' : 'none';
 
       const rows = await API.listSubmissions(current);

@@ -33,7 +33,7 @@
   if (API.mode === 'demo') document.getElementById('demo-banner').style.display = '';
 
   el.fileHint.textContent =
-    `최대 ${CFG.maxFileMB}MB · ${CFG.allowedExt.join(', ')}`;
+    `최대 ${CFG.maxFileMB}MB · ${CFG.allowedExt.join(', ')} · 영상은 '링크로 제출'을 골라 유튜브 주소로 올려 주세요.`;
   el.file.accept = CFG.allowedExt.map((e) => '.' + e).join(',');
 
   // 삭제 암호 칸에는 숫자만, 네 자리까지만 들어가게 합니다.
@@ -87,6 +87,12 @@
     if (API.isUnlocked(id)) {
       el.codeField.style.display = 'none';
       el.rest.style.display = '';
+      // 브라우저 기억이 서버와 맞는지 확인하고, 아니면 코드 입력으로 되돌립니다.
+      API.verifyUnlock(id).then((ok) => {
+        if (!ok && el.course.value === id) {
+          askCode('수업 코드를 다시 확인해 주세요. 관리자 로그인·로그아웃 뒤에는 다시 확인이 필요합니다.');
+        }
+      });
     } else {
       el.codeField.style.display = '';
       el.rest.style.display = 'none';
@@ -94,6 +100,16 @@
       el.codeMsg.textContent = '코드를 확인해야 제출할 수 있습니다.';
       el.codeMsg.style.color = '';
     }
+  }
+
+  function askCode(message) {
+    el.codeField.style.display = '';
+    el.rest.style.display = 'none';
+    el.code.value = '';
+    el.codeMsg.textContent = message;
+    el.codeMsg.style.color = 'var(--danger)';
+    el.codeField.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    el.code.focus();
   }
 
   async function checkCode() {
@@ -148,6 +164,9 @@
       const f = el.file.files[0];
       if (!f) return '올릴 파일을 골라 주세요.';
       const ext = (f.name.split('.').pop() || '').toLowerCase();
+      if (/^video\//.test(f.type) || ['mp4', 'mov', 'avi', 'mkv', 'wmv', 'webm', 'm4v'].includes(ext)) {
+        return '영상은 파일로 올리지 않고 링크로 제출합니다. 유튜브에 \'일부 공개\'로 올린 뒤 위에서 \'링크로 제출\'을 골라 주소를 붙여 넣어 주세요.';
+      }
       if (!CFG.allowedExt.includes(ext)) {
         return `올릴 수 없는 형식입니다(.${ext}). 허용: ${CFG.allowedExt.join(', ')}`;
       }
@@ -203,9 +222,14 @@
         </div>`;
       el.done.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (err) {
-      show('danger', `<strong>제출하지 못했습니다</strong>${esc(err.message || err)}`);
       el.submit.disabled = false;
       el.submit.textContent = '제출하기';
+      if (err && err.needsCode) {
+        // 적어 둔 제목·이름 등은 그대로 두고 코드만 다시 받습니다.
+        askCode(err.message);
+        return;
+      }
+      show('danger', `<strong>제출하지 못했습니다</strong>${esc(err.message || err)}`);
     }
   }
 })();

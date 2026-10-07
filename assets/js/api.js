@@ -111,6 +111,25 @@ const API = (() => {
     return data === true;
   }
 
+  /**
+   * 이 브라우저가 '코드를 풀었다'고 기억하는 과목을 서버에도 확인합니다.
+   * 관리자 로그인·로그아웃을 하면 접속 계정이 바뀌어 서버 쪽 해제 기록이 없어지는데,
+   * 그때 브라우저 기억만 믿고 제출하면 'row-level security' 오류가 납니다.
+   * 서버에 기록이 없으면 브라우저 기억도 지우고 false 를 돌려줍니다.
+   */
+  async function verifyUnlock(courseId) {
+    if (!isUnlocked(courseId)) return false;
+    if (MODE === 'demo') return true;
+    try {
+      const supa = await getClient();
+      const { data, error } = await supa.rpc('has_access', { p_course_id: courseId });
+      if (error) return true;            // 확인 자체가 안 되면 막지 않고 제출 단계에서 다시 판단
+      if (data === true) return true;
+    } catch { return true; }
+    lock(courseId);
+    return false;
+  }
+
   function lock(courseId) {
     const list = unlockedList().filter((id) => id !== courseId);
     store.set(UNLOCK_KEY, JSON.stringify(list));
@@ -240,7 +259,7 @@ const API = (() => {
       const { error: upErr } = await supa.storage
         .from(CFG.bucket)
         .upload(filePath, p.file, { cacheControl: '3600', upsert: false });
-      if (upErr) throw upErr;
+      if (upErr) throw friendly(upErr, p.courseId);
     }
 
     // 제출물과 비밀번호를 한 번에 넣습니다.
@@ -261,9 +280,24 @@ const API = (() => {
     if (error) {
       // 글이 안 들어갔는데 파일만 남는 일이 없도록 치웁니다.
       if (filePath) await supa.storage.from(CFG.bucket).remove([filePath]).catch(() => {});
-      throw error;
+      throw friendly(error, p.courseId);
     }
     return data;
+  }
+
+  /** 권한 오류를 '수업 코드를 다시 확인해 주세요'로 바꾸고, 브라우저의 해제 기억도 지웁니다. */
+  function friendly(err, courseId) {
+    const msg = String((err && err.message) || err || '');
+    if (/row-level security|수업 코드를 먼저/i.test(msg)) {
+      lock(courseId);
+      const e = new Error('수업 코드 확인이 풀렸습니다. 수업 코드를 다시 입력한 뒤 제출해 주세요. (관리자 로그인·로그아웃을 하면 다시 확인해야 합니다.)');
+      e.needsCode = true;
+      return e;
+    }
+    if (/exceeded the maximum allowed size|payload too large|413/i.test(msg)) {
+      return new Error(`파일이 너무 큽니다. 최대 ${CFG.maxFileMB}MB까지 올릴 수 있습니다. 영상은 유튜브에 올린 뒤 링크로 제출해 주세요.`);
+    }
+    return err;
   }
 
   /* ---------- 올린 본인이 지우기 ---------- */
@@ -321,6 +355,7 @@ const API = (() => {
     const supa = await getClient();
     const { data, error } = await supa.auth.signInWithPassword({ email, password });
     if (error) throw error;
+    store.del(UNLOCK_KEY);   // 접속 계정이 바뀌어 예전 수업 코드 해제 기록은 더 이상 통하지 않습니다
     return data.user;
   }
 
@@ -329,6 +364,7 @@ const API = (() => {
     const supa = await getClient();
     await supa.auth.signOut();
     await supa.auth.signInAnonymously(); // 다시 일반 방문자로
+    store.del(UNLOCK_KEY);
   }
 
   /** 지금 관리자로 로그인되어 있는지 */
@@ -431,7 +467,7 @@ const API = (() => {
   return {
     mode: MODE,
     listCourses, getCourse,
-    isUnlocked, unlock, lock,
+    isUnlocked, verifyUnlock, unlock, lock,
     listSubmissions, listPublic, createSubmission, deleteOwn,
     signIn, signOut, currentAdmin, changePassword, listAll, setVisibility,
     removeSubmission, restoreSubmission,
