@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>XML과 JSON 실습 자료 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 2강 XML과 JSON 실습 파일과 안내서.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .files { display: flex; flex-wrap: wrap; gap: .35rem .5rem; }
+  .files a { font-size: .86rem; padding: .12rem .55rem; border: 1px solid var(--line); border-radius: 999px; white-space: nowrap; }
+  .weeks .w-body { flex: 1; min-width: 0; }
+  .weeks .w-meta { flex: none; font-size: .84rem; color: var(--ink-faint); text-align: right; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="course.html?id=metadata-2026-2">← 메타데이터와아카이빙연구</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 수업 자료</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">XML과 JSON 실습 자료</h1>
+      <p style="max-width:60ch; font-size:1.05rem; color:var(--ink-soft)">
+        2강 ‘XML과 JSON: 메타데이터를 담는 그릇’의 실습 파일입니다. 메모장과 브라우저만 있으면 되고, 설치할 프로그램은 없습니다.
+      </p>
+      <div class="row" style="margin-top:1.4rem">
+        <a class="btn" href="materials/metadata-2026-2/xml-json/xml-json-practice-20261030.zip" download="XML과 JSON-실습파일-20261030.zip">실습 파일 한꺼번에 받기 (zip, 288KB)</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/xml-json/xml-json-guide-20261030.pdf" target="_blank" rel="noopener">실습 안내서 (PDF)</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/xml-json/files/실습3-5_링크모음.html" target="_blank" rel="noopener">링크 모음 열기</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="notice notice--info" style="max-width:60ch">
+        <strong>메모장으로 저장할 때 두 가지</strong>
+        ① 인코딩은 <b>UTF-8</b> ② 파일 형식은 <b>모든 파일</b>로 바꾸고 이름 끝을 <code>.xml</code>·<code>.json</code>으로 합니다. <code>book.xml.txt</code>가 되면 브라우저가 XML로 읽지 못합니다.
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>실습 순서</h2>
+        <p>zip을 풀면 아래 파일이 모두 들어 있습니다. 파일 하나만 다시 받으려면 이름을 누르세요. 정답 파일은 들어 있지 않습니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">실습 1</span><span class="w-body">book.xml 쓰고 브라우저로 열기, 일부러 틀린 파일 고치기
+          <span class="files" style="margin-top:.4rem">
+            <a href="materials/metadata-2026-2/xml-json/files/실습1_book_빈칸.xml" download>실습1_book_빈칸.xml</a>
+            <a href="materials/metadata-2026-2/xml-json/files/오류1_닫는태그없음.xml" download>오류1</a>
+            <a href="materials/metadata-2026-2/xml-json/files/오류2_앰퍼샌드.xml" download>오류2</a>
+            <a href="materials/metadata-2026-2/xml-json/files/오류3_대소문자.xml" download>오류3</a>
+            <a href="materials/metadata-2026-2/xml-json/files/오류4_속성따옴표.xml" download>오류4</a>
+            <a href="materials/metadata-2026-2/xml-json/files/오류5_루트두개.xml" download>오류5</a>
+          </span></span><span class="w-meta">20분</span></li>
+        <li><span class="w-no">실습 2</span><span class="w-body">book.json 쓰고 오류 찾기
+          <span class="files" style="margin-top:.4rem">
+            <a href="materials/metadata-2026-2/xml-json/files/실습2_book_빈칸.json" download>실습2_book_빈칸.json</a>
+            <a href="materials/metadata-2026-2/xml-json/files/오류6_끝쉼표.json" download>오류6</a>
+            <a href="materials/metadata-2026-2/xml-json/files/오류7_작은따옴표.json" download>오류7</a>
+            <a href="materials/metadata-2026-2/xml-json/files/오류8_쉼표빠짐.json" download>오류8</a>
+            <a href="materials/metadata-2026-2/xml-json/files/오류9_True대문자.json" download>오류9</a>
+          </span></span><span class="w-meta">10분</span></li>
+        <li><span class="w-no">실습 3</span><span class="w-body">API 주소의 바꿀 자리를 고쳐 직접 가져오고, 응답 구조를 나무로 그리기 (LC SRU · Open Library · Crossref · 국립중앙도서관 LOD)
+          <span class="files" style="margin-top:.4rem">
+            <a href="materials/metadata-2026-2/xml-json/files/실습3-5_링크모음.html" target="_blank" rel="noopener">링크 모음</a>
+          </span></span><span class="w-meta">15분 · 인터넷</span></li>
+        <li><span class="w-no">실습 4</span><span class="w-body">링크드 데이터 따라가기: 국립중앙도서관 LOD → Wikidata → 『어린 왕자』</span><span class="w-meta">7분 · 인터넷</span></li>
+        <li><span class="w-no">실습 5</span><span class="w-body">국립중앙도서관 SPARQL 편집기에서 질의 세 개
+          <span class="files" style="margin-top:.4rem">
+            <a href="materials/metadata-2026-2/xml-json/files/실습5_SPARQL.md" download>실습5_SPARQL.md</a>
+          </span></span><span class="w-meta">10분 · 인터넷</span></li>
+        <li><span class="w-no">실습 6</span><span class="w-body">LRM 활동지: 다른 번역본으로 저작·표현형·구현형·개별자료 채우기
+          <span class="files" style="margin-top:.4rem">
+            <a href="materials/metadata-2026-2/xml-json/files/실습6_LRM_활동지.md" download>실습6_LRM_활동지.md</a>
+          </span></span><span class="w-meta">8분 · 인터넷</span></li>
+        <li><span class="w-no">마무리</span><span class="w-body">오류 찾기 퀴즈 (XML 3문항 · JSON 3문항)
+          <span class="files" style="margin-top:.4rem">
+            <a href="materials/metadata-2026-2/xml-json/files/퀴즈_오류찾기.md" download>퀴즈_오류찾기.md</a>
+          </span></span><span class="w-meta">5분</span></li>
+      </ul>
+      <p class="small muted" style="margin-top:1rem">.md 파일은 메모장으로 열면 됩니다. 실습 3~6의 외부 사이트 주소는 2026-10-30에 응답을 확인했습니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>실습 3~5 링크 모음</title>
+<style>
+body{font-family:"맑은 고딕",sans-serif;max-width:900px;margin:24px auto;padding:0 16px;line-height:1.65;color:#1F2933}
+h1{color:#0B4F5C}h2{color:#15808F;border-bottom:2px solid #EEF4F5;padding-bottom:4px}
+code{background:#EEF4F5;padding:1px 4px;word-break:break-all}
+.slot{background:#E9A23B;color:#1F2933;font-weight:bold;padding:0 3px;border-radius:3px}
+li{margin:8px 0}.tip{color:#5E6A75;font-size:0.92em}
+</style></head>
+<body>
+<h1>실습 3~5 링크 모음 (메타데이터론 2강)</h1>
+<p>링크를 누르면 실제 서버가 보낸 응답이 열립니다. 아래 링크는 모두 2026-10-29~30에 응답을 확인했습니다.<br>
+<span class="slot">주황색</span>은 <b>바꿀 자리</b>입니다. 주소창에서 그 부분만 고치고 Enter를 누르세요.</p>
+
+<h2>실습 3. API로 직접 바꿔서 가져오기</h2>
+<p>먼저 예시 링크를 열어 보고, 다음에는 바꿀 자리를 고쳐서 다시 가져옵니다.</p>
+<ol>
+<li><b>LC SRU (XML)</b> — 예시: <a href="http://lx2.loc.gov:210/LCDB?version=1.1&operation=searchRetrieve&query=bath.isbn=0156012197&maximumRecords=1&recordSchema=marcxml">『The Little Prince』 MARCXML</a><br>
+틀: <code>http://lx2.loc.gov:210/LCDB?version=1.1&amp;operation=searchRetrieve&amp;query=bath.isbn=<span class="slot">ISBN</span>&amp;maximumRecords=1&amp;recordSchema=<span class="slot">marcxml|mods|dc</span></code><br>
+<span class="tip">recordSchema만 mods, dc로 바꿔 같은 책을 세 형식으로 받아 보세요. 영어책 ISBN을 넣으면 찾을 가능성이 높습니다.</span></li>
+<li><b>Open Library (JSON)</b> — 예시: <a href="https://openlibrary.org/isbn/9780156012195.json">openlibrary.org/isbn/9780156012195.json</a><br>
+틀: <code>https://openlibrary.org/isbn/<span class="slot">ISBN</span>.json</code><br>
+검색 틀: <code>https://openlibrary.org/search.json?q=<span class="slot">검색어</span>&amp;limit=<span class="slot">5</span></code> — 예: <a href="https://openlibrary.org/search.json?q=the+little+prince&limit=2">q=the+little+prince</a></li>
+<li><b>Crossref (JSON, 논문)</b> — 예시: <a href="https://api.crossref.org/works/10.1038/sdata.2016.18">api.crossref.org/works/10.1038/sdata.2016.18</a><br>
+틀: <code>https://api.crossref.org/works/<span class="slot">DOI</span></code><br>
+<span class="tip">한국 학술지 DOI는 대부분 KISTI에 등록되어 Crossref에서는 '찾을 수 없음'이 나올 수 있습니다.</span></li>
+<li><b>국립중앙도서관 LOD (JSON·Turtle, 키 없음)</b> — 예시: <a href="https://lod.nl.go.kr/data/KMO200722491?output=json">KMO200722491 JSON</a> · <a href="https://lod.nl.go.kr/data/KMO200722491?output=ttl">Turtle</a> · <a href="https://lod.nl.go.kr/page/KMO200722491">사람용 페이지</a><br>
+틀: <code>https://lod.nl.go.kr/data/<span class="slot">리소스번호</span>?output=<span class="slot">json|ttl|rdfxml</span></code><br>
+<span class="tip">리소스 번호 예: KMO200722491(어린 왕자, 문학동네), KJU200003488(어린 왕자, 비룡소), WMO202006856(The little prince, Harcourt), KAC199623935(생텍쥐페리)</span></li>
+<li><b>OAI-PMH (XML)</b> — 예시: <a href="https://oaipmh.arxiv.org/oai?verb=Identify">verb=Identify</a> · <a href="https://oaipmh.arxiv.org/oai?verb=GetRecord&identifier=oai:arXiv.org:1706.03762&metadataPrefix=oai_dc">GetRecord</a><br>
+틀: <code>https://oaipmh.arxiv.org/oai?verb=GetRecord&amp;identifier=oai:arXiv.org:<span class="slot">논문번호</span>&amp;metadataPrefix=oai_dc</code></li>
+</ol>
+<p><b>그리기</b>: 받은 응답 하나를 골라 종이에 나무 모양으로 그리세요(최상위 → 객체/요소 → 배열 → 값). 제목·ISBN·저자까지 가는 길을 화살표로 표시합니다.</p>
+
+<h2>실습 4. 링크드 데이터 따라가기</h2>
+<ol>
+<li>국립중앙도서관 LOD 『어린 왕자』(문학동네, 2007): <a href="https://lod.nl.go.kr/page/KMO200722491">lod.nl.go.kr/page/KMO200722491</a> → 저자 링크 → owl:sameAs 중 Wikidata</li>
+<li>Wikidata 『어린 왕자』 저작: <a href="https://www.wikidata.org/wiki/Q25338">wikidata.org/wiki/Q25338</a></li>
+<li>LC 주제명 'Metadata'(SKOS): <a href="https://id.loc.gov/authorities/subjects/sh96000740.html">id.loc.gov/authorities/subjects/sh96000740</a> · 'Linked data': <a href="https://id.loc.gov/authorities/subjects/sh2013002090.html">sh2013002090</a></li>
+</ol>
+
+<h2>실습 5. SPARQL 한 줄 질의</h2>
+<p>국립중앙도서관 SPARQL 편집기: <a href="https://lod.nl.go.kr/editor">lod.nl.go.kr/editor</a> — 활동지(실습5_SPARQL.md)의 질의를 붙여 넣고 실행합니다.</p>
+</body></html>

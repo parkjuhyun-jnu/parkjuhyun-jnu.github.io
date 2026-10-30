@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 실습 1: 빈칸(____)을 채워 저장한 뒤 브라우저로 열어 보세요. 파일 이름: book.xml -->
+<book id="KMO200722491">
+  <title>____</title>
+  <creator role="author">____</creator>
+  <creator role="____">김화영</creator>
+  <publisher>____</publisher>
+  <date>____</date>
+  <isbn>9788954603096</isbn>
+____

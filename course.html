@@ -77,6 +77,9 @@
 
     const goals = (c.goals || []).map((g) => `<li>${esc(g)}</li>`).join('');
 
+    const materials = (c.materials || []).map((m) => `
+      <li><span class="w-no">${esc(m.no || '')}</span><span><a href="${esc(m.url)}">${esc(m.title)}</a>${m.note ? ` <span class="muted small">— ${esc(m.note)}</span>` : ''}</span></li>`).join('');
+
     main.innerHTML = `
     <section class="section">
       <div class="wrap">
@@ -94,6 +97,17 @@
         </div>
       </div>
     </section>
+
+    ${materials ? `
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>수업 자료</h2>
+          <p>실습 파일과 안내서를 내려받을 수 있습니다.</p>
+        </div>
+        <ul class="weeks">${materials}</ul>
+      </div>
+    </section>` : ''}
 
     ${goals ? `
     <section class="section">
