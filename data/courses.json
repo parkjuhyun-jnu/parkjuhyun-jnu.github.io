@@ -55,6 +55,12 @@
           "title": "XML과 JSON 실습 자료",
           "url": "materials/metadata-2026-2/xml-json/",
           "note": "두 주(2강 ①·②) 실습 파일(zip) · 실습 안내서(PDF) · API 링크 모음"
+        },
+        {
+          "no": "3강",
+          "title": "데이터베이스와 SQL 실습",
+          "url": "materials/metadata-2026-2/sql-db/",
+          "note": "두 주(3강 ①·②) 도서관 DB 구조 보기(ERD) · 브라우저 SQL 실습실(설치 없음, 26문제)"
         }
       ]
     }

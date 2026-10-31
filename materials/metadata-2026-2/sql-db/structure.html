@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 하위 폴더 페이지지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>도서관 DB 구조 보기 | 박주현</title>
+<meta name="description" content="메타데이터론 3강 실습용 작은 도서관 DB의 ERD와 테이블 미리보기.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="materials/metadata-2026-2/sql-db/sqldb.css?v=20261031">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="materials/metadata-2026-2/sql-db/">← DB와 SQL 실습 자료</a></p>
+      <span class="course-card__term">메타데이터와아카이빙연구 · 3강</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">작은 도서관 DB 구조 보기</h1>
+      <p style="max-width:62ch; color:var(--ink-soft)">
+        실습에 쓰는 DB의 테이블 9개와 그 사이 관계입니다. 아래 그림은 이 페이지가 DB에 직접 물어(<code>PRAGMA table_info</code>, <code>foreign_key_list</code>) 그린 것입니다. 상자를 누르면 그 테이블의 열 설명과 앞 10행이 아래에 나옵니다.
+      </p>
+      <div class="row" style="margin-top:1rem">
+        <a class="btn" href="materials/metadata-2026-2/sql-db/lab.html">SQL 실습실 열기</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/sql-db/library.sql" download="library.sql">DB 파일 받기 (library.sql)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="erd-wrap"><div id="erd" class="loading">DB를 불러오는 중입니다…</div></div>
+      <p class="erd-legend"><b class="pk">PK</b> 기본 키(행을 하나로 가리키는 값) · <b class="fk">FK</b> 외래 키(다른 테이블의 PK를 가리키는 값) · 선의 <b>1</b>쪽 한 행에 <b>N</b>쪽 여러 행이 붙습니다. 그림이 좁으면 옆으로 밀어 보세요.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>테이블 미리보기</h2>
+        <p>이용자·대출 자료는 모두 가상입니다. 서지 사항은 실제 책을 참고했지만 실습용으로 단순화했습니다(정확한 서지 자료로 쓰지 마세요).</p>
+      </div>
+      <div class="table-chips" id="chips"></div>
+      <div id="detail"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><h2>읽을 때 볼 점</h2></div>
+      <ul class="weeks">
+        <li><span class="w-no">판과 실물</span><span class="w-body"><code>book</code> 한 행은 출판된 판 하나(LRM의 구현형), <code>item</code> 한 행은 서가에 꽂힌 실물 한 권(개별자료)입니다. 『소년이 온다』는 book에 한 행, item에 세 행입니다. 대출은 실물에 붙으므로 <code>loan</code>은 <code>item</code>을 가리킵니다.</span></li>
+        <li><span class="w-no">다대다</span><span class="w-body">한 책에 사람이 여럿(지은이·옮긴이), 한 사람이 책 여럿을 냅니다. 그래서 <code>book_author</code>라는 잇는 표가 따로 있고, 역할(<code>role</code>)도 여기에 적습니다. MARC의 100·700 필드, 더블린 코어의 creator·contributor를 떠올려 보세요.</span></li>
+        <li><span class="w-no">한 번만 적기</span><span class="w-body">출판사 이름·분류명은 <code>publisher</code>·<code>kdc</code>에 한 번만 적고 도서는 번호로 가리킵니다(정규화). 전거 레코드가 하는 일과 같습니다.</span></li>
+        <li><span class="w-no">비어 있는 값</span><span class="w-body">쪽수·태어난 해·반납일이 비어 있으면 <code>NULL</code>입니다. ‘0’이나 빈 글자와 다르며, 비교할 때 <code>IS NULL</code>을 씁니다.</span></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script src="materials/metadata-2026-2/sql-db/sqldb.js?v=20261031"></script>
+<script>
+(async () => {
+  const erdEl = document.getElementById('erd');
+  try { await SQLDB.init(); } catch (e) {
+    erdEl.innerHTML = '<p class="err">DB를 불러오지 못했습니다. 인터넷 연결을 확인하고 새로 고쳐 보세요.</p>'; return;
+  }
+  const db = SQLDB.fresh();
+  const T = SQLDB.tables(db);
+  const byName = Object.fromEntries(T.map(t => [t.name, t]));
+
+  // 배치: 열(col) 다섯 개, 위·아래 두 줄. 같은 열의 두 상자 관계는 세로선으로 잇는다.
+  const POS = { author: [0, 0], book_author: [1, 0], kdc: [1, 1], book: [2, 0], publisher: [2, 1],
+                item: [3, 0], reservation: [3, 1], loan: [4, 0], member: [4, 1] };
+  const W = 230, GAP = 64, HEAD = 40, ROW = 21, PAD = 8, TOP = 16, LEFT = 16, VGAP = 56;
+  const h = t => HEAD + t.cols.length * ROW + PAD;
+  const rowsTop = [0, 0];
+  T.forEach(t => { if (POS[t.name][1] === 0) rowsTop[1] = Math.max(rowsTop[1], h(t)); });
+  const geo = {};
+  T.forEach(t => {
+    const [c, r] = POS[t.name];
+    geo[t.name] = { x: LEFT + c * (W + GAP), y: TOP + (r ? rowsTop[1] + VGAP : 0), h: h(t) };
+  });
+  const totalW = LEFT * 2 + 5 * W + 4 * GAP;
+  const totalH = Math.max(...T.map(t => geo[t.name].y + geo[t.name].h)) + TOP;
+  const colY = (t, col) => geo[t.name].y + HEAD + t.cols.findIndex(c => c.name === col) * ROW + ROW / 2 + 2;
+
+  let rels = '', boxes = '';
+  T.forEach(t => t.fks.forEach(fk => {
+    const a = geo[t.name], b = geo[fk.table], pt = byName[fk.table];
+    let d, l1, l2;
+    if (POS[t.name][0] === POS[fk.table][0]) {         // 같은 열: 세로선
+      const x = a.x + W / 2, top = a.y < b.y;
+      const y1 = top ? a.y + a.h : a.y, y2 = top ? b.y : b.y + b.h;
+      d = `M${x} ${y1} L${x} ${y2}`;
+      l1 = [x + 8, y1 + (top ? 14 : -6)]; l2 = [x + 8, y2 + (top ? -6 : 14)];
+    } else {
+      const right = POS[t.name][0] < POS[fk.table][0];
+      const x1 = right ? a.x + W : a.x, x2 = right ? b.x : b.x + W;
+      const y1 = colY(t, fk.from), y2 = colY(pt, fk.to);
+      const k = (right ? 1 : -1) * GAP * 0.55;
+      d = `M${x1} ${y1} C${x1 + k} ${y1}, ${x2 - k} ${y2}, ${x2} ${y2}`;
+      l1 = [x1 + (right ? 4 : -12), y1 - 5]; l2 = [x2 + (right ? -12 : 4), y2 - 5];
+    }
+    rels += `<path class="rel" data-a="${t.name}" data-b="${fk.table}" d="${d}"/>
+      <text class="card" x="${l1[0]}" y="${l1[1]}">N</text><text class="card" x="${l2[0]}" y="${l2[1]}">1</text>`;
+  }));
+  T.forEach(t => {
+    const g = geo[t.name];
+    const fkCols = new Set(t.fks.map(f => f.from));
+    const cols = t.cols.map((c, i) => {
+      const y = g.y + HEAD + i * ROW + ROW / 2 + 6;
+      const key = c.pk ? '<text class="key pk" x="' + (g.x + 10) + '" y="' + y + '">PK</text>'
+        : fkCols.has(c.name) ? '<text class="key fk" x="' + (g.x + 10) + '" y="' + y + '">FK</text>' : '';
+      return `${key}<text class="col" x="${g.x + 34}" y="${y}">${c.name}</text>
+        <text class="ctype" x="${g.x + W - 10}" y="${y}" text-anchor="end">${c.type.toLowerCase()}</text>`;
+    }).join('');
+    boxes += `<g class="box" data-t="${t.name}" tabindex="0" role="button" aria-label="${t.name} 테이블 보기">
+      <rect class="body" x="${g.x}" y="${g.y}" width="${W}" height="${g.h}" rx="8"/>
+      <rect class="head" x="${g.x}" y="${g.y}" width="${W}" height="${HEAD - 4}" rx="8"/>
+      <text class="tname" x="${g.x + 10}" y="${g.y + 17}">${t.name}</text>
+      <text class="tdesc" x="${g.x + 10}" y="${g.y + 31}">${SQLDB.esc(t.desc)} · ${t.count}행</text>${cols}</g>`;
+  });
+  erdEl.className = '';
+  erdEl.innerHTML = `<svg class="erd" viewBox="0 0 ${totalW} ${totalH}" role="img" aria-label="작은 도서관 DB 관계도">${rels}${boxes}</svg>`;
+
+  const chips = document.getElementById('chips'), detail = document.getElementById('detail');
+  chips.innerHTML = T.map(t => `<button type="button" data-t="${t.name}" aria-pressed="false">${t.name} <span class="muted">${t.count}</span></button>`).join('');
+
+  function show(name) {
+    const t = byName[name];
+    document.querySelectorAll('.erd .box').forEach(b => b.classList.toggle('on', b.dataset.t === name));
+    document.querySelectorAll('.erd path.rel').forEach(p => p.classList.toggle('on', p.dataset.a === name || p.dataset.b === name));
+    chips.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === name));
+    const fk = Object.fromEntries(t.fks.map(f => [f.from, f]));
+    const refBy = T.flatMap(o => o.fks.filter(f => f.table === name).map(f => `${o.name}.${f.from}`));
+    const colRows = t.cols.map(c => `<tr><td class="mono">${c.name}</td><td class="mono">${c.type}</td>
+      <td>${c.pk ? '<b style="color:var(--gold)">PK</b> ' : ''}${fk[c.name] ? `<b style="color:var(--t-library)">FK</b> → ${fk[c.name].table}.${fk[c.name].to}` : ''}${c.notnull && !c.pk ? ' 비울 수 없음' : ''}</td></tr>`).join('');
+    const q = `SELECT * FROM ${name} LIMIT 10;`;
+    detail.innerHTML = `<div class="card" style="padding:1.1rem 1.2rem">
+      <h3 style="margin:0 0 .2rem">${name} <span class="small muted">${SQLDB.esc(t.desc)} · 전체 ${t.count}행</span></h3>
+      ${refBy.length ? `<p class="small muted" style="margin:.2rem 0 .6rem">이 테이블을 가리키는 열: ${refBy.join(', ')}</p>` : ''}
+      <table class="col-table"><thead><tr><th>열</th><th>자료형</th><th>키·규칙</th></tr></thead><tbody>${colRows}</tbody></table>
+      <p class="small" style="margin:1rem 0 .4rem"><code>${q}</code> · <a href="materials/metadata-2026-2/sql-db/lab.html?sql=${encodeURIComponent(q)}">실습실에서 이 질의 열기</a></p>
+      <div id="preview"></div></div>`;
+    SQLDB.renderResult(document.getElementById('preview'), db.exec(q)[0]);
+  }
+  document.querySelectorAll('.erd .box').forEach(b => {
+    b.addEventListener('click', () => { show(b.dataset.t); detail.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    b.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(b.dataset.t); } });
+  });
+  chips.addEventListener('click', e => { const b = e.target.closest('button'); if (b) show(b.dataset.t); });
+  show('book');
+})();
+</script>
+</body>
+</html>

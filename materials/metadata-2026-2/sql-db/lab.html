@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 하위 폴더 페이지지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>SQL 실습실 | 박주현</title>
+<meta name="description" content="메타데이터론 3강 브라우저에서 바로 하는 SQL 실습. 설치·가입 없음.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="materials/metadata-2026-2/sql-db/sqldb.css?v=20261031">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:1rem">
+    <div class="wrap">
+      <p class="small"><a href="materials/metadata-2026-2/sql-db/">← DB와 SQL 실습 자료</a> · <a href="materials/metadata-2026-2/sql-db/structure.html">DB 구조 보기</a></p>
+      <h1 style="font-family:var(--font-serif); margin:.3rem 0 .4rem">SQL 실습실</h1>
+      <p style="max-width:66ch; color:var(--ink-soft); margin:0">
+        브라우저 안에서 SQLite가 돌아갑니다. 설치·가입이 없고, 무엇을 바꿔도 내 브라우저 안에서만 바뀝니다. 왼쪽에서 문제를 고르고, SQL을 써서 <b>실행</b>으로 결과를 본 뒤 <b>채점</b>을 누르세요. 채점은 처음 상태의 DB에서 다시 돌려 결과만 비교합니다(열 이름은 보지 않습니다). 기준일은 <b>2026-11-05</b>입니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.6rem">
+    <div class="wrap lab">
+      <div>
+        <div class="q-nav" id="qnav"></div>
+        <div class="q-card" id="qcard"><p class="loading">문제를 불러오는 중입니다…</p></div>
+        <p class="small muted" style="margin-top:.6rem" id="progress"></p>
+      </div>
+
+      <div>
+        <label for="sql" class="sr-only">SQL 입력</label>
+        <textarea id="sql" class="sql-editor" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="SELECT * FROM book;"></textarea>
+        <div class="editor-bar">
+          <button class="btn btn--sm" id="run" type="button" disabled>실행</button>
+          <button class="btn btn--sm btn--ghost" id="check" type="button" disabled>채점</button>
+          <button class="btn btn--sm btn--ghost" id="reset" type="button" disabled title="실습 DB를 처음 상태로">DB 초기화</button>
+          <span class="small">Ctrl + Enter 로 실행</span>
+        </div>
+        <div id="msg" class="msg"></div>
+        <div id="out"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head"><h2 style="font-size:1.15rem">테이블 목록</h2><p>이름을 누르면 편집기에 넣습니다. 전체 관계는 <a href="materials/metadata-2026-2/sql-db/structure.html">DB 구조 보기</a>에서.</p></div>
+      <div class="schema-list" id="schema"></div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script src="materials/metadata-2026-2/sql-db/sqldb.js?v=20261031"></script>
+<script>
+(async () => {
+  const $ = id => document.getElementById(id);
+  const ed = $('sql'), out = $('out'), msg = $('msg');
+  let EX = [], cur = 0, work = null;
+  const solved = new Set(SQLDB.store.get('solved', []));
+  const drafts = SQLDB.store.get('drafts', {});
+
+  try {
+    const [, data] = await Promise.all([SQLDB.init(), fetch(SQLDB.BASE + 'exercises.json?v=' + SQLDB.VER).then(r => r.json())]);
+    EX = data.exercises;
+  } catch (e) {
+    $('qcard').innerHTML = '<p class="err">DB를 불러오지 못했습니다. 인터넷 연결을 확인하고 새로 고쳐 보세요.</p>'; return;
+  }
+  work = SQLDB.fresh();
+  ['run', 'check', 'reset'].forEach(id => $(id).disabled = false);
+
+  // 테이블 목록
+  const T = SQLDB.tables(work);
+  $('schema').innerHTML = T.map(t => `<details><summary><button class="ins" type="button" data-ins="${t.name}">${t.name}</button>
+    <span class="small muted">${SQLDB.esc(t.desc)} · ${t.count}행</span></summary>
+    <code>${t.cols.map(c => `<button class="ins" type="button" data-ins="${c.name}">${c.name}</button>`).join(', ')}</code></details>`).join('');
+  $('schema').addEventListener('click', e => {
+    const b = e.target.closest('[data-ins]'); if (!b) return;
+    e.preventDefault(); insertAt(b.dataset.ins);
+  });
+  function insertAt(text) {
+    const s = ed.selectionStart, en = ed.selectionEnd;
+    ed.value = ed.value.slice(0, s) + text + ed.value.slice(en);
+    ed.focus(); ed.selectionStart = ed.selectionEnd = s + text.length; saveDraft();
+  }
+
+  // 문제 목록
+  function renderNav() {
+    let html = '', lastPart = null;
+    EX.forEach((x, i) => {
+      if (x.part !== lastPart) { html += `<span class="q-group">${x.part}주차</span>`; lastPart = x.part; }
+      const cls = [i === cur ? 'cur' : '', solved.has(x.id) ? 'done' : ''].join(' ');
+      html += `<button type="button" class="${cls}" data-i="${i}" title="${SQLDB.esc(x.title)}">${SQLDB.esc(x.id)}</button>`;
+    });
+    $('qnav').innerHTML = html;
+    const graded = EX.filter(x => x.key).length;
+    $('progress').textContent = `맞힌 문제 ${EX.filter(x => x.key && solved.has(x.id)).length} / ${graded} · 이 기록은 이 브라우저에만 남습니다.`;
+  }
+  $('qnav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) select(+b.dataset.i); });
+
+  function select(i) {
+    saveDraft();
+    cur = i; const x = EX[i];
+    let shown = 0;
+    $('qcard').innerHTML = `<span class="q-level">${x.part}주차 · ${SQLDB.esc(x.level)}${x.key ? '' : ' · 채점 없음'}</span>
+      <h3>${SQLDB.esc(x.id)}. ${SQLDB.esc(x.title)}</h3>
+      <p class="q-prompt">${SQLDB.esc(x.prompt)}</p>
+      ${x.ordered ? '<p class="small muted" style="margin:-.4rem 0 .7rem">이 문제는 행 순서도 봅니다.</p>' : ''}
+      ${x.check ? '<p class="small muted" style="margin:-.4rem 0 .7rem">데이터를 바꾸는 문제입니다. 채점은 처음 DB에서 내 SQL을 돌린 뒤 결과 상태를 확인합니다.</p>' : ''}
+      <div id="hints"></div>
+      ${x.hints && x.hints.length ? `<button class="btn btn--sm btn--ghost" id="hintBtn" type="button">힌트 보기 (${x.hints.length})</button>` : ''}
+      <div class="feedback" id="fb"></div>`;
+    const hb = $('hintBtn');
+    if (hb) hb.onclick = () => {
+      $('hints').insertAdjacentHTML('beforeend', `<p class="hint">힌트 ${shown + 1}. ${SQLDB.esc(x.hints[shown])}</p>`);
+      shown++; if (shown >= x.hints.length) hb.remove(); else hb.textContent = `다음 힌트 (${x.hints.length - shown})`;
+    };
+    $('check').disabled = !x.key;
+    ed.value = drafts[x.id] || '';
+    out.innerHTML = ''; msg.innerHTML = '';
+    renderNav();
+    try { history.replaceState(null, '', location.pathname + location.search + '#' + encodeURIComponent(x.id)); } catch { }
+  }
+  function saveDraft() { if (EX[cur]) { drafts[EX[cur].id] = ed.value; SQLDB.store.set('drafts', drafts); } }
+  ed.addEventListener('input', () => { clearTimeout(ed._t); ed._t = setTimeout(saveDraft, 400); });
+
+  // 실행: 실습 DB(work)에 바로 반영. 마지막 결과 표를 보인다.
+  function run() {
+    const sql = ed.value.trim(); if (!sql) return;
+    msg.innerHTML = ''; out.innerHTML = '';
+    try {
+      const res = work.exec(sql);
+      const changed = work.getRowsModified();
+      if (res.length) SQLDB.renderResult(out, res[res.length - 1]);
+      msg.innerHTML = res.length ? (res.length > 1 ? `결과가 있는 문장 ${res.length}개 가운데 마지막 결과입니다.` : '')
+        : `실행했습니다.${changed ? ` 바뀐 행: ${changed}개 (마지막 문장 기준).` : ''} 결과 표를 돌려주는 문장이 아닙니다.`;
+    } catch (e) { msg.innerHTML = '<span class="err">오류</span> · ' + SQLDB.explain(e.message); }
+  }
+
+  // 채점: 처음 상태의 DB에서 다시 돌려 결과 해시를 비교
+  async function check() {
+    const x = EX[cur]; if (!x.key) return;
+    const fb = $('fb'), sql = ed.value.trim();
+    const say = (cls, html) => { fb.className = 'feedback show ' + cls; fb.innerHTML = html; };
+    if (!sql) return say('info', 'SQL을 먼저 써 주세요.');
+    const db = SQLDB.fresh();
+    let res;
+    try {
+      const r = db.exec(sql);
+      res = x.check ? db.exec(x.check)[0] : r[r.length - 1];
+    } catch (e) { db.close(); return say('no', SQLDB.explain(e.message)); }
+    db.close();
+    if (!res && !x.check) return say('no', '결과 표가 나오지 않았습니다. SELECT 문으로 끝나야 합니다.');
+    const ncols = res ? res.columns.length : 0, nrows = res ? res.values.length : 0;
+    if (await SQLDB.resultKey(res, !!x.ordered) === x.key) {
+      solved.add(x.id); SQLDB.store.set('solved', [...solved]); renderNav();
+      return say('ok', '<b>맞았습니다.</b> ' + (x.check ? '바뀐 상태가 기대와 같습니다.' : `${nrows}행 · ${ncols}열이 기대 결과와 같습니다.`));
+    }
+    if (x.check) return say('no', '바뀐 뒤 상태가 기대와 다릅니다. 조건(WHERE)과 넣은 값을 확인하세요. 확인 질의: <code>' + SQLDB.esc(x.check) + '</code>');
+    if (ncols !== x.ncols) return say('no', `열 개수가 다릅니다. 내 결과 ${ncols}열 · 기대 ${x.ncols}열. 문제에서 보라는 열만 고르세요.`);
+    if (nrows !== x.nrows) return say('no', `행 개수가 다릅니다. 내 결과 ${nrows}행 · 기대 ${x.nrows}행. 조건(WHERE·HAVING)이나 JOIN을 확인하세요.`);
+    if (x.key_any && await SQLDB.resultKey(res, false) === x.key_any) return say('no', '값은 모두 맞는데 <b>순서</b>가 다릅니다. ORDER BY를 확인하세요.');
+    say('no', `행·열 개수(${nrows}행 · ${ncols}열)는 맞지만 값이 다릅니다. 고른 열의 순서나 조건을 다시 보세요.`);
+  }
+
+  $('run').onclick = run;
+  $('check').onclick = check;
+  $('reset').onclick = () => { work.close(); work = SQLDB.fresh(); msg.innerHTML = '실습 DB를 처음 상태로 되돌렸습니다.'; out.innerHTML = ''; };
+  ed.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); run(); }
+  });
+
+  const params = new URLSearchParams(location.search);
+  const start = Math.max(0, EX.findIndex(x => '#' + encodeURIComponent(x.id) === location.hash));
+  select(start);
+  if (params.get('sql')) { ed.value = params.get('sql'); run(); }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>DB와 SQL 실습 자료 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 3강 데이터베이스와 SQL: DB 구조 보기, 브라우저 SQL 실습실, 강의 자료.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="materials/metadata-2026-2/sql-db/sqldb.css?v=20261031">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="course.html?id=metadata-2026-2">← 메타데이터와아카이빙연구</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 수업 자료</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">데이터베이스와 SQL 실습 자료</h1>
+      <p style="max-width:62ch; font-size:1.05rem; color:var(--ink-soft)">
+        3강 ‘데이터베이스와 SQL’의 실습 자료입니다. 두 주에 나눠 진행합니다. 작은 도서관 DB(도서·저자·소장 자료·이용자·대출)의 구조를 그림으로 보고, 브라우저에서 바로 SQL을 써 봅니다. 설치할 프로그램도, 가입도 없습니다.
+      </p>
+      <div class="row" style="margin-top:1.4rem">
+        <a class="btn" href="materials/metadata-2026-2/sql-db/lab.html">SQL 실습실 열기</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/sql-db/structure.html">DB 구조 보기 (ERD)</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/sql-db/library.sql" download="library.sql">DB 파일 받기 (library.sql)</a>
+      </div>
+      <p class="small" style="margin-top:1rem">강의 슬라이드(PDF):
+        <a href="materials/metadata-2026-2/sql-db/db-sql-week1-slides-20261031.pdf" target="_blank" rel="noopener">1주차 · 3강 ①</a> ·
+        <a href="materials/metadata-2026-2/sql-db/db-sql-week2-slides-20261031.pdf" target="_blank" rel="noopener">2주차 · 3강 ②</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="notice notice--info" style="max-width:62ch">
+        <strong>실습 전에</strong>
+        노트북(또는 태블릿)과 인터넷이 필요합니다. 크롬·엣지·사파리 최신판이면 됩니다. 실습실에서 바꾼 자료와 맞힌 문제 기록은 <b>내 브라우저에만</b> 남고, 다른 사람에게 보이지 않습니다. 이용자·대출 자료는 모두 가상입니다.
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>1주차 · 3강 ① 구조: 관계형 DB 읽기와 한 테이블 질의</h2>
+        <p>테이블·행·열, 기본 키와 외래 키, ERD, 정규화를 배우고 SELECT로 한 테이블에 묻습니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">실습 1</span><span class="w-body">DB 구조 읽기: ERD에서 PK·FK를 찾고, 『소년이 온다』가 book·item·loan에 어떻게 나뉘어 있는지 따라가기
+          <span class="files" style="margin-top:.4rem"><a href="materials/metadata-2026-2/sql-db/structure.html">DB 구조 보기</a></span></span><span class="w-meta">15분</span></li>
+        <li><span class="w-no">실습 2</span><span class="w-body">SELECT 기초 8문제 (1-1 ~ 1-8): 열 고르기, WHERE, ORDER BY, LIKE, NULL, COUNT, DISTINCT
+          <span class="files" style="margin-top:.4rem"><a href="materials/metadata-2026-2/sql-db/lab.html#1-1">실습실 1-1부터</a></span></span><span class="w-meta">35분</span></li>
+        <li><span class="w-no">생각 1</span><span class="w-body">왜 표를 나눌까: 출판사 이름을 book에 바로 적으면 생기는 일 (채점 없음, 짝 토론)</span><span class="w-meta">5분</span></li>
+      </ul>
+
+      <div class="section-head" style="margin-top:2.6rem">
+        <h2>2주차 · 3강 ② 잇기: JOIN·집계·데이터 바꾸기</h2>
+        <p>여러 테이블을 잇고, 묶어 세고, 넣고·고치고·지웁니다. 마지막에 DB 설계를 LRM·메타데이터 관점으로 다시 봅니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">실습 3</span><span class="w-body">JOIN 5문제 (2-1 ~ 2-5): 출판사·분류·저자·옮긴이 잇기, 한 번도 안 빌린 책
+          <span class="files" style="margin-top:.4rem"><a href="materials/metadata-2026-2/sql-db/lab.html#2-1">실습실 2-1부터</a></span></span><span class="w-meta">25분</span></li>
+        <li><span class="w-no">실습 4</span><span class="w-body">집계·하위 질의 7문제 (2-6 ~ 2-12): GROUP BY, HAVING, 연체, 평균
+          <span class="files" style="margin-top:.4rem"><a href="materials/metadata-2026-2/sql-db/lab.html#2-6">실습실 2-6부터</a></span></span><span class="w-meta">30분</span></li>
+        <li><span class="w-no">실습 5</span><span class="w-body">데이터 바꾸기 3문제 (2-13 ~ 2-15): INSERT · UPDATE · DELETE, 그리고 도전 과제(서평 테이블 만들기)
+          <span class="files" style="margin-top:.4rem"><a href="materials/metadata-2026-2/sql-db/lab.html#2-13">실습실 2-13부터</a></span></span><span class="w-meta">15분</span></li>
+        <li><span class="w-no">생각 2</span><span class="w-body">저작은 어디에 있나: ‘어린 왕자’ 세 종을 LRM으로 읽고 work 테이블 설계해 보기 (채점 없음)</span><span class="w-meta">10분</span></li>
+      </ul>
+      <p class="small muted" style="margin-top:1rem">실습실은 sql.js(SQLite를 브라우저에서 돌리는 공개 라이브러리)를 씁니다. 실습실에서 만든 결과를 다른 프로그램(DB Browser for SQLite 등)에서 이어 하려면 library.sql을 받아 열면 됩니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>
