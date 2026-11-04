@@ -83,6 +83,88 @@ function currentTheme() {
   return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
+/* ---------- 디자인 선택 ----------
+   방문자가 머리글의 '디자인' 단추로 세 가지 중 하나를 고릅니다.
+   고른 값은 그 브라우저에만 기억됩니다. 스타일은 style.css 20~22절. */
+const DESIGNS = [
+  { id: '',        ko: '기본',      en: 'Default',  noteKo: '처음 디자인',            noteEn: 'Original design' },
+  { id: 'refined', ko: '다듬은 판', en: 'Refined',  noteKo: 'impeccable 스킬로 다듬음', noteEn: 'Refined with impeccable' },
+  { id: 'catalog', ko: '장서 카드', en: 'Catalog',  noteKo: 'frontend-design 스킬',  noteEn: 'Made with frontend-design' },
+];
+const DESIGN_FONTS = {
+  catalog: 'https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700&family=Nanum+Gothic+Coding:wght@400;700&display=swap',
+};
+function applyDesign(id) {
+  const known = DESIGNS.some((d) => d.id && d.id === id);
+  if (known) document.documentElement.setAttribute('data-design', id);
+  else document.documentElement.removeAttribute('data-design');
+  const href = known && DESIGN_FONTS[id];
+  if (href && !document.querySelector(`link[data-design-font="${id}"]`)) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.dataset.designFont = id;
+    document.head.appendChild(link);
+  }
+  return known ? id : '';
+}
+applyDesign(store.get('design')); // 깜빡임을 줄이려 즉시 적용
+
+function initDesignPicker(navEl) {
+  if (!navEl || navEl.querySelector('.design-pick')) return;
+  const en = document.documentElement.lang === 'en';
+  const wrap = document.createElement('div');
+  wrap.className = 'design-pick';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'design-pick__btn';
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-controls', 'design-pick-panel');
+  btn.title = en ? 'Choose a design' : '디자인 고르기';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="12" rx="1.5"/><path d="M3.5 8h17M12 20v-4"/></svg>'
+    + `<span class="design-pick__label">${en ? 'Design' : '디자인'}</span>`;
+  const panel = document.createElement('div');
+  panel.className = 'design-pick__panel';
+  panel.id = 'design-pick-panel';
+  panel.hidden = true;
+  panel.setAttribute('role', 'group');
+  panel.setAttribute('aria-label', en ? 'Site design' : '사이트 디자인');
+  panel.innerHTML = DESIGNS.map((d) => `<button type="button" class="design-pick__opt" data-design-id="${d.id}">
+      <strong>${en ? d.en : d.ko}</strong><span>${en ? d.noteEn : d.noteKo}</span></button>`).join('');
+  wrap.append(btn, panel);
+  navEl.insertBefore(wrap, navEl.querySelector('.theme-toggle'));
+
+  const paint = () => {
+    const cur = document.documentElement.getAttribute('data-design') || '';
+    panel.querySelectorAll('.design-pick__opt').forEach((o) => {
+      o.setAttribute('aria-pressed', String(o.dataset.designId === cur));
+    });
+  };
+  const close = () => { panel.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+  paint();
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = panel.hidden;
+    panel.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) panel.querySelector('[aria-pressed="true"]')?.focus();
+  });
+  panel.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const opt = e.target.closest('.design-pick__opt');
+    if (!opt) return;
+    const id = applyDesign(opt.dataset.designId);
+    if (id) store.set('design', id); else store.del('design');
+    paint();
+    close();
+    btn.focus();
+  });
+  document.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden) { close(); btn.focus(); }
+  });
+}
+
 /* ---------- 학기 ---------- */
 /**
  * 학기 id('2026-2')가 오늘 기준으로 진행 중인지 계산합니다.
@@ -113,6 +195,9 @@ function initHeader() {
     a.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><span class="nav-admin__label">관리자 로그인</span>';
     navEl.insertBefore(a, navEl.querySelector('.theme-toggle'));
   }
+
+  // 디자인 고르기 단추(모든 페이지 공통)
+  initDesignPicker(navEl);
 
   // 현재 페이지 메뉴에 표시
   const here = location.pathname.split('/').pop() || 'index.html';

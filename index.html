@@ -45,6 +45,8 @@
         <span class="hero__eyebrow">전남대학교 사회과학대학 문헌정보학과 부교수</span>
         <h1 class="hero__name">박주현<span class="hero__name-en">Park, Juhyeon</span></h1>
         <p class="hero__role"><strong>연구분야</strong> 독서 리터러시, 정보미디어 리터러시, 디지털 리터러시</p>
+        <!-- 연구 성과 한 줄(다듬은 판·장서 카드 디자인에서만 보임). 숫자는 자료에서 자동으로 채웁니다. -->
+        <p class="hero__stats" id="hero-stats" hidden></p>
         <p class="hero__lead">
           초등학교 사서교사로 15년을 보낸 뒤, 그 학교에서 얻은 질문을 연구로 옮겨 왔습니다.
           독서가 사람을 어떻게 바꾸는지, 그리고 학교와 도서관이 그 변화를
@@ -61,6 +63,17 @@
       </div>
     </div>
   </section>
+
+  <!-- 수강생 바로가기(다듬은 판·장서 카드 디자인에서만 보임) -->
+  <nav class="quick" aria-label="수강생 바로가기">
+    <div class="wrap quick__inner">
+      <span class="quick__label">수강생</span>
+      <a href="upload.html">결과물 올리기</a>
+      <a href="gallery.html">갤러리</a>
+      <a href="surveys.html">설문</a>
+      <a href="courses.html">이번 학기 수업</a>
+    </div>
+  </nav>
 
   <!-- 두 갈래 -->
   <section class="section" style="padding-top:0">
@@ -212,6 +225,14 @@ Promise.all([
   readSetting('showEnrollment', false),
 ]).then(([pubs, books, teaching, showN]) => {
   const cited = pubs.items.reduce((sum, p) => sum + (p.citations || 0), 0);
+  const stats = document.getElementById('hero-stats');
+  if (stats) {
+    stats.innerHTML =
+      `<span>학술논문 <b>${pubs.items.length}</b>편</span>`
+      + `<span>저역서 <b>${books.items.length}</b>권</span>`
+      + `<span>피인용 <b>${cited}</b>회</span>`;
+    stats.hidden = false;
+  }
   const gwR = document.getElementById('gw-research');
   if (gwR) {
     gwR.textContent =

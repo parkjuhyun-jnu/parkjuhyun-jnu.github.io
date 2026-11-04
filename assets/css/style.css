@@ -947,3 +947,205 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
     border: 0; border-radius: 0; padding: .72rem .6rem; }
   .nav-admin__label { position: static; width: auto; height: auto; overflow: visible; clip: auto; font-size: 1rem; }
 }
+
+/* ==========================================================================
+   20~22. 디자인 고르기
+   머리글의 '디자인' 단추로 세 가지 중 하나를 고릅니다(assets/js/common.js).
+   - 기본: 위 1~19절 그대로
+   - 다듬은 판(data-design="refined"): impeccable 스킬로 기존 디자인을 다듬음
+   - 장서 카드(data-design="catalog"): frontend-design 스킬로 만든 목록 카드 디자인
+   ========================================================================== */
+
+/* ---------- 20. 디자인 고르기 단추 ---------- */
+.design-pick { position: relative; flex: none; }
+.design-pick__btn {
+  display: inline-flex; align-items: center; gap: .4rem; height: 34px; padding: 0 .65rem;
+  border: 1px solid var(--line); border-radius: 9px; background: none;
+  color: var(--ink-soft); font: inherit; font-size: .86rem; font-weight: 500; cursor: pointer;
+}
+.design-pick__btn:hover,
+.design-pick__btn[aria-expanded="true"] { background: var(--surface-2); color: var(--ink); }
+.design-pick__panel {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; width: 236px;
+  display: grid; gap: .15rem; padding: .35rem;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-lg);
+}
+.design-pick__opt {
+  display: grid; gap: .05rem; text-align: left; padding: .55rem .7rem;
+  border: 0; border-radius: 6px; background: none; color: var(--ink);
+  font: inherit; line-height: 1.4; cursor: pointer;
+}
+.design-pick__opt strong { font-size: .92rem; }
+.design-pick__opt span { font-size: .8rem; color: var(--ink-soft); }
+.design-pick__opt:hover { background: var(--surface-2); }
+.design-pick__opt[aria-pressed="true"] { background: var(--navy-wash); }
+.design-pick__opt[aria-pressed="true"] strong { color: var(--navy); }
+.design-pick__opt:focus-visible,
+.design-pick__btn:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+@media (max-width: 800px) {
+  .design-pick__btn { width: 100%; height: auto; border: 0; border-radius: 0;
+    padding: .72rem .6rem; font-size: 1rem; justify-content: flex-start; }
+  .design-pick__panel { position: static; width: auto; box-shadow: none; margin: 0 0 .4rem; }
+}
+
+/* 새 디자인에서만 쓰는 첫 화면 부품(기본 디자인에서는 숨김) */
+.hero__stats, .quick { display: none; }
+.quick__inner { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1.3rem; min-height: 52px; }
+.quick__label { font-size: .84rem; font-weight: 700; color: var(--ink-soft); }
+.quick a { display: inline-block; padding: .6rem 0; font-size: .95rem; font-weight: 600; color: var(--navy); }
+
+/* ---------- 21. 다듬은 판 (impeccable: init → critique → typeset·layout·polish) ----------
+   기존 정체성(남색·금색, 명조 제목, 사진)은 그대로 두고
+   ① 연구 성과 숫자를 이름 아래로 ② 휴대폰 사진 작게
+   ③ 보조 글자 대비 4.5:1 이상 ④ 수강생 바로가기를 첫 화면 바로 아래로 */
+:root[data-design="refined"] { --ink-faint: #676c74; }
+@media (prefers-color-scheme: dark) {
+  :root[data-design="refined"]:not([data-theme="light"]) { --ink-faint: #8c929a; }
+}
+:root[data-design="refined"][data-theme="dark"] { --ink-faint: #8c929a; }
+
+[data-design="refined"] .hero__stats {
+  display: flex; flex-wrap: wrap; gap: .2rem 1.5rem;
+  margin: -.45rem 0 1.3rem; color: var(--ink-soft); font-size: .95rem;
+}
+[data-design="refined"] .hero__stats b {
+  font-family: var(--font-serif); font-size: 1.32rem; font-weight: 700;
+  color: var(--navy); font-variant-numeric: tabular-nums; margin: 0 .1rem 0 .2rem;
+}
+[data-design="refined"] .quick { display: block; background: var(--surface); border-block: 1px solid var(--line); }
+[data-design="refined"] .quick + .section { padding-top: clamp(1.8rem, 4vw, 2.6rem) !important; }
+[data-design="refined"] ::selection { background: var(--navy-wash); color: var(--ink); }
+@media (max-width: 819px) {
+  [data-design="refined"] .hero__grid { gap: 1.1rem; }
+  [data-design="refined"] .portrait {
+    order: -1; width: 96px; justify-self: start; border-radius: 12px;
+    font-size: .68rem; padding: .4rem;
+  }
+  [data-design="refined"] .portrait:has(img) { padding: 0; }
+}
+
+/* ---------- 22. 장서 카드 (frontend-design) ----------
+   도서관 목록 카드: 카드 종이, 위쪽 붉은 가로 괘선, 왼쪽 세로 여백선, 아래 가운데 펀치 구멍.
+   제목은 함렛(Hahmlet), 카드에 타자한 기록 줄은 나눔고딕코딩. */
+:root[data-design="catalog"] {
+  --paper: #e4e8e3; --surface: #fcfaf2; --surface-2: #f2efe4;
+  --ink: #1f232b; --ink-soft: #4a4f57; --ink-faint: #636870;
+  --line: #d4d2c6; --line-soft: #e3e0d4;
+  --navy: #26487f; --navy-hover: #335b9c; --navy-wash: #e6ebf3;
+  --gold: #a8302a; --gold-wash: #f6e4df;
+  --rule: #a8302a; --rule-soft: rgba(168, 48, 42, .45);
+  --font-serif: "Hahmlet", "Noto Serif KR", Georgia, serif;
+  --font-type: "Nanum Gothic Coding", ui-monospace, monospace;
+  --radius: 4px; --radius-sm: 3px;
+  --shadow: 0 1px 0 rgba(31,35,43,.05), 0 6px 14px -8px rgba(31,35,43,.25);
+  --shadow-lg: 0 2px 0 rgba(31,35,43,.05), 0 16px 30px -14px rgba(31,35,43,.32);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-design="catalog"]:not([data-theme="light"]) {
+    --paper: #131518; --surface: #1e2125; --surface-2: #26292e;
+    --ink: #ece7db; --ink-soft: #bdb8ad; --ink-faint: #9a968d;
+    --line: #34373c; --line-soft: #2a2d32;
+    --navy: #94b3e8; --navy-hover: #b4caf0; --navy-wash: #1e2a3d;
+    --gold: #e2756b; --gold-wash: #3a2220;
+    --rule: #e2756b; --rule-soft: rgba(226, 117, 107, .4);
+    --shadow: 0 1px 0 rgba(0,0,0,.3), 0 6px 14px -8px rgba(0,0,0,.6);
+    --shadow-lg: 0 2px 0 rgba(0,0,0,.3), 0 16px 30px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-design="catalog"][data-theme="dark"] {
+  --paper: #131518; --surface: #1e2125; --surface-2: #26292e;
+  --ink: #ece7db; --ink-soft: #bdb8ad; --ink-faint: #9a968d;
+  --line: #34373c; --line-soft: #2a2d32;
+  --navy: #94b3e8; --navy-hover: #b4caf0; --navy-wash: #1e2a3d;
+  --gold: #e2756b; --gold-wash: #3a2220;
+  --rule: #e2756b; --rule-soft: rgba(226, 117, 107, .4);
+  --shadow: 0 1px 0 rgba(0,0,0,.3), 0 6px 14px -8px rgba(0,0,0,.6);
+  --shadow-lg: 0 2px 0 rgba(0,0,0,.3), 0 16px 30px -14px rgba(0,0,0,.7);
+}
+
+[data-design="catalog"] ::selection { background: var(--gold-wash); color: var(--ink); }
+[data-design="catalog"] .site-header {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border-bottom: 1px solid var(--rule-soft);
+}
+[data-design="catalog"] .nav a,
+[data-design="catalog"] .design-pick__btn,
+[data-design="catalog"] .theme-toggle,
+[data-design="catalog"] .nav .nav-admin { border-radius: 3px; }
+
+/* 영문 대문자 소제목은 이 디자인에서 쓰지 않습니다(제목이 스스로 말하게). */
+[data-design="catalog"] .eyebrow { display: none; }
+[data-design="catalog"] .section-head h2 { font-size: clamp(1.5rem, 3.4vw, 2rem); letter-spacing: -0.03em; }
+
+/* 첫 화면 */
+[data-design="catalog"] .hero__eyebrow {
+  background: none; padding: 0 0 .45rem; border-radius: 0; margin-bottom: 1.1rem;
+  font-family: var(--font-type); font-size: .84rem; font-weight: 400; letter-spacing: 0;
+  color: var(--ink-soft); border-bottom: 1px solid var(--rule);
+}
+[data-design="catalog"] .hero__name { font-size: clamp(2.6rem, 7vw, 4rem); letter-spacing: -0.04em; }
+[data-design="catalog"] .hero__name-en { font-family: var(--font-type); font-size: .3em; color: var(--ink-soft); }
+[data-design="catalog"] .hero__stats {
+  display: flex; flex-wrap: wrap; gap: .2rem 1.6rem; margin: -.35rem 0 1.3rem;
+  font-family: var(--font-type); font-size: .9rem; color: var(--ink-soft);
+}
+[data-design="catalog"] .hero__stats b { color: var(--ink); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+[data-design="catalog"] .portrait,
+[data-design="catalog"] .portrait:has(img) {
+  border-radius: 2px; padding: .55rem .55rem 1.6rem; background: var(--surface);
+  border: 1px solid var(--line); box-shadow: var(--shadow); aspect-ratio: auto;
+}
+[data-design="catalog"] .portrait img { aspect-ratio: 3/4; height: auto; display: block; }
+@media (max-width: 819px) {
+  [data-design="catalog"] .portrait { order: -1; width: 112px; justify-self: start; padding: .35rem .35rem 1rem; font-size: .66rem; }
+}
+
+/* 수강생 바로가기 = 서랍 앞 표지판 */
+[data-design="catalog"] .quick { display: block; background: var(--surface-2); border-block: 1px solid var(--line); }
+[data-design="catalog"] .quick__label { font-family: var(--font-type); font-weight: 700; color: var(--gold); }
+[data-design="catalog"] .quick + .section { padding-top: clamp(1.8rem, 4vw, 2.6rem) !important; }
+
+/* 목록 카드: 첫 화면의 진입 카드와 연구 관심 카드 */
+[data-design="catalog"] .gateway__card,
+[data-design="catalog"] .grid-3 > .card {
+  position: relative; border-radius: var(--radius);
+  padding: 1rem 1.4rem 2.3rem 2.2rem;
+  background:
+    linear-gradient(var(--rule), var(--rule)) 0 3rem / 100% 1px no-repeat,
+    linear-gradient(var(--rule-soft), var(--rule-soft)) 1.35rem 0 / 1px 100% no-repeat,
+    var(--surface);
+}
+[data-design="catalog"] .gateway__card:hover { transform: translateY(-2px); }
+/* 아래 가운데 펀치 구멍(화살표 대신) */
+[data-design="catalog"] .gateway__card::after,
+[data-design="catalog"] .grid-3 > .card::after {
+  content: ""; position: absolute; top: auto; right: auto; left: 50%; bottom: .75rem;
+  width: 11px; height: 11px; margin-left: -5.5px; border-radius: 50%;
+  background: var(--paper); box-shadow: inset 0 1px 2px rgba(0,0,0,.25);
+  transform: none;
+}
+[data-design="catalog"] .gateway__card:hover::after { transform: none; }
+[data-design="catalog"] .gateway__num {
+  font-family: var(--font-type); font-size: .82rem; letter-spacing: 0; color: var(--gold);
+  height: 2rem; display: flex; align-items: center; margin-bottom: .55rem;
+}
+[data-design="catalog"] .grid-3 > .card h3 { margin-top: .75rem !important; }
+[data-design="catalog"] .gateway__meta { font-family: var(--font-type); font-size: .8rem; color: var(--ink-soft); }
+[data-design="catalog"] .card { border-radius: var(--radius); }
+
+/* 태그 = 고무 도장 */
+[data-design="catalog"] .tag {
+  border-radius: 3px; background: transparent; border-width: 1.5px;
+  border-color: color-mix(in srgb, currentColor 55%, transparent);
+  font-family: var(--font-type); font-weight: 700; font-size: .74rem;
+}
+
+/* 논문 = 서지 기록 */
+[data-design="catalog"] .pub-grid li { border-top: 1px dashed var(--line); }
+[data-design="catalog"] .pub-grid__meta { font-family: var(--font-type); font-size: .8rem; color: var(--ink-soft); }
+[data-design="catalog"] .pub-grid__year { color: var(--gold); }
+
+/* 단추 */
+[data-design="catalog"] .btn { border-radius: 3px; }
+[data-design="catalog"] .btn--ghost { border-color: color-mix(in srgb, var(--ink) 35%, transparent); }

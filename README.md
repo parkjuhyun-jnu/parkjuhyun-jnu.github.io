@@ -60,6 +60,8 @@ python -m http.server 5173
 | `research.html` | 학술발표 목록 |
 | `data/media.json` | 미디어·강연 페이지(방송·보도·기고·강연·토론회). 포스터·사진은 `assets/img/media/` 에 |
 | `assets/css/style.css` 맨 위 `:root` | 사이트 전체 색 |
+| `assets/css/style.css` 20~22절 | 디자인 고르기 단추와 두 디자인(다듬은 판·장서 카드). 단추 동작은 `assets/js/common.js`의 '디자인 선택' |
+| `PRODUCT.md` | impeccable 스킬이 디자인 판단의 기준으로 읽는 사이트 설명(주 방문자, 목적) |
 | `assets/js/config.js` | Supabase 연결 정보, 파일 크기·형식 제한 |
 | `assets/js/layout.js` | 모든 페이지 아래쪽 꼬리말(연락처 등) |
 
