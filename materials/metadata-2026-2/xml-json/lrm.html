@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>LRM 활동 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 2강 실습 6. LRM이 무엇인지 알아보고 실제 레코드의 값을 저작·표현형·구현형·개별자료로 나눠 봅니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .lead { max-width: 66ch; font-size: 1.02rem; line-height: 1.7; color: var(--ink-soft); }
+  .prose { max-width: 66ch; font-size: .96rem; line-height: 1.75; color: var(--ink-soft); }
+  .prose b { color: var(--ink); }
+  h2.sub { font-size: 1.15rem; margin: 1.8rem 0 .4rem; font-family: inherit; scroll-margin-top: 90px; }
+  .stairs { list-style: none; margin: .7rem 0; padding: 0; max-width: 46rem; }
+  .stairs li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .55rem .85rem; margin-bottom: .4rem; }
+  .stairs li:nth-child(2) { margin-left: 3%; } .stairs li:nth-child(3) { margin-left: 6%; } .stairs li:nth-child(4) { margin-left: 9%; }
+  .stairs b { color: var(--navy); }
+  .stairs span { display: block; font-size: .9rem; line-height: 1.55; color: var(--ink-soft); }
+  .stairs em { font-style: normal; color: var(--gold); font-weight: 600; }
+  .tip { background: var(--gold-wash); border-radius: var(--radius-sm); padding: .65rem .9rem; max-width: 66ch; font-size: .93rem; line-height: 1.7; margin: .6rem 0; }
+  .progress { font-size: .9rem; color: var(--ink-soft); margin: .4rem 0; }
+  .fact { background: var(--surface); border: 2px solid var(--navy); border-radius: var(--radius-sm); padding: .9rem 1.1rem; max-width: 46rem; margin: .5rem 0 .7rem; }
+  .fact .val { font-size: 1.2rem; font-weight: 700; overflow-wrap: anywhere; }
+  .fact .prop { font-family: ui-monospace, Consolas, "D2Coding", monospace; font-size: .84rem; color: var(--ink-faint); margin-top: .2rem; overflow-wrap: anywhere; }
+  .fact .hintline { font-size: .9rem; color: var(--ink-soft); margin-top: .35rem; }
+  .choices { display: flex; flex-wrap: wrap; gap: .4rem; max-width: 46rem; }
+  .choices button { font: inherit; font-size: .95rem; padding: .4rem .9rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; }
+  .choices button:hover { border-color: var(--navy); }
+  .msg { font-size: .94rem; line-height: 1.6; margin: .55rem 0; min-height: 1.5rem; max-width: 46rem; } .msg.no { color: var(--danger); } .msg.ok { color: var(--ok); font-weight: 600; }
+  .sheetwrap { overflow-x: auto; margin: .6rem 0; max-width: 56rem; }
+  table.sheet { width: 100%; border-collapse: collapse; font-size: .88rem; min-width: 30rem; }
+  table.sheet th, table.sheet td { border: 1px solid var(--line); padding: .4rem .55rem; text-align: left; vertical-align: top; line-height: 1.5; }
+  table.sheet th { background: var(--line-soft); font-weight: 600; }
+  table.sheet td.lab { font-weight: 600; white-space: nowrap; }
+  table.sheet td.empty { color: var(--ink-faint); }
+  table.sheet .prop { font-family: ui-monospace, Consolas, monospace; font-size: .78rem; color: var(--ink-faint); overflow-wrap: anywhere; }
+  .same button { font: inherit; font-size: .86rem; padding: .18rem .6rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; margin: 0 .2rem .2rem 0; }
+  .same button.right { background: var(--ok); border-color: var(--ok); color: var(--paper); }
+  .same button.wrong { border-color: var(--danger); color: var(--danger); }
+  .finish { background: var(--gold-wash); border-radius: var(--radius-sm); padding: .8rem 1rem; margin: 1rem 0; line-height: 1.7; max-width: 56rem; }
+  .finish[hidden] { display: none; }
+  .bar { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: .65rem 0; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="materials/metadata-2026-2/xml-json/">← XML과 JSON 실습 자료</a></p>
+      <span class="course-card__term">2강 ② · 실습 6 · 8분</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">『어린 왕자』를 네 층으로 나누기</h1>
+      <p class="lead">실제 도서관 레코드의 값을 하나씩 보고 어느 칸에 들어가는지 고릅니다. 이 화면에서 끝까지 할 수 있습니다.</p>
+
+      <h2 class="sub">LRM이 뭔가요?</h2>
+      <p class="prose">친구가 “『어린 왕자』 있어?”라고 물으면 네 가지 뜻일 수 있습니다. 작품을 읽어 봤느냐, 어느 번역이냐, 어느 출판사 책이냐, 네 책장에 그 책이 꽂혀 있느냐. <b>LRM</b>(IFLA 도서관 참조모형, 2017)은 ‘책’이라는 말을 이렇게 나눠 정리한 국제 모형입니다. 네 층의 머리글자를 따서 <b>WEMI</b>라고도 합니다.</p>
+      <ol class="stairs">
+        <li><b>저작 (Work)</b><span>작품 그 자체. 종이도 글자도 아닌 생각 속의 이야기입니다. <em>예: 생텍쥐페리의 Le Petit Prince (1943)</em></span></li>
+        <li><b>표현형 (Expression)</b><span>그 작품을 표현한 글. 누가 어떤 언어로 옮겼는지에 따라 갈립니다. <em>예: 김화영의 한국어 번역</em></span></li>
+        <li><b>구현형 (Manifestation)</b><span>그 글을 찍어 낸 책의 판. 출판사·연도·쪽수·ISBN이 여기에 속합니다. <em>예: 문학동네, 2007, 147 p, 20 cm</em></span></li>
+        <li><b>개별자료 (Item)</b><span>도서관 서가에 있는 바로 그 한 권. 등록번호로 구분합니다. <em>예: 국립중앙도서관의 EM3889515</em></span></li>
+      </ol>
+      <p class="prose">네 층 말고 두 가지를 더 봅니다. <b>에이전트(Agent)</b>는 만든 사람이나 단체 자체이고, <b>노멘(Nomen)</b>은 그 대상을 부르는 이름표입니다. 생텍쥐페리는 한 사람(에이전트)이지만 ‘생떽쥐베리’, ‘Saint Exupéry’처럼 이름표(노멘)는 여러 개입니다.</p>
+      <p class="prose"><b>왜 나누나요?</b> 이 층을 구분해야 도서관 목록이 “이 작품의 번역본을 모아 보여 줘”와 “이 판을 빌릴 수 있어?”에 각각 답할 수 있습니다.</p>
+
+      <h2 class="sub">그 링크는 뭔가요?</h2>
+      <p class="prose"><a href="https://lod.nl.go.kr/page/KJU200003488" target="_blank" rel="noopener">lod.nl.go.kr/page/KJU200003488</a>은 국립중앙도서관이 공개한 <b>비룡소판 『어린 왕자』(박성창 옮김, 2000)의 정보 페이지</b>입니다. 주소 끝의 KJU200003488이 이 책의 번호입니다. 페이지를 열면 ‘속성 - 값’ 표가 나오는데, 한 페이지에 네 층의 정보가 섞여 있습니다. 이것을 가려내는 것이 이번 활동입니다.</p>
+      <div class="tip">아래 카드의 값은 이 페이지에서 옮겼습니다. 페이지를 열지 않아도 활동을 할 수 있고, 근거가 궁금하면 카드의 속성 이름을 페이지에서 찾아보면 됩니다.</div>
+
+      <h2 class="sub" id="step1">1단계. 값을 칸에 넣기</h2>
+      <p class="prose" style="margin-bottom:.3rem">카드의 값이 어느 칸에 들어가는지 누르세요. 틀리면 힌트가 나오고, 맞으면 아래 활동지에 채워집니다.</p>
+      <p class="progress" id="progress"></p>
+      <div id="game">
+        <div class="fact">
+          <div class="val" id="val"></div>
+          <div class="prop" id="prop"></div>
+          <div class="hintline" id="hintline"></div>
+        </div>
+        <div class="choices" id="choices" role="group" aria-label="LRM 칸 고르기"></div>
+      </div>
+      <p class="msg" id="msg" aria-live="polite"></p>
+
+      <h3 style="font-size:1rem; margin:1rem 0 .1rem">활동지: 비룡소판 (KJU200003488)</h3>
+      <div class="sheetwrap"><table class="sheet" id="sheet"></table></div>
+
+      <h2 class="sub" id="step2">2단계. 다른 번역본과 견주기</h2>
+      <p class="prose" style="margin-bottom:.3rem">이번에는 실습 내내 본 문학동네판과 나란히 놓습니다. 줄마다 같은지 다른지 고르세요.</p>
+      <div class="sheetwrap"><table class="sheet" id="compare"></table></div>
+      <p class="msg" id="msg2" aria-live="polite"></p>
+
+      <div class="finish" id="finish" hidden>
+        <b>저작은 같고, 표현형부터 아래는 모두 달라졌습니다.</b> 그래서 두 책은 ‘같은 『어린 왕자』이면서 다른 책’입니다. 에이전트도 저자는 같고 번역자만 다릅니다.
+        한 레코드 안에 섞인 값을 이렇게 나눌 수 있어야 번역본 모아 보기 같은 서비스를 설계할 수 있습니다.
+        <div class="bar" style="margin-bottom:0"><a class="btn btn--sm btn--ghost" href="https://lod.nl.go.kr/page/WMO202006856" target="_blank" rel="noopener">더 해 보기: 영어판(Harcourt, 2000) 페이지 열기</a></div>
+        <span class="small">영어판에서는 어느 층까지 같고 어디부터 달라질지 생각해 보세요.</span>
+      </div>
+
+      <div class="bar" style="margin-top:1.4rem">
+        <button class="btn btn--ghost" id="restart" type="button">처음부터 다시</button>
+      </div>
+      <p class="small muted">값은 국립중앙도서관 LOD(2026-11-05 확인)에서 옮겼고, 칸 나누기는 수업용 풀이입니다. 국립중앙도서관 레코드 자체가 LRM으로 나뉘어 있는 것은 아닙니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('xmljson:' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem('xmljson:' + k, JSON.stringify(v)); } catch { /* 저장 못 해도 활동은 된다 */ } },
+    del(k) { try { localStorage.removeItem('xmljson:' + k); } catch { /* 위와 같음 */ } },
+  };
+  const KINDS = [
+    { id: 'W', name: '저작', need: '작품 자체' },
+    { id: 'E', name: '표현형', need: '누구의 어떤 언어 번역?' },
+    { id: 'M', name: '구현형', need: '출판사·연도·쪽수·크기·ISBN' },
+    { id: 'I', name: '개별자료', need: '도서관이 가진 한 권(등록번호)' },
+    { id: 'A', name: '에이전트', need: '저자·번역자의 주소(URI)' },
+    { id: 'N', name: '노멘', need: '같은 사람의 다른 이름 표기' },
+  ];
+  // 값과 속성은 lod.nl.go.kr/data/KJU200003488 응답 그대로 (2026-11-05 확인)
+  const CARDS = [
+    { val: 'Petit prince', prop: 'dcterms:alternative', hint: '이 책이 번역한 원래 작품의 제목입니다.', to: 'W', why: '어느 번역본이든 같은 원작을 가리키니 저작입니다.', no: '이 번역, 이 책에만 해당하는 값이 아닙니다. 번역본이 달라져도 그대로인 것은 무엇일까요?' },
+    { val: '박성창 옮김', prop: 'rdfs:label', hint: '레코드 표시 이름에 “생텍쥐페리 글·그림; 박성창 옮김”이라고 적혀 있습니다.', to: 'E', why: '누구의 번역인지는 표현형을 가르는 값입니다.', no: '사람 자체를 묻는 것이 아니라 ‘이 글이 누구의 번역인가’를 말하는 값입니다.' },
+    { val: 'kor (한국어)', prop: 'dcterms:language', hint: '이 책의 글이 쓰인 언어입니다.', to: 'E', why: '언어가 바뀌면 다른 표현형입니다.', no: '언어는 책의 판이 아니라 글 자체의 특징입니다.' },
+    { val: '비룡소', prop: 'dc:publisher', hint: '이 책을 낸 곳입니다.', to: 'M', why: '출판사는 찍어 낸 판의 특징이라 구현형입니다.', no: '같은 번역을 다른 출판사가 내면 무엇이 달라질까요? 찍어 낸 판입니다.' },
+    { val: '2000', prop: 'nlon:issuedYear', hint: '발행 연도입니다.', to: 'M', why: '발행 연도는 판의 특징이라 구현형입니다.', no: '작품이 처음 나온 해(1943)가 아니라 이 판이 나온 해입니다.' },
+    { val: '127p, 23cm', prop: 'bibframe:extent', hint: '쪽수와 크기입니다.', to: 'M', why: '같은 판이면 어느 권이든 쪽수와 크기가 같으니 구현형입니다.', no: '쪽수와 크기는 같은 판의 책이면 모두 같습니다. 한 권만의 특징이 아닙니다.' },
+    { val: '8949190133', prop: 'bibo:isbn', hint: 'ISBN입니다.', to: 'M', why: 'ISBN은 판마다 붙으니 구현형입니다.', no: 'ISBN은 같은 판의 모든 책에 똑같이 붙습니다. 무엇을 구분하는 번호일까요?' },
+    { val: 'JU121828', prop: 'nlon:localHolding', hint: '도서관이 소장한 책에 붙인 등록번호입니다.', to: 'I', why: '등록번호는 서가의 그 한 권을 가리키니 개별자료입니다.', no: '이 번호는 같은 판이라도 권마다 다릅니다.' },
+    { val: 'nlk:KAC199623935', prop: 'dcterms:creator', hint: '이름이 아니라 주소입니다. 생텍쥐페리를 가리킵니다.', to: 'A', why: '사람 자체를 가리키는 주소이니 에이전트입니다.', no: '글자 표기가 아니라 사람 자체를 가리키는 주소입니다.' },
+    { val: 'nlk:KAC201226980', prop: 'dcterms:creator', hint: '이것도 주소입니다. 박성창을 가리킵니다.', to: 'A', why: '번역자도 사람 자체를 가리키는 주소이니 에이전트입니다.', no: '글자 표기가 아니라 사람 자체를 가리키는 주소입니다.' },
+    { val: 'Saint Exupery, Antoine de', prop: 'dc:creator', hint: '주소가 아니라 글자로 적은 이름입니다.', to: 'N', why: '사람을 부르는 이름표이니 노멘입니다.', no: '사람 자체가 아니라, 그 사람을 부르는 표기입니다.' },
+    { val: 'Saint-Ezup´ry, Antoine de', prop: 'dcterms:description', hint: '같은 사람의 다른 표기입니다. 글자가 조금 깨져 있는 것까지 실제 값입니다.', to: 'N', why: '같은 사람의 또 다른 이름표입니다. 표기는 이렇게 흔들리지만 주소는 하나입니다.', no: '사람 자체가 아니라, 그 사람을 부르는 표기입니다.' },
+  ];
+  const COMPARE = [
+    { name: '저작', a: 'Petit prince (생텍쥐페리)', b: 'Petit prince (생텍쥐페리)', same: true, why: '둘 다 같은 원작입니다.' },
+    { name: '표현형', a: '박성창의 한국어 번역', b: '김화영의 한국어 번역', same: false, why: '언어는 같아도 번역자가 달라 다른 표현형입니다.' },
+    { name: '구현형', a: '비룡소, 서울, 2000, 127p, 23cm, ISBN 8949190133', b: '문학동네, 파주, 2007, 147 p, 20 cm, ISBN 9788954603096', same: false, why: '출판사, 연도, 쪽수, ISBN이 모두 다릅니다.' },
+    { name: '개별자료', a: 'JU121828, JU121829, AV865478, AV865479', b: 'EM3889515, EM3889516', same: false, why: '서가에 있는 책이 다르니 등록번호도 다릅니다.' },
+    { name: '에이전트(저자)', a: 'nlk:KAC199623935', b: 'nlk:KAC199623935', same: true, why: '주소가 같으니 같은 사람입니다.' },
+    { name: '에이전트(번역자)', a: 'nlk:KAC201226980 (박성창)', b: 'nlk:KAC201114808 (김화영)', same: false, why: '주소가 달라 다른 사람입니다.' },
+  ];
+
+  const blank = () => ({ placed: [], cmp: {} });
+  let st = store.get('lrm', blank());
+  st.placed = st.placed || [];
+  st.cmp = st.cmp || {};
+  const save = () => store.set('lrm', st);
+
+  function renderSheet() {
+    $('sheet').innerHTML = `<thead><tr><th>LRM 칸</th><th>채울 내용</th><th>찾은 값과 근거</th></tr></thead><tbody>` + KINDS.map(k => {
+      const got = CARDS.map((c, n) => [c, n]).filter(([c, n]) => c.to === k.id && st.placed.includes(n));
+      const cell = got.length ? got.map(([c]) => `<div>${esc(c.val)} <span class="prop">${esc(c.prop)}</span></div>`).join('') : '아직 없음';
+      return `<tr><td class="lab">${esc(k.name)}</td><td>${esc(k.need)}</td><td class="${got.length ? '' : 'empty'}">${cell}</td></tr>`;
+    }).join('') + '</tbody>';
+  }
+  function renderCard() {
+    const n = CARDS.findIndex((_, i) => !st.placed.includes(i));
+    $('progress').textContent = `${st.placed.length} / ${CARDS.length}장`;
+    $('game').hidden = n < 0;
+    if (n < 0) return;
+    const c = CARDS[n];
+    $('val').textContent = c.val;
+    $('prop').textContent = '속성: ' + c.prop;
+    $('hintline').textContent = c.hint;
+  }
+  $('choices').innerHTML = KINDS.map(k => `<button type="button" data-k="${k.id}">${esc(k.name)}</button>`).join('');
+  $('choices').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    const n = CARDS.findIndex((_, i) => !st.placed.includes(i));
+    if (n < 0) return;
+    const c = CARDS[n], msg = $('msg');
+    if (b.dataset.k === c.to) {
+      st.placed.push(n);
+      save();
+      msg.className = 'msg ok';
+      msg.textContent = `맞습니다. ${c.why}`;
+      if (st.placed.length === CARDS.length) msg.textContent += ' 활동지를 다 채웠습니다. 2단계로 가세요.';
+      renderCard();
+      renderSheet();
+    } else {
+      msg.className = 'msg no';
+      msg.textContent = `다시 생각해 보세요. ${c.no}`;
+    }
+  });
+
+  function renderCompare() {
+    $('compare').innerHTML = `<thead><tr><th>칸</th><th>비룡소판</th><th>문학동네판</th><th>같은가요?</th></tr></thead><tbody>` + COMPARE.map((r, n) => {
+      const pick = st.cmp[n];
+      const cls = v => (pick === undefined ? '' : pick === v ? (v === r.same ? 'right' : 'wrong') : '');
+      const done = pick === r.same;
+      return `<tr><td class="lab">${esc(r.name)}</td><td>${esc(r.a)}</td><td>${esc(r.b)}</td><td class="same" data-n="${n}"><button type="button" data-v="1" class="${cls(true)}">같다</button><button type="button" data-v="0" class="${cls(false)}">다르다</button>${done ? `<div class="prop" style="font-family:inherit">${esc(r.why)}</div>` : ''}</td></tr>`;
+    }).join('') + '</tbody>';
+    const all = COMPARE.every((r, n) => st.cmp[n] === r.same);
+    $('finish').hidden = !all;
+  }
+  $('compare').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    const n = +b.closest('td').dataset.n, v = b.dataset.v === '1';
+    st.cmp[n] = v;
+    save();
+    const r = COMPARE[n], msg = $('msg2');
+    if (v === r.same) { msg.className = 'msg ok'; msg.textContent = `맞습니다. ${r.why}`; }
+    else { msg.className = 'msg no'; msg.textContent = '두 칸의 값을 다시 견주어 보세요.'; }
+    renderCompare();
+  });
+  $('restart').addEventListener('click', () => {
+    st = blank();
+    store.del('lrm');
+    $('msg').textContent = ''; $('msg2').textContent = '';
+    renderCard(); renderSheet(); renderCompare();
+  });
+  renderCard();
+  renderSheet();
+  renderCompare();
+})();
+</script>
+</body>
+</html>

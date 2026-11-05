@@ -1,44 +1,285 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><title>실습 3~5 링크 모음</title>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>실습 3·4 따라 하기 (메타데이터론 2강)</title>
+<!-- zip에 넣어 파일로 열어도 돌아가도록 외부 파일 없이 이 파일 하나로 만든다 -->
 <style>
-body{font-family:"맑은 고딕",sans-serif;max-width:900px;margin:24px auto;padding:0 16px;line-height:1.65;color:#1F2933}
-h1{color:#0B4F5C}h2{color:#15808F;border-bottom:2px solid #EEF4F5;padding-bottom:4px}
-code{background:#EEF4F5;padding:1px 4px;word-break:break-all}
-.slot{background:#E9A23B;color:#1F2933;font-weight:bold;padding:0 3px;border-radius:3px}
-li{margin:8px 0}.tip{color:#5E6A75;font-size:0.92em}
+:root{--paper:#fbfaf6;--surface:#fff;--ink:#1b1d21;--soft:#54585f;--faint:#8b9098;--line:#e5e1d8;--wash:#eaeff7;--navy:#1f3a5f;--gold:#a8742f;--goldw:#f8f0e2;--ok:#2f6b52;--no:#a33a33;--slot:#f3c27a}
+@media (prefers-color-scheme:dark){:root{--paper:#14161a;--surface:#1c1f25;--ink:#e9e7e2;--soft:#a8adb5;--faint:#7b8189;--line:#2e333b;--wash:#1e2836;--navy:#9dbbe6;--gold:#dfb073;--goldw:#2b2419;--ok:#6fbf9b;--no:#e58a83;--slot:#7a5a24}}
+*{box-sizing:border-box}
+body{font-family:"Pretendard Variable",Pretendard,"맑은 고딕","Malgun Gothic",sans-serif;background:var(--paper);color:var(--ink);max-width:880px;margin:0 auto;padding:1.2rem 16px 3rem;line-height:1.7;font-size:16px;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--navy)}
+h1{font-size:1.6rem;margin:.3rem 0 .4rem}
+h2{font-size:1.25rem;margin:2.4rem 0 .4rem;color:var(--navy);scroll-margin-top:1rem}
+h3{font-size:1rem;margin:1.3rem 0 .3rem}
+.back{font-size:.88rem}
+.lead{color:var(--soft);margin:.2rem 0 .6rem}
+ol.steps{padding-left:1.3rem;margin:.4rem 0}
+ol.steps li{margin:.25rem 0}
+.tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin:.6rem 0}
+.tabs button{font:inherit;font-size:.9rem;padding:.25rem .8rem;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);cursor:pointer}
+.tabs button.cur{background:var(--navy);border-color:var(--navy);color:var(--paper);font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;margin:.6rem 0}
+.card p{margin:.2rem 0 .6rem}
+.slots{display:flex;flex-wrap:wrap;gap:.6rem 1rem;margin:.5rem 0}
+.slots label{display:flex;flex-direction:column;font-size:.84rem;color:var(--soft);min-width:9rem;flex:1}
+.slots input,.slots select{font:inherit;font-size:.95rem;padding:.35rem .5rem;border:2px solid var(--gold);border-radius:8px;background:var(--surface);color:var(--ink);margin-top:.15rem;width:100%}
+.url{font-family:ui-monospace,Consolas,"D2Coding",monospace;font-size:.84rem;word-break:break-all;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.5rem .6rem;margin:.5rem 0}
+.url mark{background:var(--slot);color:var(--ink);border-radius:3px;padding:0 2px}
+.btn{display:inline-block;font:inherit;font-size:.92rem;font-weight:600;padding:.4rem .9rem;border-radius:9px;border:1px solid var(--navy);background:var(--navy);color:var(--paper);cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--navy)}
+.btn[hidden]{display:none}
+.bar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.5rem 0}
+.note{font-size:.88rem;color:var(--soft)}
+.tip{font-size:.9rem;background:var(--goldw);border-radius:9px;padding:.5rem .75rem;margin:.5rem 0}
+textarea{width:100%;min-height:6.5rem;font-family:ui-monospace,Consolas,monospace;font-size:.84rem;padding:.5rem .6rem;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);resize:vertical}
+.msg{font-size:.9rem;margin:.4rem 0}.msg.no{color:var(--no)}.msg.ok{color:var(--ok);font-weight:600}
+.treebox{max-height:26rem;overflow:auto;border:1px solid var(--line);border-radius:9px;padding:.5rem .7rem;background:var(--surface);font-family:ui-monospace,Consolas,monospace;font-size:.84rem;line-height:1.55}
+.treebox[hidden]{display:none}
+.treebox details{margin-left:.9rem}.treebox>details{margin-left:0}
+.treebox summary{cursor:pointer}
+.treebox .leaf{margin-left:1.9rem}
+.node{font:inherit;background:none;border:0;padding:0 .15rem;color:var(--navy);font-weight:600;cursor:pointer;border-radius:4px}
+.node:hover,.node.on{background:var(--slot);color:var(--ink)}
+.val{color:var(--soft);overflow-wrap:anywhere}
+.path{font-family:ui-monospace,Consolas,monospace;font-size:.88rem;word-break:break-all;background:var(--wash);border-radius:8px;padding:.45rem .6rem;margin:.5rem 0;min-height:2.1rem}
+.rec{width:100%;border-collapse:collapse;font-size:.9rem;margin:.4rem 0}
+.rec td{padding:.35rem .4rem;border-bottom:1px solid var(--line);vertical-align:top}
+.rec td:first-child{white-space:nowrap;width:4.5rem;font-weight:600}
+.rec td.p{font-family:ui-monospace,Consolas,monospace;font-size:.82rem;word-break:break-all}
+.check{list-style:none;padding:0;margin:.4rem 0}
+.check li{display:flex;gap:.6rem;align-items:flex-start;padding:.55rem 0;border-bottom:1px solid var(--line)}
+.check input{margin-top:.4rem;width:1.1rem;height:1.1rem;flex:none}
+code{background:var(--wash);padding:1px 4px;border-radius:4px;font-size:.92em;word-break:break-all}
 </style></head>
 <body>
-<h1>실습 3~5 링크 모음 (메타데이터론 2강)</h1>
-<p>링크를 누르면 실제 서버가 보낸 응답이 열립니다. 아래 링크는 모두 2026-10-29~30에 응답을 확인했습니다.<br>
-<span class="slot">주황색</span>은 <b>바꿀 자리</b>입니다. 주소창에서 그 부분만 고치고 Enter를 누르세요.</p>
+<p class="back"><a href="https://parkjuhyun-jnu.github.io/materials/metadata-2026-2/xml-json/">← XML과 JSON 실습 자료로</a></p>
+<h1>실습 3·4 따라 하기</h1>
+<p class="lead">메타데이터론 2강 ②. 차례로 따라 하면 됩니다.</p>
 
-<h2>실습 3. API로 직접 바꿔서 가져오기</h2>
-<p>먼저 예시 링크를 열어 보고, 다음에는 바꿀 자리를 고쳐서 다시 가져옵니다.</p>
-<ol>
-<li><b>LC SRU (XML)</b> — 예시: <a href="http://lx2.loc.gov:210/LCDB?version=1.1&operation=searchRetrieve&query=bath.isbn=0156012197&maximumRecords=1&recordSchema=marcxml">『The Little Prince』 MARCXML</a><br>
-틀: <code>http://lx2.loc.gov:210/LCDB?version=1.1&amp;operation=searchRetrieve&amp;query=bath.isbn=<span class="slot">ISBN</span>&amp;maximumRecords=1&amp;recordSchema=<span class="slot">marcxml|mods|dc</span></code><br>
-<span class="tip">recordSchema만 mods, dc로 바꿔 같은 책을 세 형식으로 받아 보세요. 영어책 ISBN을 넣으면 찾을 가능성이 높습니다.</span></li>
-<li><b>Open Library (JSON)</b> — 예시: <a href="https://openlibrary.org/isbn/9780156012195.json">openlibrary.org/isbn/9780156012195.json</a><br>
-틀: <code>https://openlibrary.org/isbn/<span class="slot">ISBN</span>.json</code><br>
-검색 틀: <code>https://openlibrary.org/search.json?q=<span class="slot">검색어</span>&amp;limit=<span class="slot">5</span></code> — 예: <a href="https://openlibrary.org/search.json?q=the+little+prince&limit=2">q=the+little+prince</a></li>
-<li><b>Crossref (JSON, 논문)</b> — 예시: <a href="https://api.crossref.org/works/10.1038/sdata.2016.18">api.crossref.org/works/10.1038/sdata.2016.18</a><br>
-틀: <code>https://api.crossref.org/works/<span class="slot">DOI</span></code><br>
-<span class="tip">한국 학술지 DOI는 대부분 KISTI에 등록되어 Crossref에서는 '찾을 수 없음'이 나올 수 있습니다.</span></li>
-<li><b>국립중앙도서관 LOD (JSON·Turtle, 키 없음)</b> — 예시: <a href="https://lod.nl.go.kr/data/KMO200722491?output=json">KMO200722491 JSON</a> · <a href="https://lod.nl.go.kr/data/KMO200722491?output=ttl">Turtle</a> · <a href="https://lod.nl.go.kr/page/KMO200722491">사람용 페이지</a><br>
-틀: <code>https://lod.nl.go.kr/data/<span class="slot">리소스번호</span>?output=<span class="slot">json|ttl|rdfxml</span></code><br>
-<span class="tip">리소스 번호 예: KMO200722491(어린 왕자, 문학동네), KJU200003488(어린 왕자, 비룡소), WMO202006856(The little prince, Harcourt), KAC199623935(생텍쥐페리)</span></li>
-<li><b>OAI-PMH (XML)</b> — 예시: <a href="https://oaipmh.arxiv.org/oai?verb=Identify">verb=Identify</a> · <a href="https://oaipmh.arxiv.org/oai?verb=GetRecord&identifier=oai:arXiv.org:1706.03762&metadataPrefix=oai_dc">GetRecord</a><br>
-틀: <code>https://oaipmh.arxiv.org/oai?verb=GetRecord&amp;identifier=oai:arXiv.org:<span class="slot">논문번호</span>&amp;metadataPrefix=oai_dc</code></li>
-</ol>
-<p><b>그리기</b>: 받은 응답 하나를 골라 종이에 나무 모양으로 그리세요(최상위 → 객체/요소 → 배열 → 값). 제목·ISBN·저자까지 가는 길을 화살표로 표시합니다.</p>
-
-<h2>실습 4. 링크드 데이터 따라가기</h2>
-<ol>
-<li>국립중앙도서관 LOD 『어린 왕자』(문학동네, 2007): <a href="https://lod.nl.go.kr/page/KMO200722491">lod.nl.go.kr/page/KMO200722491</a> → 저자 링크 → owl:sameAs 중 Wikidata</li>
-<li>Wikidata 『어린 왕자』 저작: <a href="https://www.wikidata.org/wiki/Q25338">wikidata.org/wiki/Q25338</a></li>
-<li>LC 주제명 'Metadata'(SKOS): <a href="https://id.loc.gov/authorities/subjects/sh96000740.html">id.loc.gov/authorities/subjects/sh96000740</a> · 'Linked data': <a href="https://id.loc.gov/authorities/subjects/sh2013002090.html">sh2013002090</a></li>
+<h2 id="p3">실습 3. API로 직접 가져오기 (15분)</h2>
+<p><b>API</b>는 주소로 자료를 달라고 요청하는 창구입니다. 주소의 일부(바꿀 자리)만 바꾸면 다른 자료가 옵니다. 이 실습에서는 <b>주소를 바꿔 자료를 받고, 받은 자료의 생김새를 읽어</b> 표제·ISBN·저자가 어디에 들어 있는지 찾습니다.</p>
+<ol class="steps">
+  <li>아래에서 서비스를 고릅니다. <b>Open Library부터</b> 하세요.</li>
+  <li>주황색 칸의 값을 바꾸면 주소도 함께 바뀝니다. 어느 부분이 바뀌는지 보세요.</li>
+  <li><b>응답 보기</b>로 서버가 보낸 원래 자료를 확인합니다.</li>
+  <li><b>나무로 보기</b>에서 항목을 누르면 그 값까지 가는 길(경로)이 나옵니다. 표제·ISBN·저자의 경로를 찾아 적습니다.</li>
+  <li>나무를 보고 종이에 간단히 따라 그립니다(최상위 → 객체·요소 → 배열 → 값).</li>
 </ol>
 
-<h2>실습 5. SPARQL 한 줄 질의</h2>
-<p>국립중앙도서관 SPARQL 편집기: <a href="https://lod.nl.go.kr/editor">lod.nl.go.kr/editor</a> — 활동지(실습5_SPARQL.md)의 질의를 붙여 넣고 실행합니다.</p>
+<div class="tabs" id="tabs" role="group" aria-label="서비스 고르기"></div>
+<div class="card">
+  <p id="desc"></p>
+  <div class="slots" id="slots"></div>
+  <div class="url" id="url"></div>
+  <div class="bar">
+    <a class="btn ghost" id="open" target="_blank" rel="noopener">응답 보기 (새 탭)</a>
+    <button class="btn" id="fetch" type="button">여기로 가져와 나무로 보기</button>
+  </div>
+  <p class="note" id="corsNote"></p>
+  <p class="tip" id="todo"></p>
+</div>
+
+<h3>나무로 보기</h3>
+<p class="note">가져온 자료가 아래에 나옵니다. 새 탭에서 본 응답을 복사해 이 칸에 붙여 넣어도 됩니다. XML은 새 탭에서 Ctrl+U(페이지 원본 보기)를 누른 뒤 전체 선택(Ctrl+A)·복사(Ctrl+C)하세요.</p>
+<textarea id="paste" spellcheck="false" placeholder="응답(JSON 또는 XML)을 여기에 붙여 넣으세요" aria-label="응답 붙여 넣기"></textarea>
+<div class="bar"><button class="btn ghost" id="draw" type="button">붙여 넣은 내용을 나무로 보기</button></div>
+<p class="msg" id="msg" aria-live="polite"></p>
+<div class="treebox" id="tree" hidden></div>
+<p class="note" style="margin:.6rem 0 0">항목 이름을 누르면 경로가 여기에 나옵니다.</p>
+<div class="path" id="path" aria-live="polite"></div>
+<div class="bar">
+  <span class="note">이 경로를</span>
+  <button class="btn ghost" type="button" data-rec="표제">표제로 적기</button>
+  <button class="btn ghost" type="button" data-rec="ISBN">ISBN으로 적기</button>
+  <button class="btn ghost" type="button" data-rec="저자">저자로 적기</button>
+</div>
+<table class="rec" id="rec"></table>
+
+<h3>다 했으면 확인해 보세요</h3>
+<ul>
+  <li>바꾼 값이 응답에 들어 있나요?</li>
+  <li>응답 형식은 XML인가요, JSON인가요?</li>
+  <li>같은 정보(표제·저자)가 서비스마다 어떤 이름으로 들어 있나요?</li>
+</ul>
+
+<h2 id="p4">실습 4. 링크드 데이터 따라가기 (7분)</h2>
+<p>링크를 따라 <b>국립중앙도서관에서 Wikidata까지 기관을 넘어</b> 『어린 왕자』를 찾아갑니다. 각 단계의 페이지는 새 탭으로 열립니다. 끝낸 단계는 왼쪽 칸에 표시하세요.</p>
+<ul class="check" id="p4list">
+  <li><input type="checkbox" id="c1" aria-label="1단계 완료"><div><b>1. 책에서 출발합니다.</b> <a href="https://lod.nl.go.kr/page/KMO200722491" target="_blank" rel="noopener">국립중앙도서관 LOD 『어린 왕자』(문학동네, 2007) 열기</a><br><span class="note">책 한 권의 정보가 ‘속성 - 값’ 표로 나옵니다.</span></div></li>
+  <li><input type="checkbox" id="c2" aria-label="2단계 완료"><div><b>2. 저자로 건너갑니다.</b> 표에서 <code>dcterms:creator</code> 줄을 찾아 <code>nlk:KAC199623935</code>를 누릅니다.<br><span class="note">막히면: <a href="https://lod.nl.go.kr/page/KAC199623935" target="_blank" rel="noopener">저자 페이지 바로 열기</a></span></div></li>
+  <li><input type="checkbox" id="c3" aria-label="3단계 완료"><div><b>3. 다른 기관으로 넘어갑니다.</b> 저자 페이지에서 <code>owl:sameAs</code> 줄을 찾습니다. ‘같은 대상’이라는 뜻입니다. 여러 주소 가운데 <code>www.wikidata.org</code>로 시작하는 것을 누릅니다.</div></li>
+  <li><input type="checkbox" id="c4" aria-label="4단계 완료"><div><b>4. 다시 작품으로 돌아옵니다.</b> Wikidata의 저자 항목에서 <b>notable work</b>(대표작) 칸을 찾아 『어린 왕자』를 누릅니다. 화면 언어에 따라 칸 이름이 다를 수 있습니다.<br><span class="note">주소 끝이 <code>Q25338</code>이면 도착입니다. 막히면: <a href="https://www.wikidata.org/wiki/Q25338" target="_blank" rel="noopener">Q25338 바로 열기</a></span></div></li>
+</ul>
+<p class="msg ok" id="p4done" hidden>한 바퀴 돌았습니다. 책 → 저자 → Wikidata → 작품까지, 서로 다른 기관의 자료가 주소(URI)로 이어져 있습니다.</p>
+<h3>더 해 보기</h3>
+<p class="note">LC 주제명 <a href="https://id.loc.gov/authorities/subjects/sh96000740.html" target="_blank" rel="noopener">‘Metadata’</a>에서 하위어 <a href="https://id.loc.gov/authorities/subjects/sh2013002090.html" target="_blank" rel="noopener">‘Linked data’</a>, 관련어 ‘Uniform Resource Identifiers’로 옮겨 다녀 보세요.</p>
+
+<h2 id="p5">실습 5·6은 다음 화면에서 합니다</h2>
+<ul>
+  <li><a href="https://parkjuhyun-jnu.github.io/materials/metadata-2026-2/xml-json/sparql.html">실습 5. SPARQL로 도서관 데이터에 묻기</a></li>
+  <li><a href="https://parkjuhyun-jnu.github.io/materials/metadata-2026-2/xml-json/lrm.html">실습 6. 『어린 왕자』를 네 층으로 나누기</a></li>
+</ul>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('xmljson:' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem('xmljson:' + k, JSON.stringify(v)); } catch { /* 저장 못 해도 실습은 된다 */ } },
+  };
+  // cors: 이 서버가 다른 사이트 페이지 안으로 가져오는 것을 허용하는지 (2026-11-05 응답 머리글로 확인)
+  const APIS = [
+    { id: 'ol', name: 'Open Library', fmt: 'JSON', cors: true,
+      desc: '세계 도서 목록을 모으는 공개 사이트입니다. ISBN으로 책 한 권을 받습니다.',
+      tpl: 'https://openlibrary.org/isbn/{isbn}.json',
+      slots: [{ k: 'isbn', label: 'ISBN (내 책 ISBN으로 바꿔 보세요)', v: '9780156012195' }],
+      todo: '해 볼 일: 먼저 그대로 가져와 표제(title)를 찾으세요. 그다음 ISBN을 다른 영어책 것으로 바꿔 다시 가져옵니다. 저자가 이름이 아니라 authors[0].key 같은 번호로 나오는 점도 보세요.' },
+    { id: 'ols', name: 'Open Library 검색', fmt: 'JSON', cors: true,
+      desc: '같은 사이트의 검색 창구입니다. 검색어로 여러 건을 받습니다.',
+      tpl: 'https://openlibrary.org/search.json?q={q}&limit={n}',
+      slots: [{ k: 'q', label: '검색어', v: 'the little prince' }, { k: 'n', label: '몇 건 받을까요', v: '2' }],
+      todo: '해 볼 일: 검색어와 건수를 바꿔 보세요. 결과가 docs라는 배열에 담겨 오고, 첫 건의 표제 경로는 docs[0].title 처럼 번호가 붙습니다.' },
+    { id: 'lc', name: 'LC SRU', fmt: 'XML', cors: false,
+      desc: '미국 의회도서관(LC) 목록입니다. 같은 책을 세 가지 XML 형식으로 받을 수 있습니다.',
+      tpl: 'http://lx2.loc.gov:210/LCDB?version=1.1&operation=searchRetrieve&query=bath.isbn={isbn}&maximumRecords=1&recordSchema={schema}',
+      slots: [{ k: 'isbn', label: 'ISBN (영어책이면 찾을 가능성이 높습니다)', v: '0156012197' }, { k: 'schema', label: '형식', opts: ['marcxml', 'mods', 'dc'] }],
+      todo: '해 볼 일: 형식을 marcxml → mods → dc로 바꿔 새 탭에서 차례로 열어 보세요. 같은 책인데 태그 이름이 어떻게 달라지나요?' },
+    { id: 'cr', name: 'Crossref', fmt: 'JSON', cors: true,
+      desc: '학술 논문의 DOI 정보를 주는 창구입니다. DOI로 논문 한 편을 받습니다.',
+      tpl: 'https://api.crossref.org/works/{doi}',
+      slots: [{ k: 'doi', label: 'DOI', v: '10.1038/sdata.2016.18', raw: true }],
+      todo: '해 볼 일: 내가 아는 논문의 DOI로 바꿔 보세요. 한국 학술지 DOI는 대부분 KISTI에 등록되어 있어 ‘찾을 수 없음’이 나올 수 있습니다. 답은 message 아래에 들어 있습니다.' },
+    { id: 'nlk', name: '국립중앙도서관 LOD', fmt: 'JSON·Turtle', cors: false,
+      desc: '국립중앙도서관의 링크드 데이터입니다. 인증키 없이 받습니다.',
+      tpl: 'https://lod.nl.go.kr/data/{id}?output={out}',
+      slots: [{ k: 'id', label: '리소스 번호', opts: [['KMO200722491', 'KMO200722491 어린 왕자(문학동네)'], ['KJU200003488', 'KJU200003488 어린 왕자(비룡소)'], ['WMO202006856', 'WMO202006856 The little prince(Harcourt)'], ['KAC199623935', 'KAC199623935 생텍쥐페리']] }, { k: 'out', label: '형식', opts: ['json', 'ttl', 'rdfxml'] }],
+      todo: '해 볼 일: 리소스 번호와 형식을 바꿔 보세요. JSON을 복사해 아래에 붙여 넣으면, 이름 자리에 긴 주소(URI)가 들어 있는 것이 보입니다.' },
+    { id: 'oai', name: 'OAI-PMH (더 해 보기)', fmt: 'XML', cors: false,
+      desc: '기관끼리 메타데이터를 넘겨받는 규약입니다. 여기서는 arXiv 논문 한 편을 더블린 코어로 받습니다.',
+      tpl: 'https://oaipmh.arxiv.org/oai?verb=GetRecord&identifier=oai:arXiv.org:{id}&metadataPrefix=oai_dc',
+      slots: [{ k: 'id', label: 'arXiv 논문 번호', v: '1706.03762', raw: true }],
+      todo: '해 볼 일: 시간이 남으면 해 보세요. 새 탭에서 dc:title, dc:creator를 찾아봅니다.' },
+  ];
+  let api = APIS[0];
+  const vals = {};
+
+  function buildUrl(mark) {
+    return api.tpl.split(/(\{\w+\})/).map(part => {
+      const m = part.match(/^\{(\w+)\}$/);
+      if (!m) return mark ? esc(part) : part;
+      const s = api.slots.find(x => x.k === m[1]);
+      const v = (vals[api.id + m[1]] || '').trim();
+      const enc = s.raw ? v : encodeURIComponent(v).replace(/%20/g, '+');
+      return mark ? `<mark>${esc(enc)}</mark>` : enc;
+    }).join('');
+  }
+  function refresh() {
+    $('url').innerHTML = buildUrl(true);
+    $('open').href = buildUrl(false);
+  }
+  function renderApi() {
+    $('tabs').innerHTML = APIS.map(a => `<button type="button" data-id="${a.id}" class="${a === api ? 'cur' : ''}">${esc(a.name)}</button>`).join('');
+    $('desc').innerHTML = `<b>${esc(api.name)}</b> · 받는 형식 ${esc(api.fmt)}. ${esc(api.desc)}`;
+    $('slots').innerHTML = api.slots.map(s => {
+      const key = api.id + s.k;
+      if (vals[key] === undefined) vals[key] = s.opts ? (Array.isArray(s.opts[0]) ? s.opts[0][0] : s.opts[0]) : s.v;
+      if (s.opts) return `<label>${esc(s.label)}<select data-k="${key}">${s.opts.map(o => { const [v, t] = Array.isArray(o) ? o : [o, o]; return `<option value="${esc(v)}"${vals[key] === v ? ' selected' : ''}>${esc(t)}</option>`; }).join('')}</select></label>`;
+      return `<label>${esc(s.label)}<input data-k="${key}" value="${esc(vals[key])}" autocomplete="off" spellcheck="false"></label>`;
+    }).join('');
+    $('todo').textContent = api.todo;
+    $('fetch').hidden = !api.cors;
+    $('corsNote').textContent = api.cors ? '' : '이 서버는 다른 페이지 안으로 자료를 가져오는 것을 막아 두어, 새 탭으로만 열립니다. 나무로 보려면 새 탭의 내용을 복사해 아래 칸에 붙여 넣으세요.';
+    refresh();
+  }
+  $('tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { api = APIS.find(a => a.id === b.dataset.id); renderApi(); } });
+  $('slots').addEventListener('input', e => { if (e.target.dataset.k) { vals[e.target.dataset.k] = e.target.value; refresh(); } });
+
+  // ── 나무 그리기: JSON과 XML을 같은 모양의 접고 펴는 나무로 ──
+  const LIMIT = 30;
+  const isId = k => /^[A-Za-z_$][\w$]*$/.test(k);
+  const joinKey = (p, k) => isId(k) ? (p ? p + '.' + k : k) : `${p}["${k}"]`;
+
+  function jsonNode(v, key, path, depth) {
+    const label = key === null ? '최상위' : key;
+    const btn = `<button type="button" class="node" data-path="${esc(path || '(최상위)')}">${esc(label)}</button>`;
+    if (v && typeof v === 'object') {
+      const arr = Array.isArray(v), keys = arr ? v.map((_, i) => i) : Object.keys(v);
+      const kids = keys.slice(0, LIMIT).map(k => jsonNode(v[k], arr ? `[${k}]` : k, arr ? `${path}[${k}]` : joinKey(path, k), depth + 1)).join('');
+      const more = keys.length > LIMIT ? `<div class="leaf val">… ${keys.length - LIMIT}개 더 있음</div>` : '';
+      return `<details${depth < 2 ? ' open' : ''}><summary>${btn} <span class="val">${arr ? `배열 [${keys.length}개]` : `객체 {${keys.length}개}`}</span></summary>${kids}${more}</details>`;
+    }
+    const s = JSON.stringify(v);
+    return `<div class="leaf">${btn}: <span class="val">${esc(s.length > 160 ? s.slice(0, 160) + '…' : s)}</span></div>`;
+  }
+  function xmlNode(el, path, depth) {
+    const siblings = el.parentElement ? [...el.parentElement.children].filter(c => c.nodeName === el.nodeName) : [el];
+    const here = path + '/' + el.nodeName + (siblings.length > 1 ? `[${siblings.indexOf(el) + 1}]` : '');
+    const btn = `<button type="button" class="node" data-path="${esc(here)}">${esc(el.nodeName)}</button>`;
+    const attrs = [...el.attributes].filter(a => !a.name.startsWith('xmlns')).map(a => ` <span class="val">${esc(a.name)}="${esc(a.value)}"</span>`).join('');
+    const kids = [...el.children];
+    if (!kids.length) { const t = el.textContent.trim(); return `<div class="leaf">${btn}${attrs}: <span class="val">${esc(t.length > 160 ? t.slice(0, 160) + '…' : t)}</span></div>`; }
+    const shown = kids.slice(0, LIMIT).map(k => xmlNode(k, here, depth + 1)).join('');
+    const more = kids.length > LIMIT ? `<div class="leaf val">… ${kids.length - LIMIT}개 더 있음</div>` : '';
+    return `<details${depth < 4 ? ' open' : ''}><summary>${btn}${attrs}</summary>${shown}${more}</details>`;
+  }
+  function draw(text) {
+    const t = text.trim(), msg = $('msg'), box = $('tree');
+    box.hidden = true; box.innerHTML = ''; msg.className = 'msg';
+    if (!t) { msg.textContent = '먼저 응답을 붙여 넣거나 가져오세요.'; return; }
+    if (t[0] === '{' || t[0] === '[') {
+      try { box.innerHTML = jsonNode(JSON.parse(t), null, '', 0); box.hidden = false; msg.className = 'msg ok'; msg.textContent = 'JSON입니다. 항목 이름을 눌러 보세요.'; return; }
+      catch (e) { msg.className = 'msg no'; msg.textContent = 'JSON으로 읽지 못했습니다. 일부만 복사된 것은 아닌지 보세요. (' + e.message + ')'; return; }
+    }
+    if (/^(@prefix|@base|prefix\s)/i.test(t)) { msg.className = 'msg no'; msg.textContent = 'Turtle 형식입니다. Turtle은 나무 구조가 아니라 ‘주어 서술어 목적어’ 줄의 모음이라, 형식을 json으로 바꿔 받아 보세요.'; return; }
+    const at = t.indexOf('<');
+    if (at >= 0) {
+      const doc = new DOMParser().parseFromString(t.slice(at), 'application/xml');
+      if (!doc.querySelector('parsererror')) { box.innerHTML = xmlNode(doc.documentElement, '', 0); box.hidden = false; msg.className = 'msg ok'; msg.textContent = 'XML입니다. 항목 이름을 눌러 보세요.'; return; }
+      msg.className = 'msg no'; msg.textContent = 'XML로 읽지 못했습니다. 새 탭에서 Ctrl+U를 누른 화면의 내용을 복사해 보세요.'; return;
+    }
+    msg.className = 'msg no'; msg.textContent = 'JSON이나 XML이 아닙니다. 응답을 처음부터 끝까지 복사했는지 보세요.';
+  }
+  $('draw').addEventListener('click', () => draw($('paste').value));
+  $('fetch').addEventListener('click', async () => {
+    const url = buildUrl(false), msg = $('msg'), b = $('fetch');
+    b.disabled = true; msg.className = 'msg'; msg.textContent = '가져오는 중입니다…';
+    try {
+      const r = await fetch(url);
+      if (!r.ok) { msg.className = 'msg no'; msg.textContent = r.status === 404 ? '서버에 그런 자료가 없습니다(404, 찾을 수 없음). 번호를 확인하거나 다른 값을 넣어 보세요.' : `서버가 오류로 답했습니다(${r.status}). 잠시 뒤 다시 해 보세요.`; $('tree').hidden = true; return; }
+      const text = await r.text();
+      $('paste').value = text.length > 200000 ? text.slice(0, 200000) : text;
+      draw(text);
+    } catch { msg.className = 'msg no'; msg.textContent = '가져오지 못했습니다. 인터넷 연결을 확인하거나 ‘응답 보기’로 새 탭에서 열어 보세요.'; }
+    finally { b.disabled = false; }
+  });
+
+  let picked = '';
+  $('tree').addEventListener('click', e => {
+    const b = e.target.closest('.node'); if (!b) return;
+    e.preventDefault();
+    document.querySelectorAll('.node.on').forEach(n => n.classList.remove('on'));
+    b.classList.add('on');
+    picked = b.dataset.path;
+    $('path').textContent = picked;
+  });
+  const rec = store.get('paths', {});
+  function renderRec() {
+    $('rec').innerHTML = ['표제', 'ISBN', '저자'].map(k => `<tr><td>${k}</td><td class="p">${esc(rec[k] || '아직 없음')}</td></tr>`).join('');
+  }
+  document.querySelectorAll('[data-rec]').forEach(b => b.addEventListener('click', () => {
+    if (!picked) { $('path').textContent = '먼저 나무에서 항목 이름을 누르세요.'; return; }
+    rec[b.dataset.rec] = `${picked}  (${api.name})`; store.set('paths', rec); renderRec();
+  }));
+
+  // 실습 4 진행 표시
+  const ticks = store.get('p4', {});
+  const boxes = ['c1', 'c2', 'c3', 'c4'].map($);
+  const paint = () => { $('p4done').hidden = !boxes.every(c => c.checked); };
+  boxes.forEach(c => { c.checked = !!ticks[c.id]; c.addEventListener('change', () => { ticks[c.id] = c.checked; store.set('p4', ticks); paint(); }); });
+  paint();
+  renderApi();
+  renderRec();
+})();
+</script>
 </body></html>

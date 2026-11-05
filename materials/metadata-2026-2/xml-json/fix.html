@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>XML·JSON 고치기 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 2강 실습 1·2. 빈칸을 채우고 일부러 틀린 XML·JSON 파일을 웹에서 바로 고쳐 봅니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .pick { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; margin: .3rem 0; }
+  .pick .lbl { font-size: .84rem; color: var(--ink-faint); width: 5.4rem; white-space: nowrap; }
+  .pick button { font: inherit; font-size: .86rem; padding: .22rem .7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; }
+  .pick button.cur { border-color: var(--navy); box-shadow: inset 0 0 0 1px var(--navy); font-weight: 700; }
+  .pick button.done { background: var(--ok); border-color: var(--ok); color: var(--paper); }
+  .task { margin: 1.1rem 0 .8rem; font-size: 1.02rem; line-height: 1.65; max-width: 66ch; }
+  .fill { font-size: .9rem; background: var(--gold-wash); border-radius: var(--radius-sm); padding: .55rem .8rem; margin: 0 0 .8rem; max-width: 66ch; }
+  .editor { display: flex; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); overflow: hidden; }
+  .editor:focus-within { outline: 2px solid var(--navy); outline-offset: 1px; }
+  .gutter, .editor textarea { font-family: ui-monospace, "Cascadia Mono", Consolas, "D2Coding", monospace; font-size: .95rem; line-height: 1.6; padding: .7rem .6rem; margin: 0; }
+  .gutter { flex: none; text-align: right; color: var(--ink-faint); background: var(--line-soft); user-select: none; overflow: hidden; white-space: pre; min-width: 2.2rem; }
+  .gutter b { color: var(--danger); }
+  .editor textarea { flex: 1; min-width: 0; min-height: 13rem; border: 0; outline: 0; resize: vertical; background: transparent; color: var(--ink); white-space: pre; overflow: auto; }
+  .bar { display: flex; flex-wrap: wrap; gap: .5rem; margin: .7rem 0; align-items: center; }
+  .result { border-radius: var(--radius-sm); padding: .7rem .9rem; font-size: .94rem; line-height: 1.6; margin: .4rem 0; }
+  .result.no { border: 1px solid var(--danger); }
+  .result.ok { border: 1px solid var(--ok); }
+  .result.info { border: 1px solid var(--line); background: var(--navy-wash); }
+  .result pre { margin: .35rem 0 0; white-space: pre-wrap; word-break: break-word; font-size: .84rem; color: var(--ink-soft); font-family: ui-monospace, Consolas, monospace; }
+  .tree, .tree ul { list-style: none; margin: .1rem 0; padding-left: 1.1rem; font-family: ui-monospace, Consolas, monospace; font-size: .84rem; line-height: 1.6; }
+  .tree { padding-left: 0; margin-top: .5rem; }
+  .tree .k { color: var(--navy); font-weight: 600; } .tree .a { color: var(--gold); } .tree .v { color: var(--ink-soft); }
+  .hint { font-size: .9rem; background: var(--gold-wash); border-radius: var(--radius-sm); padding: .5rem .75rem; margin: .4rem 0; }
+  ol.how { margin: .3rem 0 0; padding-left: 1.3rem; line-height: 1.7; max-width: 66ch; }
+  .small-note { font-size: .86rem; color: var(--ink-faint); max-width: 66ch; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section" style="padding-bottom:.6rem">
+    <div class="wrap">
+      <p class="small"><a href="materials/metadata-2026-2/xml-json/">← XML과 JSON 실습 자료</a></p>
+      <span class="course-card__term">2강 ① · 실습 1·2</span>
+      <h1 style="font-family:var(--font-serif); margin:.3rem 0 .5rem">XML·JSON 고치기</h1>
+      <p style="max-width:66ch; color:var(--ink-soft); margin:0">
+        컴퓨터는 문법이 한 군데만 틀려도 파일을 읽지 못하고 오류를 냅니다. 여기서는 그 오류 메시지를 읽고 직접 고쳐 봅니다. 설치할 것도, 저장할 것도 없습니다.
+      </p>
+      <ol class="how">
+        <li>아래에서 번호를 누르면 파일 내용이 입력 칸에 열립니다. <b>빈칸</b> 두 개를 먼저 하고, <b>오류1</b>부터 차례로 합니다.</li>
+        <li>입력 칸을 직접 고치고 <b>검사</b>를 누릅니다. 틀리면 몇째 줄이 문제인지 알려 줍니다.</li>
+        <li>‘통과’가 나오면 초록색으로 바뀝니다. <b>다음</b>을 눌러 넘어갑니다.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.8rem">
+    <div class="wrap">
+      <div id="pick"></div>
+      <p class="task" id="task"></p>
+      <p class="fill" id="fill" hidden></p>
+      <label for="code" class="sr-only">파일 내용</label>
+      <div class="editor">
+        <div class="gutter" id="gutter" aria-hidden="true">1</div>
+        <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea>
+      </div>
+      <div class="bar">
+        <button class="btn btn--sm" id="check" type="button">검사</button>
+        <button class="btn btn--sm btn--ghost" id="hintBtn" type="button">힌트</button>
+        <button class="btn btn--sm btn--ghost" id="reset" type="button">처음 내용으로</button>
+        <button class="btn btn--sm" id="next" type="button" hidden>다음 →</button>
+      </div>
+      <div id="hintOut"></div>
+      <div id="out"></div>
+      <p class="small-note" style="margin-top:1.2rem">메모장으로 해 보고 싶으면 <a id="dl" download>이 파일 받기</a>를 누르세요. 화면은 그대로이고 파일이 ‘내려받기’ 폴더에 저장됩니다. 메모장으로 고쳐 UTF-8로 저장한 뒤, 파일을 브라우저 창에 끌어다 놓으면 결과가 보입니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+(() => {
+  const DIR = 'materials/metadata-2026-2/xml-json/files/';
+  const ITEMS = [
+    { id: 'x', group: 'XML', label: '빈칸', file: '실습1_book_빈칸.xml', type: 'xml', blank: true,
+      task: '____ 자리를 채워 book.xml을 완성하세요. 맨 끝의 ____ 자리에는 가장 바깥 태그를 닫는 태그가 들어갑니다.',
+      fill: '채울 값: 『어린 왕자』, 생텍쥐페리 지음, 김화영 옮김(옮긴이의 역할 이름은 영어로 translator), 문학동네, 2007',
+      hint: '<book>으로 열었으니 맨 끝은 </book>으로 닫습니다.' },
+    { id: '1', group: 'XML', label: '오류1', file: '오류1_닫는태그없음.xml', type: 'xml', task: '이 파일에는 틀린 곳이 하나 있습니다. 찾아서 고치세요.', hint: '열린 태그마다 닫는 태그가 있는지 한 줄씩 보세요. 오류 메시지가 가리키는 줄보다 위에 원인이 있을 수 있습니다.' },
+    { id: '2', group: 'XML', label: '오류2', file: '오류2_앰퍼샌드.xml', type: 'xml', task: '이 파일에는 틀린 곳이 하나 있습니다. 찾아서 고치세요.', hint: 'XML에서 & 기호는 그대로 쓸 수 없습니다. &amp; 로 적습니다.' },
+    { id: '3', group: 'XML', label: '오류3', file: '오류3_대소문자.xml', type: 'xml', task: '이 파일에는 틀린 곳이 하나 있습니다. 찾아서 고치세요.', hint: 'XML은 대문자와 소문자를 다른 글자로 봅니다.' },
+    { id: '4', group: 'XML', label: '오류4', file: '오류4_속성따옴표.xml', type: 'xml', task: '이 파일에는 틀린 곳이 하나 있습니다. 찾아서 고치세요.', hint: '속성값은 따옴표로 감쌉니다.' },
+    { id: '5', group: 'XML', label: '오류5', file: '오류5_루트두개.xml', type: 'xml', task: '이 파일에는 틀린 곳이 하나 있습니다. 두 책을 모두 남긴 채 고쳐 보세요.', hint: '가장 바깥 요소(루트)는 하나뿐이어야 합니다. 두 <book>을 새 태그 하나로 감싸 보세요. 예: <books> … </books>', keep: '야간 비행' },
+    { id: 'j', group: 'JSON', label: '빈칸', file: '실습2_book_빈칸.json', type: 'json', blank: true,
+      task: '____ 자리를 값의 유형에 맞게 채워 book.json을 완성하세요.',
+      fill: '채울 값: 표제 어린 왕자, 번역자 김화영, 발행처 문학동네(이 셋은 이미 큰따옴표 안에 있습니다) · 발행년 2007(숫자, 따옴표 없음) · illustrated는 true · series는 null',
+      hint: '숫자와 true·null에는 따옴표를 붙이지 않습니다.' },
+    { id: '6', group: 'JSON', label: '오류6', file: '오류6_끝쉼표.json', type: 'json', task: '이 파일에는 틀린 곳이 하나 있습니다. 찾아서 고치세요.', hint: '마지막 값 뒤에 무엇이 붙어 있는지 보세요.' },
+    { id: '7', group: 'JSON', label: '오류7', file: '오류7_작은따옴표.json', type: 'json', task: '이 파일에는 틀린 곳이 있습니다. 찾아서 고치세요.', hint: 'JSON의 글자는 큰따옴표로만 감쌉니다.' },
+    { id: '8', group: 'JSON', label: '오류8', file: '오류8_쉼표빠짐.json', type: 'json', task: '이 파일에는 틀린 곳이 하나 있습니다. 찾아서 고치세요.', hint: '이름-값 쌍 사이에는 무엇이 있어야 할까요?' },
+    { id: '9', group: 'JSON', label: '오류9', file: '오류9_True대문자.json', type: 'json', task: '이 파일에는 틀린 곳이 하나 있습니다. 찾아서 고치세요.', hint: 'JSON의 참·거짓은 모두 소문자입니다.' },
+  ];
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('xmljson:' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem('xmljson:' + k, JSON.stringify(v)); } catch { /* 저장 못 해도 실습은 된다 */ } },
+  };
+  const done = new Set(store.get('fixed', []));
+  const originals = {};
+  let cur = null;
+
+  function renderPick() {
+    $('pick').innerHTML = ['XML', 'JSON'].map(g => `<div class="pick"><span class="lbl">${g === 'XML' ? '실습 1 XML' : '실습 2 JSON'}</span>` +
+      ITEMS.filter(x => x.group === g).map(x => `<button type="button" data-id="${x.id}" class="${[x === cur ? 'cur' : '', done.has(x.id) ? 'done' : ''].join(' ')}">${x.label}</button>`).join('') + '</div>').join('');
+  }
+  $('pick').addEventListener('click', e => { const b = e.target.closest('button'); if (b) open(b.dataset.id); });
+
+  function paintGutter(errLine) {
+    const n = $('code').value.split('\n').length;
+    $('gutter').innerHTML = Array.from({ length: n }, (_, i) => i + 1 === errLine ? `<b>${i + 1}</b>` : i + 1).join('\n');
+    $('gutter').scrollTop = $('code').scrollTop;
+  }
+  $('code').addEventListener('input', () => paintGutter());
+  $('code').addEventListener('scroll', () => { $('gutter').scrollTop = $('code').scrollTop; });
+
+  async function open(id) {
+    const x = ITEMS.find(i => i.id === id) || ITEMS[0];
+    cur = x;
+    renderPick();
+    $('task').textContent = x.task;
+    $('fill').hidden = !x.fill; $('fill').textContent = x.fill || '';
+    $('out').innerHTML = ''; $('hintOut').innerHTML = ''; $('next').hidden = true;
+    $('dl').href = DIR + x.file; $('dl').setAttribute('download', x.file);
+    if (originals[x.id] === undefined) {
+      $('code').value = '불러오는 중…';
+      try { originals[x.id] = (await (await fetch(DIR + x.file)).text()).replace(/\r\n/g, '\n').trimEnd(); }
+      catch { $('out').innerHTML = '<div class="result no">파일을 불러오지 못했습니다. 인터넷 연결을 확인하고 새로 고쳐 보세요.</div>'; return; }
+    }
+    if (cur !== x) return;
+    $('code').value = store.get('draft:' + x.id, originals[x.id]);
+    paintGutter();
+    try { history.replaceState(null, '', location.pathname + location.search + '#' + x.id); } catch { /* 주소만 안 바뀔 뿐 */ }
+  }
+
+  function parse(text, type) {
+    if (type === 'json') {
+      try { return { ok: true, data: JSON.parse(text) }; }
+      catch (e) { const m = String(e.message); const l = m.match(/line (\d+)/); return { ok: false, msg: m, line: l ? +l[1] : posLine(text, m) }; }
+    }
+    const doc = new DOMParser().parseFromString(text, 'application/xml');
+    const err = doc.querySelector('parsererror');
+    if (!err) return { ok: true, doc };
+    const raw = err.textContent.replace(/\s+/g, ' ').trim();
+    const pick = raw.match(/error on line .*?(?=Below is|$)/i);
+    const l = raw.match(/line (?:number )?(\d+)/i);
+    return { ok: false, msg: pick ? pick[0].trim() : raw, line: l ? +l[1] : 0 };
+  }
+  function posLine(text, m) { const p = m.match(/position (\d+)/); return p ? text.slice(0, +p[1]).split('\n').length : 0; }
+
+  function xmlTree(el) {
+    const attrs = [...el.attributes].map(a => ` <span class="a">${esc(a.name)}="${esc(a.value)}"</span>`).join('');
+    const kids = [...el.children];
+    if (!kids.length) return `<li><span class="k">${esc(el.nodeName)}</span>${attrs}: <span class="v">${esc(el.textContent.trim())}</span></li>`;
+    return `<li><span class="k">${esc(el.nodeName)}</span>${attrs}<ul>${kids.map(xmlTree).join('')}</ul></li>`;
+  }
+  function jsonTree(v, key) {
+    const name = key === undefined ? '' : `<span class="k">${esc(key)}</span>: `;
+    if (Array.isArray(v)) return `<li>${name}[ ${v.length}개 ]<ul>${v.map((x, i) => jsonTree(x, i)).join('')}</ul></li>`;
+    if (v && typeof v === 'object') return `<li>${name}{ }<ul>${Object.keys(v).map(k => jsonTree(v[k], k)).join('')}</ul></li>`;
+    return `<li>${name}<span class="v">${esc(JSON.stringify(v))}</span></li>`;
+  }
+
+  function blanksLeft(text, type) {
+    const t = type === 'xml' ? text.replace(/<!--[\s\S]*?-->/g, '') : text;
+    return (t.match(/_{2,}/g) || []).length;
+  }
+  // 빈칸 문제는 문법뿐 아니라 값의 유형까지 본다
+  function blankProblem(x, r) {
+    if (x.type === 'json') {
+      const d = r.data;
+      if (typeof d.date !== 'number') return '발행년(date)은 숫자로 씁니다. 따옴표를 빼세요.';
+      if (d.illustrated !== true) return 'illustrated에는 true를 넣습니다(소문자, 따옴표 없음).';
+      if (d.series !== null) return 'series에는 null을 넣습니다(소문자, 따옴표 없음).';
+      return '';
+    }
+    const translator = [...r.doc.querySelectorAll('creator')].find(c => c.textContent.includes('김화영'));
+    if (!translator || translator.getAttribute('role') !== 'translator') return '김화영의 역할 이름(role)은 translator로 적습니다.';
+    return '';
+  }
+
+  $('check').addEventListener('click', () => {
+    const x = cur, text = $('code').value;
+    store.set('draft:' + x.id, text);
+    const out = $('out');
+    paintGutter();
+    if (x.blank) {
+      const n = blanksLeft(text, x.type);
+      if (n) { out.innerHTML = `<div class="result info">아직 채우지 않은 ____ 가 ${n}곳 남았습니다.</div>`; return; }
+    }
+    const r = parse(text, x.type);
+    if (!r.ok) {
+      paintGutter(r.line);
+      out.innerHTML = `<div class="result no"><b>아직 틀린 곳이 있습니다.</b>${r.line ? ` 컴퓨터는 <b>${r.line}번째 줄</b> 근처에서 멈췄습니다. 원인은 그 줄이나 바로 위에 있을 수 있습니다.` : ''}
+        <pre>컴퓨터가 보낸 메시지: ${esc(r.msg)}</pre></div>`;
+      return;
+    }
+    if (!text.includes('어린 왕자') && !x.blank) { out.innerHTML = '<div class="result info">문법은 맞지만 원래 내용이 지워졌습니다. 내용은 남긴 채 틀린 곳만 고치세요. ‘처음 내용으로’를 누르면 되돌아갑니다.</div>'; return; }
+    if (x.keep && !text.includes(x.keep)) { out.innerHTML = `<div class="result info">문법은 맞지만 ‘${esc(x.keep)}’이 사라졌습니다. 두 책을 모두 남긴 채 고쳐 보세요.</div>`; return; }
+    if (x.blank) { const p = blankProblem(x, r); if (p) { out.innerHTML = `<div class="result info">문법은 맞습니다. 다만 ${esc(p)}</div>`; return; } }
+    done.add(x.id); store.set('fixed', [...done]); renderPick();
+    const tree = x.type === 'json' ? jsonTree(r.data) : xmlTree(r.doc.documentElement);
+    const i = ITEMS.indexOf(x), nx = ITEMS[i + 1];
+    out.innerHTML = `<div class="result ok"><b>통과했습니다.</b> 컴퓨터가 이제 이 파일을 아래와 같은 나무 구조로 읽습니다.<ul class="tree">${tree}</ul></div>` +
+      (done.size >= ITEMS.length ? '<div class="result info">모두 끝냈습니다. 마지막으로 <a href="materials/metadata-2026-2/xml-json/quiz.html">오류 찾기 게임</a>을 해 보세요.</div>' : '');
+    $('next').hidden = !nx;
+    if (nx) $('next').textContent = `다음: ${nx.group} ${nx.label} →`;
+  });
+  $('next').addEventListener('click', () => { const i = ITEMS.indexOf(cur); if (ITEMS[i + 1]) open(ITEMS[i + 1].id); });
+  $('hintBtn').addEventListener('click', () => { $('hintOut').innerHTML = `<p class="hint">힌트. ${esc(cur.hint)}</p>`; });
+  $('reset').addEventListener('click', () => { $('code').value = originals[cur.id]; store.set('draft:' + cur.id, originals[cur.id]); $('out').innerHTML = ''; paintGutter(); });
+  $('code').addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); $('check').click(); } });
+
+  open(decodeURIComponent(location.hash.slice(1)) || 'x');
+  window.addEventListener('hashchange', () => { const id = decodeURIComponent(location.hash.slice(1)); if (id && (!cur || cur.id !== id)) open(id); });
+})();
+</script>
+</body>
+</html>

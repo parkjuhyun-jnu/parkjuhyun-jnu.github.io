@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>오류 찾기 게임 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 2강 마무리. XML·JSON 조각에서 틀린 곳을 눌러 찾고 바르게 고치는 게임.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .game { max-width: 760px; margin: 0 auto; }
+  .hud { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .pips { display: flex; gap: .3rem; flex: 1; min-width: 9rem; }
+  .pips i { flex: 1; height: .5rem; border-radius: 999px; background: var(--line); }
+  .pips i.now { background: var(--gold); }
+  .pips i.ok { background: var(--ok); }
+  .score { font-weight: 700; font-size: 1.15rem; font-variant-numeric: tabular-nums; color: var(--navy); }
+  .combo { font-size: .84rem; color: var(--gold); font-weight: 700; min-width: 4.2rem; }
+  .stage { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.3rem 1.4rem; box-shadow: var(--shadow); }
+  .stage .kind { font-size: .8rem; font-weight: 700; color: var(--t-library); }
+  .stage h2 { font-size: 1.15rem; margin: .2rem 0 .9rem; }
+  .code { display: flex; flex-wrap: wrap; align-items: center; gap: .2rem .12rem; padding: .9rem; border-radius: var(--radius-sm); background: var(--paper); border: 1px solid var(--line-soft); font-family: ui-monospace, "Cascadia Mono", Consolas, "D2Coding", monospace; font-size: 1.02rem; }
+  .tok { font: inherit; color: var(--ink); background: transparent; border: 1px solid transparent; border-radius: 6px; padding: .28rem .3rem; min-height: 2.1rem; cursor: pointer; transition: background .12s, border-color .12s; }
+  .tok:hover:not(:disabled), .tok:focus-visible { background: var(--navy-wash); border-color: var(--navy); outline: none; }
+  .tok.gap { width: 1.15rem; padding: 0; border: 1px dashed var(--ink-faint); color: transparent; }
+  .tok.miss { background: color-mix(in srgb, var(--danger) 14%, transparent); border-color: var(--danger); animation: shake .3s; }
+  .tok.hit { background: color-mix(in srgb, var(--ok) 18%, transparent); border-color: var(--ok); font-weight: 700; color: var(--ink); animation: pop .28s; }
+  .tok.gap.hit { border-style: solid; }
+  .tok:disabled { cursor: default; }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+  @keyframes pop { 50% { transform: scale(1.12); } }
+  .say { min-height: 1.6rem; margin: .8rem 0 0; font-size: .95rem; line-height: 1.6; }
+  .say.no { color: var(--danger); } .say.ok { color: var(--ok); font-weight: 600; }
+  .opts { display: grid; gap: .45rem; margin-top: .8rem; }
+  .opt { font-family: ui-monospace, "Cascadia Mono", Consolas, "D2Coding", monospace; font-size: .95rem; text-align: left; padding: .6rem .8rem; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); cursor: pointer; overflow-wrap: anywhere; }
+  .opt:hover:not(:disabled), .opt:focus-visible { border-color: var(--navy); background: var(--navy-wash); outline: none; }
+  .opt.miss { border-color: var(--danger); text-decoration: line-through; opacity: .7; }
+  .opt.hit { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); font-weight: 700; }
+  .opt:disabled { cursor: default; }
+  .why { margin-top: 1rem; padding: .7rem .9rem; border-radius: var(--radius-sm); background: var(--gold-wash); font-size: .94rem; line-height: 1.65; }
+  .why .rule { font-weight: 700; }
+  .why .test { display: block; margin-top: .35rem; font-size: .84rem; color: var(--ink-soft); }
+  .row-end { display: flex; justify-content: flex-end; margin-top: 1rem; }
+  .stars { font-size: 2.6rem; letter-spacing: .2rem; color: var(--gold); line-height: 1.2; }
+  .stars .off { color: var(--line); }
+  .big { font-size: 2.2rem; font-weight: 800; color: var(--navy); font-variant-numeric: tabular-nums; }
+  table.sum { width: 100%; border-collapse: collapse; font-size: .9rem; margin-top: 1rem; }
+  table.sum td { padding: .4rem .5rem; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  table.sum td.pts { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  @media (prefers-reduced-motion: reduce) { .tok, .tok.miss, .tok.hit { animation: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap game">
+      <p class="small"><a href="materials/metadata-2026-2/xml-json/">← XML과 JSON 실습 자료</a></p>
+      <h1 style="font-family:var(--font-serif); margin:.3rem 0 1rem">오류 찾기 게임</h1>
+      <div id="app"><p class="muted">불러오는 중입니다…</p></div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+// 문제 자료. 토큰의 bad:true가 틀린 곳이다. fixed는 맞는 고침, wrong은 오답 보기.
+window.QUIZ = [
+  { kind: 'XML', tokens: ['<title>', '어린 왕자', { t: '</Title>', bad: 1 }],
+    fixed: '<title>어린 왕자</title>', wrong: ['<title>어린 왕자<title>', '<title>어린 왕자</TITLE>'],
+    clue: '여는 태그와 닫는 태그를 글자 하나까지 비교해 보세요.',
+    rule: 'XML은 대소문자를 구분합니다.', why: '<title>로 열었으면 </title>로 닫아야 합니다. </Title>은 다른 태그입니다.' },
+  { kind: 'XML', tokens: ['<book', 'id=', { t: 'KMO200722491', bad: 1 }, '>', '<title>', '어린 왕자', '</title>', '</book>'],
+    fixed: '<book id="KMO200722491"><title>어린 왕자</title></book>', wrong: ['<book id=[KMO200722491]><title>어린 왕자</title></book>', '<book "id"=KMO200722491><title>어린 왕자</title></book>'],
+    clue: '속성값을 어떻게 적어야 했는지 떠올려 보세요.',
+    rule: '속성값은 따옴표로 감쌉니다.', why: 'id의 값 KMO200722491에 따옴표가 없습니다.' },
+  { kind: 'XML', tokens: ['<publisher>', '문학동네', { t: '&', bad: 1 }, '열린책들', '</publisher>'],
+    fixed: '<publisher>문학동네 &amp; 열린책들</publisher>', wrong: ['<publisher>문학동네 && 열린책들</publisher>', '<publisher>문학동네 &amp 열린책들</publisher>'],
+    clue: 'XML에서 특별한 뜻을 가진 기호가 있습니다.',
+    rule: '&는 &amp;로 씁니다.', why: 'XML은 &를 특수 문자의 시작으로 읽습니다. 글자 그대로 쓰려면 세미콜론까지 붙여 &amp;로 적습니다.' },
+  { kind: 'JSON', gaps: 1, tokens: ['{', '"title"', ':', '"어린 왕자"', ',', '"date"', ':', '2007', { t: ',', bad: 1 }, '}'],
+    fixed: '{ "title": "어린 왕자", "date": 2007 }', wrong: ['{ "title": "어린 왕자", "date": 2007; }', '{ "title": "어린 왕자", "date": "2007", }'],
+    clue: '쉼표는 다음 쌍이 있을 때만 필요합니다.',
+    rule: 'JSON은 마지막 값 뒤에 쉼표를 허용하지 않습니다.', why: '쉼표 뒤에 이어지는 쌍이 없습니다. 2007 뒤의 쉼표를 지웁니다.' },
+  { kind: 'JSON', gaps: 1, tokens: ['{', { t: "'title'", bad: 1 }, ':', { t: "'어린 왕자'", bad: 1 }, '}'],
+    fixed: '{ "title": "어린 왕자" }', wrong: ['{ title: "어린 왕자" }', '{ "title": \'어린 왕자\' }'],
+    clue: '따옴표 모양을 보세요.',
+    rule: 'JSON의 이름과 글자 값은 큰따옴표로만 감쌉니다.', why: '작은따옴표는 JSON에서 쓸 수 없습니다. 이름과 값을 모두 큰따옴표로 바꿉니다.' },
+  { kind: 'JSON', gaps: 1, missing: 1, tokens: ['{', '"title"', ':', '"어린 왕자"', { gap: 1, bad: 1 }, '"date"', ':', '2007', '}'],
+    fixed: '{ "title": "어린 왕자", "date": 2007 }', wrong: ['{ "title": "어린 왕자"; "date": 2007 }', '{ "title": "어린 왕자" : "date": 2007 }'],
+    clue: '틀린 글자가 아니라 빠진 글자일 수도 있습니다. 글자 사이의 점선 칸도 눌러 보세요.',
+    rule: '이름-값 쌍 사이는 쉼표로 나눕니다.', why: '"어린 왕자"와 "date" 사이에 쉼표가 빠졌습니다.' },
+];
+
+(() => {
+  const app = document.getElementById('app');
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const FULL = 150; // 한 문제 만점: 찾기 100 + 고치기 50
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('xmljson:' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem('xmljson:' + k, JSON.stringify(v)); } catch { /* 저장 못 해도 게임은 된다 */ } },
+  };
+  const parses = (kind, text) => {
+    if (kind === 'JSON') { try { JSON.parse(text); return true; } catch { return false; } }
+    return !new DOMParser().parseFromString(text, 'application/xml').querySelector('parsererror');
+  };
+  const original = q => q.tokens.map(t => typeof t === 'string' ? t : (t.gap ? '' : t.t)).join(' ');
+
+  let order, idx, score, combo, misses, log;
+
+  function intro() {
+    const best = store.get('best', null);
+    app.innerHTML = `<div class="stage">
+      <p style="margin:0 0 .7rem; line-height:1.7">XML·JSON 조각 6개에 오류가 하나씩 숨어 있습니다. 찾아내서 고치세요.</p>
+      <ol style="margin:0 0 1rem; padding-left:1.3rem; line-height:1.8">
+        <li><b>찾기</b> 틀렸다고 생각하는 부분을 누릅니다. 한 번에 찾으면 100점, 빗나갈 때마다 25점이 줄고 단서가 나옵니다.</li>
+        <li><b>고치기</b> 보기 셋 가운데 바르게 고친 것을 고릅니다. 한 번에 맞히면 50점입니다.</li>
+        <li><b>연속 보너스</b> 찾기와 고치기를 한 번에 해낸 문제가 이어지면 다음 문제부터 20점씩 더 받습니다.</li>
+      </ol>
+      ${best ? `<p class="small muted">내 최고 점수: ${best}점 (이 브라우저에만 남습니다)</p>` : ''}
+      <button class="btn" id="go" type="button">게임 시작</button>
+    </div>`;
+    document.getElementById('go').onclick = start;
+  }
+  function start() {
+    order = shuffle(window.QUIZ); idx = 0; score = 0; combo = 0; log = [];
+    round();
+  }
+  function hud() {
+    const pips = order.map((_, i) => `<i class="${i < idx ? 'ok' : i === idx ? 'now' : ''}"></i>`).join('');
+    return `<div class="hud"><div class="pips" aria-label="${order.length}문제 중 ${idx + 1}번째">${pips}</div>
+      <span class="combo">${combo >= 2 ? combo + '연속!' : ''}</span><span class="score" id="score" aria-live="polite">${score}점</span></div>`;
+  }
+  function add(n) { score = Math.max(0, score + n); document.getElementById('score').textContent = score + '점'; }
+
+  function round() {
+    const q = order[idx]; misses = 0;
+    const parts = [];
+    q.tokens.forEach((t, i) => {
+      if (q.gaps && i > 0 && !(t && t.gap) && !(q.tokens[i - 1] && q.tokens[i - 1].gap)) parts.push('<button type="button" class="tok gap" data-i="g" aria-label="글자 사이 빈칸">·</button>');
+      if (typeof t === 'string') parts.push(`<button type="button" class="tok" data-i="n">${esc(t)}</button>`);
+      else if (t.gap) parts.push('<button type="button" class="tok gap" data-i="b" aria-label="글자 사이 빈칸">·</button>');
+      else parts.push(`<button type="button" class="tok" data-i="b">${esc(t.t)}</button>`);
+    });
+    app.innerHTML = hud() + `<div class="stage"><span class="kind">${q.kind} · ${idx + 1}번째</span>
+      <h2>틀린 곳을 눌러 찾으세요</h2>
+      <div class="code">${parts.join('')}</div>
+      <p class="say" id="say" aria-live="polite">${q.gaps ? '글자 사이의 점선 칸도 누를 수 있습니다.' : ''}</p>
+      <div id="next-part"></div></div>`;
+    app.querySelector('.code').addEventListener('click', onTok);
+    toTop();
+  }
+  function onTok(e) {
+    const b = e.target.closest('.tok'); if (!b || b.disabled) return;
+    const q = order[idx], say = document.getElementById('say');
+    if (b.dataset.i !== 'b') {
+      misses++; b.classList.remove('miss'); void b.offsetWidth; b.classList.add('miss');
+      say.className = 'say no';
+      say.textContent = `여기는 맞습니다. 단서: ${q.clue}`;
+      return;
+    }
+    const found = Math.max(25, 100 - misses * 25);
+    add(found);
+    app.querySelectorAll('.tok').forEach(t => { t.disabled = true; if (t.dataset.i === 'b') { t.classList.add('hit'); if (t.classList.contains('gap')) t.textContent = ''; } });
+    say.className = 'say ok';
+    say.textContent = (q.missing ? '찾았습니다! 여기에 있어야 할 것이 빠졌습니다.' : '찾았습니다!') + ` +${found}점`;
+    fixStage(q, found, misses === 0);
+  }
+  function fixStage(q, found, clean) {
+    const opts = shuffle([q.fixed, ...q.wrong]);
+    const box = document.getElementById('next-part');
+    box.innerHTML = `<h2 style="margin-top:1.2rem">어떻게 고칠까요?</h2><div class="opts">${opts.map(o => `<button type="button" class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div><div id="why"></div>`;
+    let tries = 0;
+    box.querySelector('.opts').addEventListener('click', e => {
+      const b = e.target.closest('.opt'); if (!b || b.disabled) return;
+      if (b.dataset.o !== q.fixed) {
+        tries++; b.classList.add('miss'); b.disabled = true;
+        const say = document.getElementById('say');
+        say.className = 'say no';
+        say.textContent = '이렇게 고쳐도 컴퓨터는 여전히 읽지 못합니다. 다른 것을 골라 보세요.';
+        return;
+      }
+      const fixPts = tries === 0 ? 50 : tries === 1 ? 20 : 0;
+      const perfect = clean && tries === 0;
+      const bonus = perfect && combo >= 1 ? 20 : 0;
+      combo = perfect ? combo + 1 : 0;
+      add(fixPts + bonus);
+      log.push({ q, pts: found + fixPts + bonus, perfect });
+      box.querySelectorAll('.opt').forEach(o => { o.disabled = true; if (o.dataset.o === q.fixed) o.classList.add('hit'); });
+      const say = document.getElementById('say');
+      say.className = 'say ok';
+      say.textContent = `맞았습니다! +${fixPts}점${bonus ? ` · 연속 보너스 +${bonus}점` : ''}`;
+      const before = parses(q.kind, original(q)), after = parses(q.kind, q.fixed);
+      const last = idx === order.length - 1;
+      document.getElementById('why').innerHTML = `<div class="why"><span class="rule">${esc(q.rule)}</span> ${esc(q.why)}
+        <span class="test">지금 이 브라우저의 실제 ${q.kind} 해석기로 시험한 결과: 원래 코드 ${before ? '읽음' : '읽지 못함'} → 고친 코드 ${after ? '읽음' : '읽지 못함'}</span></div>
+        <div class="row-end"><button class="btn" id="nx" type="button">${last ? '결과 보기' : '다음 문제 →'}</button></div>`;
+      const nx = document.getElementById('nx');
+      nx.onclick = () => { idx++; last ? finish() : round(); };
+      nx.focus();
+    });
+  }
+  function toTop() { const top = app.getBoundingClientRect().top + scrollY - 90; if (scrollY > top) scrollTo(0, top); }
+  function finish() {
+    const max = order.length * FULL + (order.length - 1) * 20;
+    const ratio = score / max;
+    const stars = ratio >= .85 ? 3 : ratio >= .6 ? 2 : 1;
+    const best = store.get('best', 0);
+    if (score > best) store.set('best', score);
+    const msg = stars === 3 ? '오류를 보면 바로 잡아내는 수준입니다.' : stars === 2 ? '잘했습니다. 빗나간 문제의 규칙만 다시 보세요.' : '규칙을 한 번 더 읽고 다시 해 보세요. 금방 오릅니다.';
+    const rows = log.map(l => `<tr><td style="font-family:ui-monospace,Consolas,monospace;font-size:.82rem">${esc(l.q.kind)}</td><td>${esc(l.q.rule)}</td><td class="pts">${l.pts}점${l.perfect ? ' ✓' : ''}</td></tr>`).join('');
+    app.innerHTML = `<div class="stage" style="text-align:center">
+        <div class="stars" role="img" aria-label="별 3개 중 ${stars}개">${'★'.repeat(stars)}<span class="off">${'★'.repeat(3 - stars)}</span></div>
+        <div class="big">${score}점</div>
+        <p class="small muted" style="margin:.2rem 0 .8rem">만점 ${max}점${score > best ? ' · 내 최고 점수를 새로 썼습니다' : best ? ` · 내 최고 ${best}점` : ''}</p>
+        <p style="margin:0">${msg}</p>
+        <table class="sum" style="text-align:left">${rows}</table>
+        <div class="row" style="justify-content:center; margin-top:1.2rem">
+          <button class="btn" id="again" type="button">다시 하기</button>
+          <a class="btn btn--ghost" href="materials/metadata-2026-2/xml-json/">실습 자료로</a>
+        </div>
+      </div>`;
+    document.getElementById('again').onclick = start;
+    toTop();
+  }
+  intro();
+})();
+</script>
+</body>
+</html>
