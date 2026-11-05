@@ -56,7 +56,7 @@
     json('data/projects.json'),
     json('data/publications.json'),
     json('data/pub-links.json').catch(() => ({ items: [] })),
-    json('data/books.json'),
+    loadBooks(),
     json('data/teaching.json'),
     json('data/media.json'),
   ]).catch((e) => { status.textContent = '자료를 불러오지 못했습니다.'; throw e; });
@@ -81,7 +81,6 @@
     if (!x.current || /현재/.test(p)) return p;
     return /[—–-]$/.test(p) ? `${p} 현재` : (p ? `${p} · 현재` : '현재');
   };
-  const ym = (y, m) => `${y || ''}${m ? '.' + String(m).padStart(2, '0') : ''}`;
   const fmtMonth = (d) => d ? d.slice(0, 7).replace('-', '.') : '';
   const rows = (list, f) => `<ul class="cv-rows">${list.map(f).join('')}</ul>`;
   const row = (when, main, sub) => `<li><span class="cv-when">${esc(when)}</span><span>${main}${sub ? `<span class="cv-sub">${sub}</span>` : ''}</span></li>`;
@@ -136,8 +135,8 @@
           return `<li>${bold(p.authors)} (${esc(p.year)}). ${esc(p.title)}. 『${esc(p.journal)}』, ${esc(vol)}${p.pages ? ', ' + esc(p.pages) : ''}.${doi ? ` <span class="cv-doi">doi:${esc(doi)}</span>` : ''}</li>`;
         }).join('')}</ol>`, papers.length)}
 
-      ${sec('저역서', rows(books.items || [], (b) => row(ym(b.year, b.month), esc(b.title),
-        [b.publisher, b.authors ? '공저 ' + b.authors : ''].filter(Boolean).map(esc).join(' · '))), (books.items || []).length)}
+      ${sec('저역서', rows(books, (b) => row(bookWhen(b), esc(b.title),
+        [b.publisher, b.authors ? '공저 ' + b.authors : '', b.role, b.note].filter(Boolean).map(esc).join(' · '))), books.length)}
 
       ${sec('연구과제', rows(projList, (p) => row(`${fmtMonth(p.start)}–${fmtMonth(p.end)}${p.end && p.end >= today ? ' (진행)' : ''}`,
         esc(p.title), [p.agency, p.program, p.role, p.lead ? '연구책임 ' + p.lead : ''].filter(Boolean).map(esc).join(' · '))), projList.length)}

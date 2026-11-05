@@ -220,7 +220,7 @@ fetch('data/publications.json')
 // 진입 카드의 숫자는 데이터에서 그때그때 읽습니다(손으로 고칠 필요 없음).
 Promise.all([
   fetch('data/publications.json').then((r) => r.json()),
-  fetch('data/books.json').then((r) => r.json()).catch(() => ({ items: [] })),
+  loadBooks().catch(() => []),
   fetch('data/teaching.json').then((r) => r.json()).catch(() => null),
   readSetting('showEnrollment', false),
 ]).then(([pubs, books, teaching, showN]) => {
@@ -229,14 +229,14 @@ Promise.all([
   if (stats) {
     stats.innerHTML =
       `<span>학술논문 <b>${pubs.items.length}</b>편</span>`
-      + `<span>저역서 <b>${books.items.length}</b>권</span>`
+      + `<span>저역서 <b>${books.length}</b>권</span>`
       + `<span>피인용 <b>${cited}</b>회</span>`;
     stats.hidden = false;
   }
   const gwR = document.getElementById('gw-research');
   if (gwR) {
     gwR.textContent =
-      `학술논문 ${pubs.items.length}편 · 저역서 ${books.items.length}권 · 피인용 ${cited}회`;
+      `학술논문 ${pubs.items.length}편 · 저역서 ${books.length}권 · 피인용 ${cited}회`;
   }
   const gwT = document.getElementById('gw-teaching');
   if (gwT && teaching) {

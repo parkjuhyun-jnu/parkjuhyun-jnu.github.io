@@ -412,19 +412,19 @@
   searchEl.addEventListener('input', (e) => { query = e.target.value.trim().toLowerCase(); render(); });
 
   // 저역서
-  fetch('data/books.json')
-    .then((r) => r.json())
-    .then(({ items }) => {
+  // KCI 목록(books.json)과 직접 적는 목록(books-extra.json)을 합쳐 보여 줍니다.
+  loadBooks()
+    .then((items) => {
       const box = document.getElementById('books');
       document.getElementById('book-total').textContent = String(items.length);
       box.innerHTML = items.map((b) => `
         <li>
           <span class="pub-title">
             ${esc(b.title)}
-            <span class="pub-cite">${esc(b.publisher)}${b.authors ? ' · ' + esc(b.authors) : ''}</span>
+            <span class="pub-cite">${esc(bookCite(b))}</span>
           </span>
           <span class="pub-meta">
-            <span class="pub-year">${esc(b.year || '')}${b.month ? '.' + String(b.month).padStart(2, '0') : ''}</span>
+            <span class="pub-year">${esc(bookWhen(b))}</span>
           </span>
         </li>`).join('');
     })

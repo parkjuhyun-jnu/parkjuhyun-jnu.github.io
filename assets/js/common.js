@@ -51,6 +51,30 @@ function fmtMonth(iso) {
   return m ? `${y}.${m}` : y;
 }
 
+/**
+ * 저역서 목록: KCI에서 만든 data/books.json 과 직접 적는 data/books-extra.json 을
+ * 합쳐 최신순으로 돌려줍니다. books-extra.json 을 못 읽어도 KCI 목록은 나옵니다.
+ */
+async function loadBooks() {
+  const [kci, extra] = await Promise.all([
+    fetch('data/books.json').then((r) => r.json()),
+    fetch('data/books-extra.json').then((r) => r.json()).catch(() => ({ items: [] })),
+  ]);
+  const key = (b) => (Number(b.year) || 0) * 100 + (Number(b.month) || 0);
+  return [...(kci.items || []), ...(extra.items || [])].sort((a, b) => key(b) - key(a));
+}
+
+/** 저역서 발행 시기: yearLabel 이 있으면 그것을, 없으면 2010.06 처럼 */
+function bookWhen(b) {
+  if (b.yearLabel) return String(b.yearLabel);
+  return `${b.year || ''}${b.month ? '.' + String(b.month).padStart(2, '0') : ''}`;
+}
+
+/** 저역서 한 줄 설명: 펴낸 곳 · 공저자 · 맡은 일 · 설명 */
+function bookCite(b) {
+  return [b.publisher, b.authors, b.role, b.note].filter(Boolean).join(' · ');
+}
+
 /** 1536000 → 1.5MB */
 function fmtSize(bytes) {
   if (!bytes && bytes !== 0) return '';

@@ -9,6 +9,7 @@
   2. 미디어 기록(data/media.json): 날짜 필수·형식, 구분(type), 제목, 포스터 파일, 대표 카드 수
   3. 논문 링크(data/pub-links.json)가 논문 목록(publications.json)과 맞는지
      — KCI 엑셀을 새로 가져와 새 논문이 생기면 '링크 없음'으로 알려 줍니다
+     직접 적는 저역서(data/books-extra.json)의 형식, KCI 저역서 목록과 겹치는지
   4. 연구과제(projects.json) 날짜 형식, 과목(courses.json)의 주제 이름
   5. (--external) 바깥 링크가 아직 열리는지 — 매체가 기사를 내리면 알 수 있게
 
@@ -125,6 +126,24 @@ def check_pub_links() -> list[str]:
     return [f"https://doi.org/{e['doi']}" for e in links if e.get("doi")]
 
 
+# ---------------------------------------------------------------- 3-1. 직접 적는 저역서
+def check_books_extra() -> None:
+    """data/books-extra.json: KCI에 없는 저서를 손으로 적는 파일. 형식과 KCI 목록과의 중복을 봅니다."""
+    norm = lambda s: re.sub(r"\W+", "", str(s)).lower()
+    kci = {norm(b.get("title", "")) for b in load("data/books.json").get("items", [])}
+    for i, b in enumerate(load("data/books-extra.json").get("items", []), 1):
+        name = f"books-extra.json {i}번째 「{str(b.get('title', ''))[:30]}」"
+        if not b.get("title"):
+            err(f"{name}: 제목(title)이 없습니다")
+        y, m = b.get("year"), b.get("month")
+        if not isinstance(y, int) or not 1900 <= y <= 2100:
+            err(f"{name}: 해(year)는 2010 처럼 숫자로 적어 주세요 ({y!r})")
+        if m is not None and (not isinstance(m, int) or not 1 <= m <= 12):
+            err(f"{name}: 달(month)은 1~12 숫자로 적어 주세요 ({m!r})")
+        if norm(b.get("title", "")) in kci:
+            warn(f"{name}: KCI 목록(books.json)에도 있습니다 — 두 번 나오니 books-extra.json 에서 지워 주세요")
+
+
 # ---------------------------------------------------------------- 4. 과제·과목
 def check_projects_courses() -> None:
     for p in load("data/projects.json").get("projects", []):
@@ -160,6 +179,7 @@ def check_external(urls: list[str]) -> None:
 def main() -> None:
     external = check_internal_links()
     urls = check_media() + check_pub_links()
+    check_books_extra()
     check_projects_courses()
     if "--external" in sys.argv:
         check_external(urls + external)

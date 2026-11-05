@@ -52,6 +52,7 @@ python -m http.server 5173
 | `data/publications.json` | 연구 페이지의 논문 목록 — **직접 고치지 마세요**(아래 참고) |
 | `data/pub-links.json` | 논문별 KCI·DOI·PDF 링크. 제목으로 논문 목록과 이어지며, 자동 생성되지 않으니 새 논문이 나오면 여기 한 줄 더합니다 |
 | `data/books.json` | 연구 페이지의 저역서 목록 — **직접 고치지 마세요**(아래 참고) |
+| `data/books-extra.json` | KCI에 없는 저서·자료집(교사 시절 자료집 등). 직접 적는 파일이라 KCI 가져오기에 덮어써지지 않고, 저역서 목록·첫 화면 숫자·CV에 합쳐 나옵니다 |
 | `data/teaching.json` | 이번 학기·강의 이력·과목별 누적 — **직접 고치지 마세요**(아래 참고) |
 | `data/courses.json` | 과목 상세 안내(소개글·학습목표·주차 계획·결과물 제출) |
 | `data/projects.json` | 연구 페이지의 연구 과제 (사업비 표시 여부도 여기서) |
@@ -91,6 +92,7 @@ python tools/import-kci.py
 ```
 
 `data/publications.json` 과 `data/books.json` 이 새로 만들어집니다.
+KCI에 없는 저서는 `data/books-extra.json` 에 직접 적습니다(이 파일은 덮어써지지 않습니다).
 주제 분류가 어긋난 논문이 있으면 실행 결과에 이름이 나오니,
 `tools/import-kci.py` 의 `THEME_OVERRIDE` 에 그 제목을 적어 주세요.
 
@@ -282,6 +284,7 @@ assets/js/admin.js     관리 화면
 data/publications.json 논문 목록   (자동 생성)
 data/pub-links.json    논문 KCI·DOI 링크 (직접 관리)
 data/books.json        저역서 목록 (자동 생성)
+data/books-extra.json  KCI에 없는 저역서 (직접 관리)
 data/teaching.json     강의 이력   (자동 생성)
 data/projects.json     연구 과제
 data/courses.json      과목 상세 안내

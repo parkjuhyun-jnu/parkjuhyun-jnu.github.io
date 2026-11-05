@@ -43,7 +43,7 @@ web
 
 ## Evidence on Hand
 
-- 학술논문 46편, 저역서, 피인용 수는 `data/publications.json`, `data/books.json`에서 자동 집계
+- 학술논문 46편, 저역서, 피인용 수는 `data/publications.json`, `data/books.json`(KCI 자동)과 `data/books-extra.json`(직접 적는 저서)에서 집계
 - 미디어·강연 포스터 `assets/img/media/`
 - 프로필 사진 `assets/img/profile.jpg`
 - 추천사, 수상 등 사이트에 없는 성과는 지어내지 않는다.
