@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>URI와 URL의 차이 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 참고 자료. URI와 URL의 개념과 차이를 도서관 비유와 실제 예시로 설명합니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .answer { background: var(--gold-wash); border-radius: var(--radius-sm); padding: .9rem 1.1rem; max-width: 68ch; font-size: 1.05rem; line-height: 1.8; margin: 1rem 0; }
+  .prose { max-width: 68ch; font-size: .98rem; line-height: 1.8; color: var(--ink-soft); }
+  .prose b { color: var(--ink); }
+  h2.part { font-size: 1.3rem; margin: 2.3rem 0 .5rem; font-family: var(--font-serif); scroll-margin-top: 90px; }
+  code { font-family: ui-monospace, Consolas, "D2Coding", monospace; font-size: .88em; overflow-wrap: anywhere; }
+  .wrapt { overflow-x: auto; margin: .7rem 0; }
+  table.cmp { width: 100%; min-width: 32rem; border-collapse: collapse; font-size: .9rem; line-height: 1.6; }
+  table.cmp th, table.cmp td { border: 1px solid var(--line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
+  table.cmp thead th { background: var(--line-soft); }
+  table.cmp tbody th { font-weight: 600; background: var(--surface); }
+  .venn { max-width: 44rem; border: 2px solid var(--navy); border-radius: 14px; padding: .8rem 1rem 1rem; margin: .8rem 0; background: var(--surface); }
+  .venn > b { color: var(--navy); font-size: 1.02rem; }
+  .venn > span { display: block; font-size: .9rem; color: var(--ink-soft); margin-bottom: .6rem; }
+  .venn .inner { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+  .venn .inner div { border: 1px solid var(--line); border-radius: 10px; padding: .6rem .75rem; background: var(--navy-wash); font-size: .9rem; line-height: 1.6; }
+  .venn .inner div + div { background: var(--gold-wash); }
+  .venn .inner b { display: block; }
+  .parts { display: flex; flex-wrap: wrap; gap: .25rem; margin: .7rem 0 .3rem; max-width: 56rem; font-family: ui-monospace, Consolas, "D2Coding", monospace; font-size: .9rem; }
+  .parts span { display: inline-flex; flex-direction: column; border-radius: 7px; padding: .3rem .45rem; background: var(--navy-wash); overflow-wrap: anywhere; }
+  .parts span:nth-child(even) { background: var(--gold-wash); }
+  .parts small { font-family: var(--font-sans, inherit); font-size: .74rem; color: var(--ink-soft); margin-top: .1rem; }
+  .q { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .75rem .9rem; margin: .55rem 0; max-width: 50rem; }
+  .q code { font-size: .95em; font-weight: 600; }
+  .q .opts { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+  .q button { font: inherit; font-size: .88rem; padding: .22rem .75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; }
+  .q button.right { background: var(--ok); border-color: var(--ok); color: var(--paper); }
+  .q button.wrong { border-color: var(--danger); color: var(--danger); }
+  .q .say { font-size: .9rem; line-height: 1.6; margin: .45rem 0 0; color: var(--ink-soft); }
+  .q .say:empty { display: none; }
+  .src { font-size: .85rem; line-height: 1.75; color: var(--ink-faint); max-width: 74ch; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="course.html?id=metadata-2026-2">← 메타데이터와아카이빙연구</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 참고 자료</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">URI와 URL, 무엇이 다른가요?</h1>
+
+      <div class="answer"><b>URI</b>는 대상을 가려내는 식별자 전체를 말합니다. <b>URL</b>은 그중에서 <b>어디서 찾을 수 있는지까지 알려 주는</b> 것입니다. 그래서 모든 URL은 URI이지만, 모든 URI가 URL인 것은 아닙니다.</div>
+
+      <h2 class="part">도서관으로 생각해 보기</h2>
+      <p class="prose">문학동네판 『어린 왕자』를 가리키는 방법을 두 가지 떠올려 봅시다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>가리키는 방법</th><th>알 수 있는 것</th><th>한계</th><th>닮은 것</th></tr></thead>
+          <tbody>
+            <tr><th>ISBN 9788954603096</th><td>어떤 책인지</td><td>어디에 있는지는 모릅니다.</td><td>이름처럼 쓰는 식별자 (URN)</td></tr>
+            <tr><th>○○도서관 3층 문학 서가, 청구기호 863</th><td>어디로 가면 찾을 수 있는지</td><td>책을 옮기면 더는 맞지 않습니다.</td><td>위치를 알려 주는 식별자 (URL)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">둘 다 그 책을 가리키는 데 쓸 수 있으니 넓게 보면 모두 식별자입니다. 이 넓은 말이 <b>URI</b>입니다.</p>
+
+      <div class="venn" role="img" aria-label="URI라는 큰 범위 안에 URL과 URN이 들어 있는 그림">
+        <b>URI</b> <span>Uniform Resource Identifier, 통합 자원 식별자. 대상을 가려내는 문자열 전체입니다.</span>
+        <div class="inner">
+          <div><b>URL</b>Uniform Resource Locator. 가려내면서, 찾아가는 방법도 알려 줍니다.<br><code>https://lod.nl.go.kr/page/KMO200722491</code></div>
+          <div><b>URN</b>Uniform Resource Name. 위치와 상관없이 오래 쓰는 이름입니다.<br><code>urn:isbn:9788954603096</code></div>
+        </div>
+      </div>
+      <p class="prose">칸이 딱 나뉘지는 않습니다. 표준(RFC 3986)도 URI 하나가 이름 구실과 위치 구실을 함께 할 수 있다고 봅니다. 아래에서 볼 링크드 데이터의 주소가 그런 경우입니다.</p>
+
+      <h2 class="part">URL 뜯어 보기</h2>
+      <p class="prose"><a href="materials/metadata-2026-2/xml-json/files/실습3-5_링크모음.html#p3" target="_blank" rel="noopener">실습 3</a>에서 값을 바꿔 가며 썼던 주소입니다.</p>
+      <div class="parts" aria-label="주소를 부분별로 나눈 것">
+        <span>https://<small>스킴: 찾아가는 방법</small></span>
+        <span>lod.nl.go.kr<small>서버: 어느 곳인지</small></span>
+        <span>/data/KMO200722491<small>경로: 그 안의 어디인지</small></span>
+        <span>?output=json<small>질의: 덧붙이는 조건</small></span>
+      </div>
+      <p class="prose">맨 앞의 <b>스킴</b>이 URI의 필수 요소입니다. <code>https:</code>, <code>mailto:</code>, <code>urn:</code>처럼 쌍점 앞에 오는 부분입니다. 그래서 숫자만 적은 <code>9788954603096</code>은 ISBN이기는 해도 URI는 아닙니다. 주소 끝에 <code>#</code>이 붙으면 문서 안의 한 부분을 가리킵니다. 예: <code>http://www.w3.org/2002/07/owl#sameAs</code></p>
+
+      <h2 class="part">실제 예시</h2>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>주소</th><th>가리키는 것</th><th>열어 보면</th></tr></thead>
+          <tbody>
+            <tr><th><a href="https://lod.nl.go.kr/page/KMO200722491" target="_blank" rel="noopener"><code>https://lod.nl.go.kr/page/KMO200722491</code></a></th><td>문학동네판 『어린 왕자』의 정보 페이지</td><td>그 페이지가 열립니다. 흔히 말하는 <b>URL</b>입니다.</td></tr>
+            <tr><th><code>urn:isbn:9788954603096</code></th><td>같은 책의 ISBN</td><td>브라우저가 열지 못합니다. 이름만 있고 위치가 없는 <b>URN</b>입니다.</td></tr>
+            <tr><th><a href="https://doi.org/10.1038/sdata.2016.18" target="_blank" rel="noopener"><code>https://doi.org/10.1038/sdata.2016.18</code></a></th><td>논문 한 편 (DOI)</td><td>지금 그 논문이 있는 출판사 페이지로 옮겨 갑니다. 출판사 주소가 바뀌어도 이 주소는 그대로 둡니다.</td></tr>
+            <tr><th><a href="http://www.wikidata.org/entity/Q2908" target="_blank" rel="noopener"><code>http://www.wikidata.org/entity/Q2908</code></a></th><td>사람 생텍쥐페리</td><td>사람을 내려받을 수는 없으니, 그를 설명하는 문서로 옮겨 갑니다.</td></tr>
+            <tr><th><a href="http://purl.org/dc/terms/creator" target="_blank" rel="noopener"><code>http://purl.org/dc/terms/creator</code></a></th><td>‘만든 이’라는 개념</td><td>이 용어를 설명한 DCMI 문서로 옮겨 갑니다.</td></tr>
+            <tr><th><code>mailto:someone@example.com</code></th><td>메일 주소</td><td>메일 프로그램이 열립니다. 웹 페이지 위치가 아니어도 URI입니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="part">메타데이터에서는 왜 구분하나요?</h2>
+      <p class="prose">웹 페이지를 볼 때는 ‘어디 있는가’가 중요하지만, 메타데이터에서는 <b>‘무엇을 가리키는가’</b>가 중요합니다. 국립중앙도서관 데이터에서 생텍쥐페리에게는 주소가 두 가지 있습니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>주소</th><th>가리키는 것</th><th>쓰임</th></tr></thead>
+          <tbody>
+            <tr><th><code>http://lod.nl.go.kr/resource/KAC199623935</code></th><td><b>사람</b> 생텍쥐페리</td><td>데이터 안에서 쓰는 식별자. <a href="materials/metadata-2026-2/xml-json/sparql.html">실습 5</a>의 질의에 넣은 주소입니다.</td></tr>
+            <tr><th><a href="https://lod.nl.go.kr/page/KAC199623935" target="_blank" rel="noopener"><code>https://lod.nl.go.kr/page/KAC199623935</code></a></th><td>그를 설명한 <b>웹 페이지</b></td><td>사람이 읽는 화면. <a href="materials/metadata-2026-2/xml-json/files/실습3-5_링크모음.html#p4" target="_blank" rel="noopener">실습 4</a>에서 연 주소입니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">사람과 ‘사람을 설명한 문서’는 다른 대상입니다. 저자는 1900년에 태어났지만, 그 문서는 그렇지 않습니다. 두 대상에 주소를 따로 주어야 ‘누구의 생년인가’가 섞이지 않습니다.</p>
+
+      <h2 class="part">자주 하는 실수</h2>
+      <ul class="prose">
+        <li><b>글자 하나만 달라도 다른 URI입니다.</b> 브라우저에서는 <code>http</code>와 <code>https</code>가 같은 곳으로 이어지는 일이 많지만, 식별자로서는 다릅니다. 국립중앙도서관 SPARQL 서버에 물어보니 <code>http://lod.nl.go.kr/resource/KAC199623935</code>에 관한 자료는 있고, <code>https://</code>로 쓰면 없다고 답합니다(2026-11-05). 실습 5에서 <code>http</code>로 쓰는 까닭입니다.</li>
+        <li><b>URI라고 해서 다 열리는 것은 아닙니다.</b> 식별자의 첫째 임무는 가려내는 것입니다. 눌러서 안 열려도 식별자로는 여전히 쓰입니다.</li>
+        <li><b>줄임말은 펼쳐서 읽습니다.</b> <code>dcterms:creator</code>는 <code>PREFIX</code>로 약속한 줄임말이고, 펼치면 <code>http://purl.org/dc/terms/creator</code>입니다.</li>
+      </ul>
+
+      <h2 class="part">그래서 어떤 말을 쓰면 되나요?</h2>
+      <p class="prose">웹 페이지 주소를 말할 때는 <b>URL</b>, 메타데이터나 링크드 데이터에서 대상을 가리키는 식별자를 말할 때는 <b>URI</b>라고 하면 됩니다. 표준 문서도 쓰는 말이 갈립니다. <a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener">RFC 3986</a>은 일반 용어로 URI를 권하고, 브라우저 쪽의 <a href="https://url.spec.whatwg.org/" target="_blank" rel="noopener">WHATWG URL 표준</a>은 URL 하나로 통일하자고 합니다. RDF에서는 한글 같은 문자까지 쓸 수 있게 넓힌 <b>IRI</b>라는 말도 만나게 되는데, 지금은 URI의 확장판 정도로 이해하면 충분합니다.</p>
+
+      <h2 class="part">확인해 보기</h2>
+      <p class="prose">각 문자열이 무엇인지 고르세요.</p>
+      <div id="quiz"></div>
+
+      <h2 class="part" style="font-size:1rem; font-family:inherit">출처</h2>
+      <p class="src"><a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener">RFC 3986 (URI 일반 문법)</a> 1.1.3절과 3절, <a href="https://url.spec.whatwg.org/" target="_blank" rel="noopener">WHATWG URL Standard</a>, <a href="https://www.w3.org/TR/cooluris/" target="_blank" rel="noopener">W3C Cool URIs for the Semantic Web</a>. 주소의 응답은 2026-11-05에 확인했습니다. 서가 위치의 ‘○○도서관’은 비유로 든 가상의 예입니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+(() => {
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const OPTS = ['URL이기도 한 URI', 'URL이 아닌 URI', 'URI가 아님'];
+  const QS = [
+    { s: 'https://lod.nl.go.kr/page/KJU200003488', a: 0, why: '스킴이 있고, 열면 비룡소판 정보 페이지가 나옵니다.' },
+    { s: 'urn:isbn:8949190133', a: 1, why: '스킴(urn:)이 있으니 URI입니다. 다만 어디서 찾을지는 알려 주지 않습니다.' },
+    { s: '8949190133', a: 2, why: '스킴이 없습니다. ISBN이지만 이대로는 URI가 아닙니다.' },
+    { s: 'http://www.wikidata.org/entity/Q25338', a: 0, why: '작품 『어린 왕자』를 가리키는 식별자이면서, 열면 설명 문서로 이어집니다. 이름과 위치 구실을 함께 합니다.' },
+  ];
+  const box = document.getElementById('quiz');
+  box.innerHTML = QS.map((q, n) => `<div class="q" data-n="${n}"><code>${esc(q.s)}</code><div class="opts">${OPTS.map((o, i) => `<button type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><p class="say" aria-live="polite"></p></div>`).join('');
+  box.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    const card = b.closest('.q'), q = QS[+card.dataset.n], i = +b.dataset.i;
+    card.querySelectorAll('button').forEach(x => x.classList.remove('right', 'wrong'));
+    b.classList.add(i === q.a ? 'right' : 'wrong');
+    card.querySelector('.say').textContent = i === q.a ? `맞습니다. ${q.why}` : '다시 생각해 보세요. 스킴이 있는지, 찾아갈 곳을 알려 주는지 차례로 따져 보면 됩니다.';
+  });
+})();
+</script>
+</body>
+</html>

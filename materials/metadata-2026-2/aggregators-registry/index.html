@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>유로피아나·DPLA·레지스트리 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 참고 자료. 유로피아나와 DPLA가 무엇인지, 메타데이터 레지스트리가 무엇인지 설명하고 해당 사이트로 연결합니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .lead { max-width: 66ch; font-size: 1.05rem; line-height: 1.75; color: var(--ink-soft); }
+  .prose { max-width: 68ch; font-size: .98rem; line-height: 1.8; color: var(--ink-soft); }
+  .prose b { color: var(--ink); }
+  h2.part { font-size: 1.35rem; margin: 2.4rem 0 .5rem; font-family: var(--font-serif); scroll-margin-top: 90px; }
+  h3.sub { font-size: 1.04rem; margin: 1.5rem 0 .35rem; }
+  .jump { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0 0; }
+  .two { display: grid; gap: .9rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin: 1rem 0; }
+  .site { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 1rem 1.1rem; }
+  .site h3 { font-size: 1.12rem; margin: 0 0 .3rem; }
+  .site p { margin: 0 0 .75rem; font-size: .94rem; line-height: 1.7; color: var(--ink-soft); }
+  .site .links { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .wrapt { overflow-x: auto; margin: .7rem 0; }
+  table.cmp { width: 100%; min-width: 34rem; border-collapse: collapse; font-size: .9rem; line-height: 1.6; }
+  table.cmp th, table.cmp td { border: 1px solid var(--line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
+  table.cmp thead th { background: var(--line-soft); }
+  table.cmp tbody th { font-weight: 600; white-space: nowrap; background: var(--surface); }
+  code { font-family: ui-monospace, Consolas, "D2Coding", monospace; font-size: .88em; overflow-wrap: anywhere; }
+  .flow { display: flex; flex-wrap: wrap; gap: .4rem; align-items: stretch; margin: .8rem 0; max-width: 56rem; }
+  .flow div { flex: 1 1 9rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .55rem .65rem; font-size: .9rem; line-height: 1.5; }
+  .flow b { display: block; color: var(--navy); }
+  .flow .ar { flex: 0 0 auto; border: 0; background: none; padding: 0 .1rem; align-self: center; color: var(--ink-faint); }
+  .tip { background: var(--gold-wash); border-radius: var(--radius-sm); padding: .7rem .95rem; max-width: 68ch; font-size: .95rem; line-height: 1.75; margin: .8rem 0; }
+  .search { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: .6rem 0; max-width: 46rem; }
+  .search input { flex: 1 1 12rem; font: inherit; padding: .42rem .6rem; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); color: var(--ink); }
+  ol.do { max-width: 68ch; padding-left: 1.3rem; font-size: .97rem; line-height: 1.8; color: var(--ink-soft); }
+  ol.do li { margin-bottom: .3rem; }
+  .src { font-size: .85rem; line-height: 1.75; color: var(--ink-faint); max-width: 74ch; }
+  .src li { margin-bottom: .15rem; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="course.html?id=metadata-2026-2">← 메타데이터와아카이빙연구</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 참고 자료</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">유로피아나, DPLA, 메타데이터 레지스트리</h1>
+      <p class="lead">유로피아나와 DPLA는 <b>여러 기관의 메타데이터 레코드를 모으는 곳</b>이고, 메타데이터 레지스트리는 <b>그 레코드에 쓰는 칸과 용어의 뜻을 등록해 두는 곳</b>입니다. 하나는 ‘이 책에 관한 정보’를 다루고, 다른 하나는 ‘creator라는 칸의 뜻’을 다룹니다.</p>
+      <div class="jump">
+        <a class="btn btn--sm btn--ghost" href="materials/metadata-2026-2/aggregators-registry/#sites">유로피아나와 DPLA</a>
+        <a class="btn btn--sm btn--ghost" href="materials/metadata-2026-2/aggregators-registry/#model">데이터 모델</a>
+        <a class="btn btn--sm btn--ghost" href="materials/metadata-2026-2/aggregators-registry/#registry">메타데이터 레지스트리</a>
+        <a class="btn btn--sm btn--ghost" href="materials/metadata-2026-2/aggregators-registry/#try">직접 해 보기</a>
+      </div>
+
+      <h2 class="part" id="sites">유로피아나와 DPLA</h2>
+      <div class="two">
+        <div class="site">
+          <h3>유로피아나 (Europeana)</h3>
+          <p>유럽의 도서관·기록관·박물관·미술관이 디지털화한 문화유산을 한곳에서 찾게 해 주는 플랫폼입니다. 유럽연합의 디지털 도서관 사업에서 나와 2008년 11월에 문을 열었습니다.</p>
+          <div class="links">
+            <a class="btn btn--sm" href="https://www.europeana.eu/" target="_blank" rel="noopener">유로피아나 열기</a>
+            <a class="btn btn--sm btn--ghost" href="https://pro.europeana.eu/" target="_blank" rel="noopener">전문가용 Europeana Pro</a>
+          </div>
+        </div>
+        <div class="site">
+          <h3>DPLA (미국 디지털 공공도서관)</h3>
+          <p>Digital Public Library of America. 미국 여러 기관의 디지털 자료를 한곳에서 찾게 해 주는 비영리 기관입니다. 2013년 4월에 문을 열었습니다. 전자책 플랫폼 사업도 합니다.</p>
+          <div class="links">
+            <a class="btn btn--sm" href="https://dp.la/" target="_blank" rel="noopener">DPLA 열기</a>
+            <a class="btn btn--sm btn--ghost" href="https://pro.dp.la/" target="_blank" rel="noopener">전문가용 DPLA Pro</a>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub">어떻게 모으나요</h3>
+      <p class="prose">두 곳 모두 자료의 원본을 가져오지 않습니다. 각 기관의 <b>메타데이터를 모아</b> 검색하게 하고, 이용자가 항목을 고르면 자료를 가진 기관의 사이트로 보내 줍니다. 수천 개 기관을 하나씩 상대하기는 어려워서 중간에 나라·분야·지역별 집계 기관을 둡니다.</p>
+      <div class="flow" aria-label="기관에서 집계 기관을 거쳐 유로피아나 또는 DPLA로 메타데이터가 모이고, 이용자는 원 기관으로 간다">
+        <div><b>도서관·박물관 등</b>자료와 메타데이터를 가진 기관</div>
+        <div class="ar" aria-hidden="true">→</div>
+        <div><b>집계 기관</b>유로피아나의 애그리게이터, DPLA의 허브. 모으고 점검하고 보강합니다.</div>
+        <div class="ar" aria-hidden="true">→</div>
+        <div><b>유로피아나 · DPLA</b>공통 모델로 맞춰 검색과 API로 제공합니다.</div>
+        <div class="ar" aria-hidden="true">→</div>
+        <div><b>이용자</b>찾은 뒤 원 기관 사이트에서 자료를 봅니다.</div>
+      </div>
+      <p class="prose">기관끼리 메타데이터를 넘길 때는 <a href="materials/metadata-2026-2/xml-json/files/실습3-5_링크모음.html#p3" target="_blank" rel="noopener">실습 3</a>에서 본 OAI-PMH 같은 규약을 쓰기도 합니다.</p>
+
+      <h3 class="sub">한눈에 견주기</h3>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th></th><th>유로피아나</th><th>DPLA</th></tr></thead>
+          <tbody>
+            <tr><th>범위</th><td>유럽 문화유산</td><td>미국 문화유산</td></tr>
+            <tr><th>시작</th><td>2008년 11월</td><td>2013년 4월</td></tr>
+            <tr><th>운영</th><td>유로피아나 재단(네덜란드 법인), 유럽연합 지원. 유럽 문화유산 데이터 스페이스 구축 컨소시엄도 조정합니다.</td><td>미국 보스턴에 본부를 둔 비영리 기관</td></tr>
+            <tr><th>규모</th><td>수천만 건. 정확한 수는 사이트에서 확인하세요.</td><td>53,365,391건 (2026-11-05 첫 화면)</td></tr>
+            <tr><th>중간 집계</th><td>애그리게이터 (나라·기관 유형·주제별)</td><td>허브 (주·지역 허브와 대형 기관)</td></tr>
+            <tr><th>데이터 모델</th><td>EDM (Europeana Data Model)</td><td>DPLA MAP (EDM을 바탕으로 함)</td></tr>
+            <tr><th>메타데이터 이용 조건</th><td>CC0 (누구나 자유롭게 재사용)</td><td>CC0 (누구나 자유롭게 재사용)</td></tr>
+            <tr><th>자료 자체의 이용 조건</th><td colspan="2">자료마다 다릅니다. 메타데이터가 자유롭다고 해서 이미지나 글까지 자유로운 것은 아니니, 항목의 권리 표시를 확인해야 합니다.</td></tr>
+            <tr><th>개발자용</th><td><a href="https://europeana.atlassian.net/wiki/spaces/EF/pages/2385674279" target="_blank" rel="noopener">Record API 문서</a> (키 필요)</td><td><a href="https://pro.dp.la/developers" target="_blank" rel="noopener">API·일괄 내려받기</a> (API는 키 필요)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="part" id="model">데이터 모델: 원본과 디지털본을 나눈다</h2>
+      <p class="prose">박물관의 그림과 그 그림의 사진 파일은 만든 사람도, 만든 날짜도, 권리도 다릅니다. 그래서 EDM은 이 둘을 나눠 적고, 그 둘을 묶는 꾸러미를 따로 둡니다. 유로피아나 문서의 모나리자 예로 보면 다음과 같습니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>EDM 클래스</th><th>가리키는 것</th><th>모나리자 예</th></tr></thead>
+          <tbody>
+            <tr><th><code>edm:ProvidedCHO</code></th><td>문화유산 원본</td><td>그림 모나리자. 만든 이 Leonardo da Vinci</td></tr>
+            <tr><th><code>edm:WebResource</code></th><td>원본의 디지털본</td><td>모나리자의 디지털 이미지. 형식 jpg</td></tr>
+            <tr><th><code>ore:Aggregation</code></th><td>위 둘을 잇는 꾸러미</td><td>제공 기관 같은 묶음 전체의 정보</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose"><a href="materials/metadata-2026-2/xml-json/lrm.html">실습 6</a>의 LRM이 ‘책’을 네 층으로 나눈 것과 생각이 같습니다. 한 레코드에 뭉쳐 있던 것을 무엇을 설명하는 값인지에 따라 가릅니다. DPLA MAP은 이 EDM을 바탕으로 미국 기관의 사정에 맞춰 만들었기 때문에, 두 곳은 서로 비슷한 구조를 씁니다.</p>
+
+      <h2 class="part" id="registry">메타데이터 레지스트리</h2>
+      <p class="prose"><b>메타데이터 레지스트리(metadata registry)</b>는 메타데이터 요소와 어휘를 등록해 두고 찾아 쓰게 하는 시스템입니다. 요소마다 이름, 정의, 식별자, 관리 주체, 버전을 적어 둡니다. 쉽게 말해 <b>메타데이터 세계의 용어 등록부</b>입니다.</p>
+
+      <h3 class="sub">왜 필요한가요</h3>
+      <p class="prose">한 기관은 <code>author</code>, 다른 기관은 <code>creator</code>, 또 다른 기관은 ‘저자’라고 씁니다. 반대로 같은 <code>date</code>가 곳에 따라 발행일일 수도 입수일일 수도 있습니다. 칸의 뜻을 한곳에 등록해 두면 다음이 가능해집니다.</p>
+      <ul class="prose">
+        <li><b>재사용</b>: 있는 요소를 찾아 쓰면 새로 만들지 않아도 됩니다.</li>
+        <li><b>상호운용</b>: 같은 주소의 요소를 쓰면 기관이 달라도 같은 뜻이 됩니다. 유로피아나 같은 집계가 쉬워지는 까닭입니다.</li>
+        <li><b>관리</b>: 누가 관리하는지, 언제 바뀌었는지, 지금도 쓰는지 확인할 수 있습니다.</li>
+      </ul>
+
+      <h3 class="sub">등록된 모습: <code>dcterms:creator</code></h3>
+      <p class="prose">앞의 실습에서 본 서술어가 실제로 이렇게 등록되어 있습니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <tbody>
+            <tr><th>식별자(<a href="materials/metadata-2026-2/uri-url/">URI</a>)</th><td><code>http://purl.org/dc/terms/creator</code></td></tr>
+            <tr><th>이름</th><td>Creator</td></tr>
+            <tr><th>정의</th><td>“An entity responsible for making the resource.” (자원을 만든 책임이 있는 개체)</td></tr>
+            <tr><th>관리 주체</th><td>더블린 코어 메타데이터 이니셔티브(DCMI)</td></tr>
+            <tr><th>원문</th><td><a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/" target="_blank" rel="noopener">DCMI Metadata Terms</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">국제 표준: ISO/IEC 11179</h3>
+      <p class="prose">메타데이터 레지스트리의 국제 표준은 <a href="https://www.iso.org/standard/78914.html" target="_blank" rel="noopener">ISO/IEC 11179</a>입니다. 데이터의 의미를 정확히 공유하도록 데이터 요소를 어떻게 정의하고 이름 붙이고 등록할지 정합니다. 1부(틀)의 최신판은 2023년 4판입니다. 이 표준의 중심은 <b>데이터 요소</b>입니다. 도서관과 웹에서는 요소 집합과 어휘를 등록하는 레지스트리를 더 자주 만나게 됩니다.</p>
+
+      <h3 class="sub">찾아볼 곳</h3>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>이름</th><th>무엇을 다루나</th><th>이 수업과의 연결</th></tr></thead>
+          <tbody>
+            <tr><th><a href="https://www.rdaregistry.info/" target="_blank" rel="noopener">RDA Registry</a></th><td>RDA 요소와 값 어휘</td><td>요소가 Work, Expression, Manifestation, Item, Agent, Nomen별로 나뉘어 있습니다. 실습 6의 그 층입니다.</td></tr>
+            <tr><th><a href="https://lov.linkeddata.es/dataset" target="_blank" rel="noopener">Linked Open Vocabularies</a></th><td>웹의 RDF 어휘 920개(2026-11-05)를 모은 목록</td><td>실습 5에서 본 <code>dcterms</code>, <code>bibo</code>를 찾아볼 수 있습니다.</td></tr>
+            <tr><th><a href="https://msi.dublincore.org/" target="_blank" rel="noopener">Metadata Standards Index</a></th><td>DCMI가 만드는 메타데이터 표준 색인. 아직 초안 단계입니다.</td><td>엄밀히는 요소가 아니라 표준을 모은 색인입니다. 어떤 표준이 있는지 살필 때 좋습니다.</td></tr>
+            <tr><th><a href="https://meteor.aihw.gov.au/" target="_blank" rel="noopener">METeOR</a></th><td>호주 보건·복지 분야의 메타데이터 레지스트리</td><td>ISO/IEC 11179 방식 데이터 요소 레지스트리의 예입니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">집계 서비스와 어떻게 다른가요</h3>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th></th><th>유로피아나·DPLA</th><th>메타데이터 레지스트리</th></tr></thead>
+          <tbody>
+            <tr><th>담는 것</th><td>자료를 설명한 레코드</td><td>레코드에 쓰는 요소와 어휘의 정의</td></tr>
+            <tr><th>예</th><td>『어린 왕자』의 만든 이는 생텍쥐페리</td><td><code>creator</code>는 자원을 만든 책임이 있는 개체</td></tr>
+            <tr><th>쓰는 사람</th><td>자료를 찾는 이용자, 연구자</td><td>메타데이터를 설계하는 사서, 개발자</td></tr>
+            <tr><th>묻는 말</th><td>이 주제의 자료가 어디 있나?</td><td>이 칸에 어떤 요소를 써야 하나?</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip">둘은 함께 움직입니다. 레지스트리에 등록된 요소로 EDM과 DPLA MAP 같은 모델을 만들고, 그 모델에 맞춘 레코드가 유로피아나와 DPLA에 모입니다.</div>
+
+      <h2 class="part" id="try">직접 해 보기</h2>
+      <ol class="do">
+        <li>아래 칸의 검색어로 두 사이트를 차례로 열어 봅니다. 결과에서 항목 하나를 골라, 자료가 어느 기관에 있는지 확인합니다.</li>
+      </ol>
+      <div class="search">
+        <input id="q" value="Little Prince" aria-label="검색어" autocomplete="off">
+        <a class="btn btn--sm" id="goE" target="_blank" rel="noopener">유로피아나에서 찾기</a>
+        <a class="btn btn--sm" id="goD" target="_blank" rel="noopener">DPLA에서 찾기</a>
+      </div>
+      <ol class="do" start="2">
+        <li>두 사이트의 항목 화면을 견줍니다. 메타데이터의 권리 표시와 자료의 권리 표시는 어디에 적혀 있나요?</li>
+        <li><a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/" target="_blank" rel="noopener">DCMI Metadata Terms</a>에서 <code>creator</code>와 <code>contributor</code>의 정의를 찾아 비교합니다. 번역자는 어느 쪽에 적는 것이 좋을까요?</li>
+        <li><a href="https://lov.linkeddata.es/dataset" target="_blank" rel="noopener">Linked Open Vocabularies</a>에서 ‘title’을 검색해, 같은 뜻의 요소가 어휘마다 얼마나 많은지 봅니다.</li>
+      </ol>
+
+      <h3 class="sub">출처</h3>
+      <ul class="src">
+        <li><a href="https://dp.la/about" target="_blank" rel="noopener">DPLA About Us</a>, <a href="https://pro.dp.la/hubs/metadata-application-profile" target="_blank" rel="noopener">DPLA Metadata Application Profile</a>, <a href="https://pro.dp.la/hubs/our-hubs" target="_blank" rel="noopener">Our Hubs</a></li>
+        <li><a href="https://europeana.atlassian.net/wiki/spaces/EF/pages/987758622/EDM+Core+classes" target="_blank" rel="noopener">Europeana Knowledge Base: EDM Core classes</a>, <a href="https://pro.europeana.eu/page/the-data-exchange-agreement" target="_blank" rel="noopener">Europeana Data Exchange Agreement</a>, <a href="https://pro.europeana.eu/page/common-european-data-space-for-cultural-heritage" target="_blank" rel="noopener">Common European data space for cultural heritage</a></li>
+        <li><a href="https://www.iso.org/standard/78914.html" target="_blank" rel="noopener">ISO/IEC 11179-1:2023</a>, <a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/" target="_blank" rel="noopener">DCMI Metadata Terms</a>. 모두 2026-11-05 확인.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+(() => {
+  const q = document.getElementById('q'), e = document.getElementById('goE'), d = document.getElementById('goD');
+  const sync = () => {
+    const v = encodeURIComponent(q.value.trim());
+    e.href = 'https://www.europeana.eu/en/search?query=' + v;
+    d.href = 'https://dp.la/search?q=' + v;
+  };
+  q.addEventListener('input', sync);
+  sync();
+})();
+</script>
+</body>
+</html>
