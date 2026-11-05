@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>메타데이터 어휘 이론 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 수업 자료. 요소, 요소세트, 더블린 코어, VRA Core, RDF, DC terms를 쉬운 말과 예시로 정리하고 확인 문제로 점검합니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="materials/metadata-2026-2/vocabulary/vocab.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="materials/metadata-2026-2/vocabulary/">← 메타데이터 어휘 이론과 실습</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 수업 자료 · 교재 2장</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">메타데이터 어휘: 이론</h1>
+
+      <div class="answer"><b>메타데이터 어휘</b>는 자료를 설명할 때 어떤 칸을 두고, 그 칸에 무엇을 어떻게 적을지 함께 쓰기로 정한 약속입니다. 사람끼리의 약속을 컴퓨터도 알아듣게 만드는 일이라고 생각하면 됩니다.</div>
+
+      <h3 class="sub">왜 필요한가요?</h3>
+      <p class="prose">세 기관이 같은 책을 저마다 적었다고 해 봅시다(수업용 가상 예). 사람은 같은 책인 줄 금방 알지만, 컴퓨터는 ‘지은이’와 ‘author’와 ‘저자’가 같은 칸인지 모릅니다. 그래서 세 기관의 자료를 한꺼번에 찾아 주지 못합니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>기관</th><th>사람을 적은 칸</th><th>펴낸 때를 적은 칸</th></tr></thead>
+          <tbody>
+            <tr><th>A 도서관</th><td>지은이: 생텍쥐페리</td><td>펴낸 해: 2007</td></tr>
+            <tr><th>B 박물관</th><td>author: Saint-Exupéry</td><td>연도: 07년</td></tr>
+            <tr><th>C 아카이브</th><td>저자: 앙투안 드 생텍쥐페리</td><td>date: 2007.1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">오늘의 지도: 칸 하나에서 웹까지</h3>
+      <nav class="steps-map" aria-label="이론 차례">
+        <a href="materials/metadata-2026-2/vocabulary/theory.html#p1"><b>1. 요소</b>칸 하나</a>
+        <a href="materials/metadata-2026-2/vocabulary/theory.html#p2"><b>2. 요소세트</b>칸을 모은 양식</a>
+        <a href="materials/metadata-2026-2/vocabulary/theory.html#p3"><b>3. 구조</b>평면과 중첩</a>
+        <a href="materials/metadata-2026-2/vocabulary/theory.html#p4"><b>4. RDF</b>칸을 웹에서 잇기</a>
+        <a href="materials/metadata-2026-2/vocabulary/theory.html#p5"><b>5. DC terms</b>RDF 어휘가 된 더블린 코어</a>
+        <a href="materials/metadata-2026-2/vocabulary/theory.html#glossary"><b>용어 한 장</b>복습용</a>
+      </nav>
+
+      <!-- 1부 -->
+      <h2 class="part" id="p1">1. 메타데이터 요소 <small class="muted">교재 2.1 · 52~56쪽</small></h2>
+      <h3 class="sub">요소와 요소값</h3>
+      <p class="prose"><b>요소</b>는 자원을 찾고 알아보는 데 필요한 데이터를 구조화하는 가장 작은 단위입니다. 쉽게 말해 <b>서류 양식의 칸 이름</b>입니다. 그 칸에 쓴 내용이 <b>요소값</b>입니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>요소 (칸 이름)</th><th>요소값 (칸 내용)</th></tr></thead>
+          <tbody>
+            <tr><td>표제</td><td>모나리자</td></tr>
+            <tr><td>창작자</td><td>레오나르도 다빈치</td></tr>
+            <tr><td>소장처</td><td>루브르 박물관</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">책마다 부르는 말이 다릅니다. 요소는 속성(property)이나 용어(terms)라고도 하고, 요소값은 속성값이라고도 합니다. 더블린 코어는 2007년부터 ‘용어’라고 부릅니다. 다만 <b>XML의 속성(attribute)</b>은 뜻이 다릅니다. 요소에 붙는 꼬리표입니다.</p>
+      <pre class="code">&lt;name xml:lang="eng"&gt;ABC&lt;/name&gt;
+  name     → 요소
+  xml:lang → 값의 언어를 알려 주는 속성(attribute)
+  ABC      → 요소값</pre>
+
+      <h3 class="sub">칸을 나누면 상세검색이 됩니다</h3>
+      <p class="prose">칸을 나눠 쌓아 두어야 ‘작가로 찾기’, ‘제작연도로 찾기’ 같은 <b>상세검색</b> 화면을 만들 수 있습니다. 칸 내용 전체에서 찾는 것은 통합검색입니다. 어떤 칸을 둘지는 자원의 특성과 구축 목적에 따라 달라집니다. 디지털 사진에는 아날로그 사진에 없는 파일 형식, 파일 크기 칸이 필요합니다.</p>
+
+      <h3 class="sub">1:1 원칙: 자원 하나에 레코드 하나</h3>
+      <p class="prose">원본과 그 복제물은 제목이 같아도 <b>서로 다른 자원</b>이므로 레코드를 따로 만듭니다. 창작자도 달라집니다. 더블린 코어 개발 초기에 서로 다른 자원을 한 레코드에 합쳐 적던 관행을 경계하려고 나온 원칙입니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>칸</th><th>원본 그림</th><th>원본을 찍은 디지털 이미지</th></tr></thead>
+          <tbody>
+            <tr><th>표제</th><td>모나리자</td><td>모나리자</td></tr>
+            <tr><th>창작자</th><td>레오나르도 다빈치</td><td>이미지를 만든 사람 (다빈치가 아닙니다)</td></tr>
+            <tr><th>형식</th><td>회화</td><td>JPEG 파일</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="q" data-why="맞습니다. PDF라는 자원을 만든 쪽이 창작자입니다. 원본 지도는 source(출처) 칸으로 이어 줄 수 있습니다.">
+        <p class="ask">도서관 직원이 옛 지도를 스캔해 PDF로 공개했습니다(가상 예). 이 PDF 레코드의 창작자 칸에 적을 것은?</p>
+        <div class="opts"><button data-no="그 사람은 원본 지도의 창작자입니다. 지금 기술하는 자원은 PDF입니다.">옛 지도를 그린 사람</button><button data-ok>PDF를 제작한 사람이나 기관</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+
+      <h3 class="sub">같은 정보를 칸에 넣는 방식도 정해야 합니다</h3>
+      <p class="prose">저자가 셋이면 한 칸에 이어 적을 수도, 칸을 세 번 반복해 한 사람씩 적을 수도 있습니다. 앞쪽은 입력이 빠르고, 뒤쪽은 사람마다 따로 찾고 모으기 쉽습니다. 어느 쪽이든 요소세트를 만들 때 미리 정해 둡니다.</p>
+
+      <h3 class="sub">값을 고르게 적는 세 가지 도구</h3>
+      <p class="prose">칸을 잘 나눠도 칸 안의 내용이 제각각이면 찾을 수 없습니다. 그래서 질문 세 개에 각각 답하는 도구를 씁니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>도구</th><th>답하는 질문</th><th>예</th></tr></thead>
+          <tbody>
+            <tr><th>내용규칙<br><small class="muted">content rule</small></th><td>어떻게 적을까?</td><td>크기는 세로×가로를 센티미터로 적는다. RDA, KCR</td></tr>
+            <tr><th>어휘 인코딩스킴<br><small class="muted">vocabulary encoding scheme</small></th><td>어떤 낱말을 고를까?</td><td>주제는 LCSH·AAT·MeSH에서, 예술가 이름은 ULAN에서 고른다</td></tr>
+            <tr><th>구문 인코딩스킴<br><small class="muted">syntax encoding scheme</small></th><td>어떤 모양으로 쓸까?</td><td>날짜는 W3CDTF·ISO 8601-1에 따라 2024-06-09처럼 쓴다</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">왜 모양까지 정할까요? <code>06-09-2024</code>와 <code>09-06-2024</code>는 6월 9일인지 9월 6일인지 알 수 없기 때문입니다. 어휘 인코딩스킴은 값을 어느 목록에서 골랐는지 이름까지 함께 적어야 다른 사람이 이해하고 다시 쓸 수 있습니다.</p>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#1">실습 1 · 세 도구 가려내기</a></p>
+
+      <!-- 2부 -->
+      <h2 class="part" id="p2">2. 메타데이터 요소세트 <small class="muted">교재 2.2.1 · 57~59쪽</small></h2>
+      <p class="prose">요소를 모은 것이 <b>요소세트</b>입니다. 양식 한 장이라고 생각하면 됩니다. 15개 요소로 된 더블린 코어 메타데이터 요소세트(DCMES)가 대표적이고, RDF에서는 이런 것을 <b>속성어휘</b>(property vocabulary)라고 부릅니다. 요소세트는 각 칸의 뜻과 칸 사이의 관계를 정하고(의미적), 칸에 값을 어떻게 넣을지 안내합니다(내용적).</p>
+      <h3 class="sub">요소 하나를 정의하는 다섯 항목</h3>
+      <p class="prose">여러 기관이 함께 쓰려면 정의하는 방식부터 같아야 합니다. 국제표준 ISO/IEC 11179-5:1995가 그 방식을 정했고 DCMES가 이를 채택했습니다. 사전의 표제어 항목을 본다고 생각하면 됩니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>항목</th><th>하는 일</th><th>DCMES의 date</th></tr></thead>
+          <tbody>
+            <tr><th>요소명 (name)</th><td>기계가 처리하는 고유한 이름</td><td><code>date</code></td></tr>
+            <tr><th>레이블 (label)</th><td>사람이 읽는 이름</td><td><code>Date</code></td></tr>
+            <tr><th>정의 (definition)</th><td>이 칸은 무엇인가, 되도록 한 문장으로</td><td>자원의 생애에서 어떤 사건과 관련된 시점이나 기간</td></tr>
+            <tr><th>식별자 (URI)</th><td>세상에 하나뿐인 주소</td><td><code>http://purl.org/dc/elements/1.1/date</code></td></tr>
+            <tr><th>주석 (comment)</th><td>값을 어떻게 적나, 어떤 어휘를 쓰나</td><td>W3CDTF 같은 형식으로 적기를 권장</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">요소명은 소문자로 시작하고, 두 단어 이상이면 띄어 쓰는 대신 뒷 단어 첫 글자를 대문자로 올립니다(<code>dateOfBirth</code>). 고유명사로 시작하면 첫 글자도 대문자입니다(<code>AppleSerialNumber</code>). XML은 대소문자를 구별하므로 <code>date</code>와 <code>Date</code>는 다른 이름입니다.</p>
+      <div class="q" data-why="맞습니다. 띄어쓰기 없이, 소문자로 시작해 뒷 단어 첫 글자만 대문자로 씁니다.">
+        <p class="ask">‘촬영 기기 모델’ 칸의 요소명으로 알맞은 것은?</p>
+        <div class="opts"><button data-no="이것은 사람이 읽는 레이블 모양입니다. 요소명에는 띄어쓰기를 쓰지 않습니다.">Camera Model</button><button data-ok>cameraModel</button><button data-no="소문자로 시작한 것은 좋지만 띄어쓰기가 있으면 요소명이 될 수 없습니다.">camera model</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <h3 class="sub">다른 표준과 잇는 정보, 그리고 버전</h3>
+      <p class="prose">요소를 정의할 때 다른 표준의 비슷한 요소를 적어 두면(예: VRA Core의 title ↔ Dublin Core의 TITLE) 데이터를 옮기거나 합치기 쉬워집니다. 이것이 <b>상호운용성</b>입니다. 정의는 시간이 지나면 바뀌므로 표준을 쓸 때는 버전이나 개정일을 정확히 밝힙니다. DCMES는 2001년 이후의 변경도 모두 Version 1.1로 표시하니 개정일까지 적는 편이 안전합니다.</p>
+
+      <!-- 3부 -->
+      <h2 class="part" id="p3">3. 요소의 구조 <small class="muted">교재 2.2.2 · 59~68쪽</small></h2>
+      <div class="two">
+        <div class="box"><h4>평면구조 (flat)</h4><p>모든 칸이 대등합니다. 칸막이 없이 나란한 서랍입니다. 예: DCMES</p></div>
+        <div class="box"><h4>중첩구조 (nested)</h4><p>비슷한 칸을 큰 칸 아래 하위요소로 모읍니다. 칸막이 있는 서랍입니다. 예: MODS, VRA Core 4.0</p></div>
+      </div>
+      <p class="prose">중첩구조에는 값 없이 하위요소를 담기만 하는 <b>콘테이너 요소</b>가 있습니다. 폴더는 파일을 담을 뿐 자기 내용이 없는 것과 같습니다. 아래 예의 <code>titleInfo</code>가 그렇습니다(책 값은 수업용 가상 예).</p>
+      <pre class="code">&lt;titleInfo&gt;
+  &lt;title&gt;메타데이터 입문&lt;/title&gt;
+  &lt;subTitle&gt;칸 이름부터 RDF까지&lt;/subTitle&gt;
+&lt;/titleInfo&gt;</pre>
+
+      <h3 class="sub">더블린 코어와 네 가지 규칙</h3>
+      <p class="prose">더블린은 1995년 워크숍이 열린 미국 오하이오주의 도시이고, 코어는 넓고 일반적이어서 여러 자원에 쓸 수 있다는 뜻입니다. 15개 요소로 정리되어 ANSI/NISO Z39.85-2001, ISO 15836으로 표준이 되었습니다. 규칙은 단순합니다.</p>
+      <div class="two">
+        <div class="box"><h4>평면구조</h4><p>칸 사이에 위아래가 없습니다.</p></div>
+        <div class="box"><h4>선택적</h4><p>모든 칸이 선택입니다. 모르면 비워 둡니다.</p></div>
+        <div class="box"><h4>반복가능</h4><p>같은 칸을 여러 번 쓸 수 있습니다.</p></div>
+        <div class="box"><h4>순서 없음</h4><p>표제가 맨 앞이 아니어도 됩니다.</p></div>
+      </div>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>묶음</th><th>묻는 것</th><th>요소</th></tr></thead>
+          <tbody>
+            <tr><th>내용 (Content)</th><td>무엇에 관한 자원인가?</td><td>title 표제, subject 주제, description 설명, type 유형, source 출처, relation 관련자원, coverage 수록범위</td></tr>
+            <tr><th>지적재산권 (Intellectual Property)</th><td>누가 만들고 권리를 가졌나?</td><td>creator 창작자, contributor 기여자, publisher 발행자, rights 저작권</td></tr>
+            <tr><th>인스턴스화 (Instantiation)</th><td>이 판, 이 파일은 어떤 모습인가?</td><td>date 날짜, format 형식, identifier 식별자, language 언어</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="sub">헷갈리기 쉬운 세 쌍</h3>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>요소</th><th>뜻</th><th>예</th></tr></thead>
+          <tbody>
+            <tr><th><code>creator</code></th><td>만드는 데 주된 책임</td><td>소설을 쓴 작가</td></tr>
+            <tr><th><code>contributor</code></th><td>기여한 책임</td><td>번역한 사람</td></tr>
+            <tr><th><code>type</code></th><td>유형이나 장르</td><td>이미지</td></tr>
+            <tr><th><code>format</code></th><td>파일 형식, 매체, 규격</td><td>JPEG 파일</td></tr>
+            <tr><th><code>source</code></th><td>이 자원이 파생되어 나온 원래 자원</td><td>스캔한 원본 지도</td></tr>
+            <tr><th><code>relation</code></th><td>이 자원과 관련된 자원</td><td>같은 시리즈의 다른 지도</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#2">실습 2 · 『어린 왕자』로 15개 요소 채우기</a></p>
+
+      <h3 class="sub">XML 한 줄 읽기</h3>
+      <p class="prose">코드라고 겁먹지 않아도 됩니다. 칸 이름과 칸 내용을 한 줄로 적은 것입니다. 앞의 <code>dc:</code>는 더블린 코어의 칸이라는 표시입니다.</p>
+      <pre class="code">&lt;dc:date&gt;1998-10-10&lt;/dc:date&gt;
+ 여는 태그(칸 이름) · 값(칸 내용) · 닫는 태그(칸 끝)</pre>
+
+      <h3 class="sub">상세구분과 덤 다운 원칙</h3>
+      <p class="prose">칸의 뜻이 너무 넓을 때 더 좁혀 주는 말이 <b>상세구분</b>(refinements)입니다. 처음에는 한정어(qualifier)라고 불렀습니다. <code>coverage</code>를 <code>spatial</code>(공간)과 <code>temporal</code>(시간)로 나누는 식입니다. 여기에는 <b>덤 다운 원칙</b>이 따릅니다. 상세구분을 모르는 프로그램이 그 말을 무시해도 값의 뜻이 틀리면 안 됩니다.</p>
+      <div class="two">
+        <div class="box"><h4>상세구분을 아는 프로그램</h4><p>표제: 모나리자<br>대체표제: 천년의 미소</p></div>
+        <div class="box"><h4>상세구분을 모르는 프로그램</h4><p>표제: 모나리자<br>표제: 천년의 미소<br><small class="muted">덜 구체적이지만 틀리지는 않습니다</small></p></div>
+      </div>
+      <h3 class="sub">Simple DC와 Qualified DC</h3>
+      <p class="prose">15개 요소만 쓰면 <b>Simple DC</b>, 상세구분이나 인코딩스킴까지 쓰면 <b>Qualified DC</b>입니다. 덧붙이는 정보만큼 컴퓨터가 뜻을 더 정확히 압니다.</p>
+      <pre class="code">&lt;!-- Simple: 무슨 날짜이고 062가 무엇인지 모른다 --&gt;
+&lt;dc:date&gt;2001-07-18&lt;/dc:date&gt;
+&lt;dc:subject&gt;062&lt;/dc:subject&gt;
+
+&lt;!-- Qualified: 수정일이고 W3CDTF 형식이며 062는 DDC 분류기호다 --&gt;
+&lt;dcterms:modified xsi:type="dcterms:W3CDTF"&gt;2001-07-18&lt;/dcterms:modified&gt;
+&lt;dc:subject xsi:type="dcterms:DDC"&gt;062&lt;/dc:subject&gt;</pre>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#3">실습 3 · 덤 다운 시험하기</a></p>
+
+      <h3 class="sub">중첩구조의 대표: VRA Core</h3>
+      <p class="prose">시각자원협회(VRA)가 시각자원 컬렉션을 기술하려고 만든 요소세트입니다. 2000년의 3.0은 평면구조였고, 2007년의 4.0에서 한정어가 하위요소와 속성으로 바뀌었습니다. 더블린 코어의 <code>creator</code>는 한 칸이지만 VRA Core의 <code>agent</code>는 이름, 날짜, 문화권, 역할, 귀속을 나눠 적습니다. <code>vocab</code>과 <code>refid</code>는 ‘ULAN이라는 어휘집의 이 번호’라는 뜻이어서, 철자가 달라도 같은 사람을 번호로 알아볼 수 있습니다. 이 생각이 다음의 RDF로 이어집니다.</p>
+      <pre class="code">&lt;agent&gt;
+  &lt;name type="personal" vocab="ULAN" refid="500002921"&gt;Rubens, Peter Paul&lt;/name&gt;
+  &lt;culture&gt;Flemish&lt;/culture&gt;
+  &lt;dates type="life"&gt;
+    &lt;earliestDate&gt;1577&lt;/earliestDate&gt;
+    &lt;latestDate&gt;1640&lt;/latestDate&gt;
+  &lt;/dates&gt;
+  &lt;role vocab="AAT" refid="300025136"&gt;painter (artist)&lt;/role&gt;
+&lt;/agent&gt;</pre>
+      <div class="q" data-why="맞습니다. dates는 하위요소를 담기만 하고 자기 값이 없습니다. 속성 type은 값이 아니라 꼬리표입니다.">
+        <p class="ask">위 코드에서 값 없이 담기만 하는 콘테이너 요소는?</p>
+        <div class="opts"><button data-no="name에는 Rubens, Peter Paul이라는 값이 있습니다.">name</button><button data-ok>dates</button><button data-no="earliestDate에는 1577이라는 값이 있습니다.">earliestDate</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+
+      <!-- 4부 -->
+      <h2 class="part" id="p4">4. RDF <small class="muted">교재 2.3.1 · 68~74쪽</small></h2>
+      <p class="prose">RDF는 웹에서 데이터를 주고받기 위한 W3C의 표준 모델입니다(1999년 개발). 스키마가 달라도 데이터를 합칠 수 있고, 사람이 읽는 화면보다 프로그램이 처리하는 데 맞춰져 있으며, 뜻을 잃지 않고 교환하고 다시 쓸 수 있습니다. 2010년 이후 XML 스키마로 만든 어휘들을 RDF 어휘로 바꾸는 노력이 이어져 왔습니다.</p>
+      <h3 class="sub">트리플: 세 조각 문장</h3>
+      <p class="prose">모든 사실을 <b>주어, 술어, 목적어</b>로 적습니다. 이것이 트리플이고, 트리플을 모은 것이 RDF 그래프입니다. 주어와 목적어는 노드, 술어는 화살표(아크)로 그립니다.</p>
+      <svg class="graph" viewBox="0 0 640 110" role="img" aria-label="주어 Vladimir Nabokov에서 술어 is author of 화살표가 목적어 Lolita로 향하는 그림" style="max-width:640px">
+                <ellipse class="res" cx="120" cy="60" rx="100" ry="30"/><text class="node-label" x="120" y="64" text-anchor="middle">Vladimir Nabokov</text>
+        <line class="edge" x1="220" y1="60" x2="417" y2="60"/><polygon class="arrow" points="425,60 415,55 415,65"/><text class="edge-label" x="322" y="50" text-anchor="middle">is author of</text>
+        <ellipse class="res" cx="520" cy="60" rx="95" ry="30"/><text class="node-label" x="520" y="64" text-anchor="middle">Lolita</text>
+        <text class="edge-label" x="120" y="20" text-anchor="middle">주어</text><text class="edge-label" x="322" y="22" text-anchor="middle">술어</text><text class="edge-label" x="520" y="20" text-anchor="middle">목적어</text>
+      </svg>
+      <p class="prose">이름 대신 웹 주소로 적으면 기계가 읽습니다. 다른 기관이 같은 주소를 쓰면 데이터가 저절로 이어집니다.</p>
+      <pre class="code">http://en.wikipedia.org/wiki/Vladimir_Nabokov   (주어)
+http://rdvocab.info/roles/authorWork            (술어)
+http://lccn.loc.gov/56024827                    (목적어)</pre>
+      <h3 class="sub">노드에 들어가는 세 가지</h3>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>자리</th><th class="ctr">IRI<br><small class="muted">세상에 하나뿐인 이름표</small></th><th class="ctr">리터럴<br><small class="muted">글자·숫자·날짜 값 그 자체</small></th><th class="ctr">공백노드<br><small class="muted">이름 없이 ‘무언가 있다’</small></th></tr></thead>
+          <tbody>
+            <tr><th>주어</th><td class="ctr">○</td><td class="ctr">×</td><td class="ctr">○</td></tr>
+            <tr><th>술어</th><td class="ctr">○</td><td class="ctr">×</td><td class="ctr">×</td></tr>
+            <tr><th>목적어</th><td class="ctr">○</td><td class="ctr">○</td><td class="ctr">○</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="q" data-why="맞습니다. 리터럴은 값 그 자체라서 목적어 자리에만 옵니다. 그래서 그 글자에 대해 다시 설명을 이어 갈 수 없습니다.">
+        <p class="ask">글자 값 “Seven Samurai”(리터럴)가 올 수 있는 자리는?</p>
+        <div class="opts"><button data-no="주어에는 리터럴이 올 수 없습니다.">주어</button><button data-no="술어에는 IRI만 올 수 있습니다.">술어</button><button data-ok>목적어</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <h3 class="sub">이어 붙이면 그래프가 됩니다</h3>
+      <p class="prose">목적어가 자원이면 그 자원이 다시 주어가 되어 자기 속성을 가집니다. 영화 《황야의 7인》에서 원작 《7인의 사무라이》로, 다시 감독 구로사와 아키라로 따라갈 수 있습니다. 웹 페이지를 링크로 따라다니듯 데이터를 따라다니는 것입니다.</p>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#4">실습 4 · 문장을 트리플로 쪼개 그래프 그리기</a></p>
+      <h3 class="sub">파일로 적는 법: RDF/XML</h3>
+      <p class="prose">트리플은 생각의 틀이고, 파일로 저장하려면 표기법이 필요합니다. RDF/XML, Notation3, Turtle, RDFa, JSON-LD, TriG 등이 있습니다.</p>
+      <pre class="code">&lt;rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"&gt;
+  &lt;rdf:Description rdf:about="http://dublincore.org/"&gt;   ← 주어
+    &lt;dc:title&gt;Dublin Core Metadata Initiative - Home Page&lt;/dc:title&gt;   ← 술어와 목적어
+    &lt;dc:date&gt;1998-10-10&lt;/dc:date&gt;
+  &lt;/rdf:Description&gt;
+&lt;/rdf:RDF&gt;</pre>
+
+      <!-- 5부 -->
+      <h2 class="part" id="p5">5. DC terms <small class="muted">교재 2.3.2 · 74~83쪽</small></h2>
+      <h3 class="sub">네임스페이스: 이름 앞에 붙이는 소속</h3>
+      <p class="prose">같은 반에 김민수가 둘이면 ‘문헌정보학과 김민수’, ‘사학과 김민수’로 부릅니다. 요소도 그렇습니다. <code>title</code>이 어떤 곳에서는 책 제목이고 다른 곳에서는 직함일 수 있습니다. 이름 앞에 소속을 붙여 충돌을 막는 고유한 이름이 <b>네임스페이스</b>입니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>접두어</th><th>네임스페이스</th><th>담은 것</th></tr></thead>
+          <tbody>
+            <tr><th><code>dc</code></th><td><code>http://purl.org/dc/elements/1.1/</code></td><td>원래의 15개 요소 (DCMES)</td></tr>
+            <tr><th><code>dcterms</code>, <code>dct</code></th><td><code>http://purl.org/dc/terms/</code></td><td>같은 이름의 15개(2008년 미러링) + 확장 속성·클래스·데이터유형·어휘 인코딩스킴</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">DCMI는 모델링에 더 유연하고 표현력이 있는 <code>terms</code> 쓰기를 권장합니다. 앞에서 상세구분이던 말들이 RDF에서는 독립된 속성이 됩니다. <code>title.alternative</code>처럼 꼬리로 붙던 말이 <code>dcterms:alternative</code>로 혼자 설 수 있게 된 것입니다. 새 속성도 늘었습니다. 컬렉션이 언제 어떻게 늘어나는지 적는 <code>accrualMethod</code>, 소유와 관리의 변경 내력을 적는 <code>provenance</code>가 그 예입니다.</p>
+      <h3 class="sub">URI와 QName</h3>
+      <p class="prose">용어의 정식 이름은 네임스페이스에 이름을 붙인 긴 URI입니다. 접두어로 줄인 짧은 이름이 <b>QName</b>입니다. 주소가 다르면 다른 용어이므로 <code>dc:creator</code>와 <code>dcterms:creator</code>는 서로 다른 용어입니다.</p>
+      <pre class="code">dc:creator      = http://purl.org/dc/elements/1.1/creator
+dcterms:creator = http://purl.org/dc/terms/creator</pre>
+      <p class="prose">접두어는 먼저 <code>xmlns</code>로 선언하고 씁니다.</p>
+      <pre class="code">&lt;metadata
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dcterms="http://purl.org/dc/terms/"&gt;
+  &lt;dc:title&gt;UKOLN&lt;/dc:title&gt;
+  &lt;dcterms:alternative&gt;UK Office for Library and Information Networking&lt;/dcterms:alternative&gt;
+&lt;/metadata&gt;</pre>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#5">실습 5 · 네임스페이스 고치기</a></p>
+
+      <h3 class="sub">도메인과 범주</h3>
+      <p class="prose">DC terms 명세에는 트리플의 양쪽을 제한하는 칸이 있습니다. <b>도메인</b>은 이 속성을 어떤 자원(주어)에 쓸 수 있는지, <b>범주</b>(range)는 값(목적어)으로 무엇이 올 수 있는지 정합니다. 예를 들어 <code>accrualMethod</code>는 도메인이 Collection이라 컬렉션에만 씁니다.</p>
+      <div class="q" data-why="맞습니다. 도메인이 Collection이므로 컬렉션을 기술할 때 씁니다. 책 한 권에 ‘아이템이 추가되는 방법’을 적는 것은 말이 되지 않습니다.">
+        <p class="ask"><code>accrualMethod</code>(컬렉션에 아이템이 추가되는 방법)를 적을 수 있는 자원은?</p>
+        <div class="opts"><button data-no="도메인이 Collection이라 책 한 권에는 맞지 않습니다.">책 한 권</button><button data-ok>도서관의 특별 컬렉션</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <h3 class="sub">실제 명세 읽기: dcterms:creator</h3>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>칸</th><th>값</th><th>읽는 법</th></tr></thead>
+          <tbody>
+            <tr><th>URI</th><td><code>http://purl.org/dc/terms/creator</code></td><td>이 용어의 정식 이름</td></tr>
+            <tr><th>주석</th><td>URI로 식별하기를 권장, 어려우면 글자값</td><td>값은 되도록 주소로</td></tr>
+            <tr><th>용어유형</th><td>속성 (property)</td><td>속성·클래스·데이터유형·인코딩스킴 중 하나</td></tr>
+            <tr><th>부가적 범주</th><td><code>http://purl.org/dc/terms/Agent</code></td><td>값은 행위의 주체</td></tr>
+            <tr><th>상위 속성</th><td><code>dc:creator</code>, <code>dcterms:contributor</code></td><td>창작자는 기여자의 일종</td></tr>
+            <tr><th>유사 속성</th><td><code>http://xmlns.com/foaf/0.1/maker</code></td><td>다른 어휘와 연결</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose"><b>클래스</b>는 자원의 그룹이고 <b>인스턴스</b>는 그 구체적인 사례입니다. ‘화가’가 클래스라면 ‘루벤스’는 인스턴스입니다. creator의 부가적 범주가 Agent라는 말은 값이 Agent 클래스의 인스턴스라는 뜻입니다.</p>
+      <h3 class="sub">등록된 인코딩스킴</h3>
+      <div class="two">
+        <div class="box"><h4>어휘 인코딩스킴: 어떤 낱말?</h4><p>주제명 LCSH, MeSH · 분류기호 DDC, UDC, LCC, NLM · 자원유형 DCMIType, IMT · 장소명 TGN</p></div>
+        <div class="box"><h4>구문 인코딩스킴: 어떤 모양?</h4><p>국가명 ISO3166 · 언어 RFC5646, ISO639-2 등 · 공간 DCMI Box, Point · 시간 DCMI Period, W3CDTF · 식별자 URI</p></div>
+      </div>
+      <h3 class="sub">글자로 적느냐, 주소로 가리키느냐</h3>
+      <p class="prose">DCMES와 DC terms의 15개 속성 자체는 대등합니다. 달라지는 것은 값에 대한 제한입니다. 주소로 적으면 그 주소에 있는 다른 이름 표기, 생몰년까지 이어져 링크드 데이터의 웹이 됩니다. <a href="https://lod.nl.go.kr/page/KAC199601201" target="_blank" rel="noopener">국립중앙도서관 LOD의 제인 오스틴</a>을 직접 열어 보세요.</p>
+      <pre class="code">&lt;dc:creator&gt;제인 오스틴&lt;/dc:creator&gt;                                       ← 글자(리터럴)
+&lt;dcterms:creator&gt;http://lod.nl.go.kr/resource/KAC199601201&lt;/dcterms:creator&gt;   ← 주소(IRI)</pre>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#6">실습 6 · 내 요소세트 만들기</a></p>
+
+      <!-- 용어 -->
+      <h2 class="part" id="glossary">용어 한 장</h2>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>용어</th><th>쉬운 말</th><th>용어</th><th>쉬운 말</th></tr></thead>
+          <tbody>
+            <tr><th>요소 / 요소값</th><td>칸 이름 / 칸 내용</td><th>트리플</th><td>주어·술어·목적어 세 조각 문장</td></tr>
+            <tr><th>요소세트</th><td>칸을 모은 양식 한 장</td><th>IRI / 리터럴</th><td>세상에 하나뿐인 주소 / 값 그 자체</td></tr>
+            <tr><th>내용규칙</th><td>어떻게 적을까</td><th>공백노드</th><td>이름 없이 ‘무언가 있다’</td></tr>
+            <tr><th>어휘 인코딩스킴</th><td>어떤 낱말을 고를까</td><th>네임스페이스</th><td>이름 앞에 붙이는 소속</td></tr>
+            <tr><th>구문 인코딩스킴</th><td>어떤 모양으로 쓸까</td><th>QName</th><td>접두어로 줄인 짧은 이름</td></tr>
+            <tr><th>평면 / 중첩구조</th><td>나란한 칸 / 칸 안의 칸</td><th>도메인 / 범주</th><td>주어 쪽 제한 / 값 쪽 제한</td></tr>
+            <tr><th>상세구분 (한정어)</th><td>칸의 뜻을 좁히는 말</td><th>클래스 / 인스턴스</th><td>그룹 / 그 구체적 사례</td></tr>
+            <tr><th>Simple / Qualified DC</th><td>15칸만 / 상세구분·스킴까지</td><th>DCMES / DC terms</th><td>15개 요소 / RDF 어휘로 확장</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:1.4rem">
+        <a class="btn" href="materials/metadata-2026-2/vocabulary/lab.html">실습하러 가기</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/vocabulary/">이론과 실습 안내</a>
+      </div>
+
+      <h2 class="part" style="font-size:1.1rem">근거</h2>
+      <p class="src">
+        이 페이지는 수업 교재 『메타데이터의 이해와 적용』(이미화 등) 2장의 흐름을 따라 쉬운 말로 다시 쓴 요약입니다. 교재의 그림과 표를 옮긴 것이 아니므로 자세한 내용은 교재를 읽어 주세요. 비유와 ‘수업용’, ‘가상’으로 표시한 예시는 강의를 위해 만든 것입니다.<br>
+        함께 확인한 자료: <a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/" target="_blank" rel="noopener">DCMI Metadata Terms (2020-01-20판)</a>, <a href="https://lod.nl.go.kr/page/KAC199601201" target="_blank" rel="noopener">국립중앙도서관 LOD KAC199601201</a>, <a href="https://www.getty.edu/vow/ULANFullDisplay?find=&place=&nation=&logic=&note=&role=&subjectid=500002921" target="_blank" rel="noopener">Getty ULAN 500002921</a>, <a href="https://www.getty.edu/vow/AATFullDisplay?find=&place=&nation=&logic=&note=&role=&subjectid=300025136" target="_blank" rel="noopener">Getty AAT 300025136</a> (2026-11-05~06 확인).
+      </p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="materials/metadata-2026-2/vocabulary/vocab.js"></script>
+</body>
+</html>

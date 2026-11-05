@@ -63,6 +63,12 @@
           "note": "두 주(3강 ①·②) 도서관 DB 구조 보기(ERD) · 브라우저 SQL 실습실(설치 없음, 26문제)"
         },
         {
+          "no": "교재 2장",
+          "title": "메타데이터 어휘: 이론과 실습",
+          "url": "materials/metadata-2026-2/vocabulary/",
+          "note": "이론 5부 요약과 확인 문제 · 브라우저 실습 6개(설치 없음): 더블린 코어, 덤 다운, RDF 그래프, 네임스페이스, 내 요소세트"
+        },
+        {
           "no": "참고",
           "title": "유로피아나, DPLA, 메타데이터 레지스트리",
           "url": "materials/metadata-2026-2/aggregators-registry/",

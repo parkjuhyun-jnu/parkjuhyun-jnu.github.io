@@ -1,0 +1,119 @@
+/* 메타데이터 어휘(교재 2장) 이론·실습 공통 스타일. 색은 사이트 토큰만 쓴다(다크 모드 자동) */
+.prose { max-width: 68ch; font-size: .98rem; line-height: 1.8; color: var(--ink-soft); }
+.prose b { color: var(--ink); }
+.answer { background: var(--gold-wash); border-radius: var(--radius-sm); padding: .9rem 1.1rem; max-width: 68ch; font-size: 1.03rem; line-height: 1.8; margin: 1rem 0; }
+h2.part { font-size: 1.45rem; margin: 3rem 0 .5rem; font-family: var(--font-serif); scroll-margin-top: 90px; }
+h3.sub { font-size: 1.05rem; margin: 1.6rem 0 .35rem; scroll-margin-top: 90px; }
+code, .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, "D2Coding", monospace; font-size: .9em; overflow-wrap: anywhere; }
+.wrapt { overflow-x: auto; margin: .7rem 0; }
+table.cmp { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: .9rem; line-height: 1.6; }
+table.cmp th, table.cmp td { border: 1px solid var(--line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
+table.cmp thead th { background: var(--line-soft); }
+table.cmp tbody th { font-weight: 600; background: var(--surface); }
+table.cmp .ctr { text-align: center; }
+pre.code { margin: .7rem 0; padding: .8rem .95rem; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); font-family: ui-monospace, "Cascadia Mono", Consolas, "D2Coding", monospace; font-size: .86rem; line-height: 1.6; overflow-x: auto; white-space: pre; color: var(--ink); max-width: 56rem; tab-size: 2; }
+.src { font-size: .85rem; line-height: 1.75; color: var(--ink-faint); max-width: 74ch; }
+.toc { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+.toc a { display: inline-block; font-size: .9rem; padding: .28rem .8rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.toc a:hover { background: var(--navy-wash); text-decoration: none; }
+.toc a[aria-current="true"] { background: var(--navy); border-color: var(--navy); color: var(--paper); }
+.steps-map { display: grid; gap: .5rem; grid-template-columns: repeat(auto-fit, minmax(9.2rem, 1fr)); align-items: end; margin: 1.2rem 0; max-width: 56rem; }
+.steps-map a { display: block; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); padding: .6rem .75rem; font-size: .84rem; line-height: 1.5; color: var(--ink-soft); }
+.steps-map a:hover { background: var(--navy-wash); text-decoration: none; }
+.steps-map b { display: block; font-size: 1rem; color: var(--navy); }
+.two { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); max-width: 56rem; margin: .7rem 0; }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .75rem .9rem; font-size: .92rem; line-height: 1.65; min-width: 0; }
+.box h4 { margin: 0 0 .25rem; font-size: .98rem; color: var(--navy); }
+.box p { margin: 0; }
+
+/* 확인 문제 */
+.q { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .75rem .9rem; margin: .7rem 0; max-width: 50rem; }
+.q .ask { margin: 0; font-size: .96rem; line-height: 1.65; }
+.q .ask::before { content: "확인 "; font-size: .78rem; font-weight: 700; color: var(--gold); }
+.q .opts { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+.q button { font: inherit; font-size: .88rem; padding: .25rem .75rem; min-height: 2rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.q button:hover:not(:disabled), .q button:focus-visible { border-color: var(--navy); background: var(--navy-wash); outline: none; }
+.q button.right { background: var(--ok); border-color: var(--ok); color: var(--paper); }
+.q button.wrong { border-color: var(--danger); color: var(--danger); }
+.q .say { font-size: .9rem; line-height: 1.6; margin: .45rem 0 0; color: var(--ink-soft); }
+.q .say:empty { display: none; }
+
+/* 실습 */
+.lab { max-width: 60rem; }
+.lab-intro { color: var(--ink-soft); max-width: 66ch; line-height: 1.75; margin: .4rem 0 1rem; }
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.2rem; box-shadow: var(--shadow); margin: .9rem 0; min-width: 0; }
+.stage h3 { margin: 0 0 .5rem; font-size: 1.05rem; }
+.tally { font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.say { min-height: 1.5rem; margin: .6rem 0 0; font-size: .93rem; line-height: 1.65; }
+.say.ok { color: var(--ok); font-weight: 600; }
+.say.no { color: var(--danger); }
+.card-q { font-size: 1.08rem; line-height: 1.6; margin: .2rem 0 .8rem; }
+.choice { display: flex; flex-wrap: wrap; gap: .45rem; }
+.choice button { font: inherit; font-size: .93rem; padding: .45rem .95rem; min-height: 2.5rem; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); cursor: pointer; }
+.choice button:hover:not(:disabled), .choice button:focus-visible { border-color: var(--navy); background: var(--navy-wash); outline: none; }
+.choice button.right { background: var(--ok); border-color: var(--ok); color: var(--paper); }
+.choice button.wrong { border-color: var(--danger); color: var(--danger); }
+.pips { display: flex; gap: .25rem; margin-bottom: .8rem; }
+.pips i { flex: 1; height: .45rem; border-radius: 999px; background: var(--line); }
+.pips i.now { background: var(--gold); }
+.pips i.ok { background: var(--ok); }
+.pips i.miss { background: var(--danger); }
+.field-row { display: grid; gap: .5rem .7rem; grid-template-columns: minmax(10rem, 1fr) minmax(11rem, 1fr) minmax(0, 1.4fr); align-items: center; padding: .45rem 0; border-bottom: 1px solid var(--line-soft); }
+.field-row:last-child { border-bottom: 0; }
+.field-row .val { font-weight: 600; }
+.field-row .msg { font-size: .85rem; line-height: 1.5; color: var(--ink-soft); }
+.field-row .msg.ok { color: var(--ok); font-weight: 600; }
+.field-row .msg.no { color: var(--danger); }
+.lab select, .lab input[type="text"], .lab textarea { font: inherit; font-size: .92rem; width: 100%; min-width: 0; min-height: 2.4rem; padding: .35rem .5rem; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); color: var(--ink); box-sizing: border-box; }
+.lab select:focus-visible, .lab input:focus-visible, .lab textarea:focus-visible { outline: 2px solid var(--navy); outline-offset: 1px; }
+.lab textarea { font-family: ui-monospace, "Cascadia Mono", Consolas, "D2Coding", monospace; font-size: .85rem; line-height: 1.55; white-space: pre; overflow: auto; }
+.lab label.lbl { display: block; font-size: .82rem; font-weight: 600; color: var(--ink-soft); margin-bottom: .15rem; }
+.btn-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.seg button { font: inherit; font-size: .88rem; padding: .35rem .9rem; border: 0; background: var(--surface); color: var(--ink); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--navy); color: var(--paper); }
+.read-list { list-style: none; margin: .7rem 0 0; padding: 0; }
+.read-list li { padding: .35rem 0; border-bottom: 1px solid var(--line-soft); font-size: .95rem; }
+.read-list b { display: inline-block; min-width: 6.2rem; color: var(--navy); }
+
+/* 트리플 표 */
+.triple-row { display: grid; gap: .35rem .5rem; grid-template-columns: 1fr 1fr 1fr 2.2rem; align-items: end; padding: .55rem 0; border-bottom: 1px solid var(--line-soft); }
+.triple-row .cell { min-width: 0; display: grid; gap: .25rem; }
+.triple-row .x { font: inherit; width: 2.2rem; height: 2.4rem; border: 1px solid var(--line); border-radius: 7px; background: transparent; color: var(--ink-soft); cursor: pointer; }
+.triple-msg { grid-column: 1 / -1; font-size: .85rem; color: var(--danger); line-height: 1.5; }
+.triple-msg:empty { display: none; }
+.graph { width: 100%; height: auto; display: block; border: 1px solid var(--line-soft); border-radius: var(--radius-sm); background: var(--paper); margin-top: .7rem; }
+/* 좁은 화면에서는 글자가 읽힐 크기를 지키고 그림만 옆으로 밀어 본다 */
+#g { overflow-x: auto; }
+#g .graph { min-width: 640px; }
+.graph .edge { stroke: var(--ink-faint); stroke-width: 1.4; fill: none; }
+.graph .edge-label { font-size: 11.5px; fill: var(--ink-soft); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; }
+.graph .res { fill: var(--navy-wash); stroke: var(--navy); stroke-width: 1.4; }
+.graph .lit { fill: var(--gold-wash); stroke: var(--gold); stroke-width: 1.4; }
+.graph .blank { fill: var(--paper); stroke: var(--ink-faint); stroke-width: 1.4; stroke-dasharray: 4 3; }
+.graph .node-label { font-size: 12px; fill: var(--ink); }
+.graph .arrow { fill: var(--ink-faint); }
+.legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font-size: .82rem; color: var(--ink-soft); margin-top: .4rem; }
+.legend i { display: inline-block; width: 1.1rem; height: .75rem; margin-right: .3rem; vertical-align: -1px; border: 1.4px solid var(--navy); background: var(--navy-wash); border-radius: 50%; }
+.legend i.l { border-color: var(--gold); background: var(--gold-wash); border-radius: 2px; }
+.legend i.b { border: 1.4px dashed var(--ink-faint); background: transparent; border-radius: 50%; }
+
+/* 요소세트 만들기 */
+.el { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .7rem .8rem; margin-top: .7rem; background: var(--paper); }
+.el-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-bottom: .4rem; font-weight: 700; color: var(--navy); }
+.el-grid { display: grid; gap: .5rem .7rem; grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr)); }
+.el-grid .wide { grid-column: 1 / -1; }
+.el .warn { grid-column: 1 / -1; font-size: .85rem; color: var(--danger); margin: 0; }
+.el .warn:empty { display: none; }
+.checks { list-style: none; margin: 0; padding: 0; font-size: .92rem; }
+.checks li { padding: .28rem 0 .28rem 1.6rem; position: relative; line-height: 1.55; color: var(--ink-soft); }
+.checks li::before { content: "○"; position: absolute; left: .1rem; color: var(--ink-faint); }
+.checks li.done { color: var(--ink); }
+.checks li.done::before { content: "●"; color: var(--ok); }
+@media (max-width: 640px) {
+  .field-row { grid-template-columns: 1fr; }
+  .triple-row { grid-template-columns: 1fr 2.2rem; }
+  .triple-row .cell { grid-column: 1; }
+  .triple-row .x { grid-column: 2; grid-row: 1; }
+  .triple-msg { grid-column: 1 / -1; }
+}

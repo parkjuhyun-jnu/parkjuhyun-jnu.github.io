@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>메타데이터 어휘 이론과 실습 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 수업 자료. 교재 2장 메타데이터 어휘의 이론 정리와 브라우저에서 바로 하는 실습 6개.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="materials/metadata-2026-2/vocabulary/vocab.css">
+<style>
+  .weeks .w-body { flex: 1; min-width: 0; }
+  .weeks .w-meta { flex: none; font-size: .84rem; color: var(--ink-faint); text-align: right; }
+  .why { margin: .35rem 0 .45rem; font-size: .9rem; line-height: 1.65; color: var(--ink-soft); max-width: 66ch; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="course.html?id=metadata-2026-2">← 메타데이터와아카이빙연구</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 수업 자료 · 교재 2장</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">메타데이터 어휘: 이론과 실습</h1>
+      <p style="max-width:60ch; font-size:1.05rem; color:var(--ink-soft)">
+        자료를 설명하는 칸과 낱말을 어떻게 정하고 나눠 쓰는지 배웁니다. 메타데이터를 처음 접하는 분도 따라올 수 있게 쉬운 말과 예시로 풀었습니다. 브라우저만 있으면 되고, 설치와 가입은 필요 없습니다.
+      </p>
+      <div class="row" style="margin-top:1.4rem">
+        <a class="btn" href="materials/metadata-2026-2/vocabulary/theory.html">이론 읽기</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/vocabulary/lab.html">실습 시작</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>이론</h2>
+        <p>칸 하나에서 웹까지 다섯 단계로 올라갑니다. 중간중간 확인 문제가 있습니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">1</span><div class="w-body"><a href="materials/metadata-2026-2/vocabulary/theory.html#p1">메타데이터 요소</a>
+          <p class="why">칸 이름과 칸 내용, 1:1 원칙, 값을 고르게 적는 세 도구(내용규칙·어휘 인코딩스킴·구문 인코딩스킴)</p></div><span class="w-meta">교재 52~56쪽</span></li>
+        <li><span class="w-no">2</span><div class="w-body"><a href="materials/metadata-2026-2/vocabulary/theory.html#p2">메타데이터 요소세트</a>
+          <p class="why">칸을 모은 양식, 요소를 정의하는 다섯 항목, 요소명 짓는 법, 상호운용성과 버전</p></div><span class="w-meta">교재 57~59쪽</span></li>
+        <li><span class="w-no">3</span><div class="w-body"><a href="materials/metadata-2026-2/vocabulary/theory.html#p3">요소의 구조</a>
+          <p class="why">평면과 중첩, 더블린 코어 15개 요소, 상세구분과 덤 다운, Simple·Qualified DC, VRA Core</p></div><span class="w-meta">교재 59~68쪽</span></li>
+        <li><span class="w-no">4</span><div class="w-body"><a href="materials/metadata-2026-2/vocabulary/theory.html#p4">RDF</a>
+          <p class="why">트리플, IRI·리터럴·공백노드, 그래프, RDF/XML 읽기</p></div><span class="w-meta">교재 68~74쪽</span></li>
+        <li><span class="w-no">5</span><div class="w-body"><a href="materials/metadata-2026-2/vocabulary/theory.html#p5">DC terms</a>
+          <p class="why">네임스페이스, URI와 QName, 도메인과 범주, 실제 명세 읽기, 글자값과 주소값</p></div><span class="w-meta">교재 74~83쪽</span></li>
+      </ul>
+
+      <div class="section-head" style="margin-top:2.6rem">
+        <h2>실습</h2>
+        <p>순서대로 해도 되고 필요한 것만 골라도 됩니다. 입력한 내용은 내 브라우저 밖으로 나가지 않습니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">실습 1</span><div class="w-body">세 도구 가려내기
+          <p class="why">문장 10개를 읽고 내용규칙, 어휘 인코딩스킴, 구문 인코딩스킴 가운데 어느 것인지 고릅니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#1">시작</a></div><span class="w-meta">5분</span></li>
+        <li><span class="w-no">실습 2</span><div class="w-body">『어린 왕자』로 15개 요소 채우기
+          <p class="why">값 12개를 알맞은 칸에 넣으면 더블린 코어 XML이 만들어집니다. creator와 contributor 같은 헷갈리는 쌍을 가려냅니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#2">시작</a></div><span class="w-meta">10분</span></li>
+        <li><span class="w-no">실습 3</span><div class="w-body">덤 다운 시험하기
+          <p class="why">상세구분을 모르는 프로그램이 값을 어떻게 읽는지 보고, 원칙을 어긴 상세구분을 찾습니다. Simple DC를 Qualified DC로 바꿉니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#3">시작</a></div><span class="w-meta">10분</span></li>
+        <li><span class="w-no">실습 4</span><div class="w-body">문장을 트리플로 쪼개 그래프 그리기
+          <p class="why">문장을 주어·술어·목적어로 나누면 그래프가 바로 그려집니다. 리터럴이 주어 자리에 오면 잘못을 알려 줍니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#4">시작</a></div><span class="w-meta">10분</span></li>
+        <li><span class="w-no">실습 5</span><div class="w-body">네임스페이스 고치기
+          <p class="why">QName과 전체 URI를 서로 바꿔 보고, 접두어 선언이 빠진 XML을 직접 고칩니다. 값을 글자로 적을지 주소로 적을지 판단합니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#5">시작</a></div><span class="w-meta">10분</span></li>
+        <li><span class="w-no">실습 6</span><div class="w-body">내 디지털 객체의 요소세트 만들기
+          <p class="why">교재 연습문제를 한 흐름으로 묶었습니다. 사진이나 영상 하나를 골라 요소 5개를 정의하면 표와 XML이 만들어지고 파일로 받을 수 있습니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/vocabulary/lab.html#6">시작</a></div><span class="w-meta">15분</span></li>
+      </ul>
+      <p class="src" style="margin-top:1.4rem">교재: 『메타데이터의 이해와 적용』(이미화 등) 2장 ‘메타데이터 어휘’. 관련 참고: <a href="materials/metadata-2026-2/uri-url/">URI와 URL, 무엇이 다른가요?</a></p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>
