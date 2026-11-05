@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../">
+<title>메타데이터와아카이빙연구 수업 자료 | 박주현</title>
+<meta name="description" content="2026학년도 2학기 메타데이터와아카이빙연구 수업 자료 전체: 교재 1장·2장 이론과 실습, XML·JSON 실습, 데이터베이스와 SQL 실습실, 참고 페이지를 배우는 순서와 연결 관계로 정리.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .weeks .w-body { flex: 1; min-width: 0; }
+  .weeks .w-meta { flex: none; font-size: .84rem; color: var(--ink-faint); text-align: right; }
+  .weeks .w-no { width: 4.6rem; }
+  .why { margin: .35rem 0 .45rem; font-size: .9rem; line-height: 1.65; color: var(--ink-soft); max-width: 66ch; }
+  .links { display: flex; flex-wrap: wrap; gap: .35rem .5rem; margin-top: .3rem; }
+  .links a { font-size: .86rem; padding: .12rem .6rem; border: 1px solid var(--line); border-radius: 999px; white-space: nowrap; }
+  .grid3 { display: grid; gap: .9rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); max-width: 60rem; }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; box-shadow: var(--shadow); min-width: 0; }
+  .tile h3 { margin: 0 0 .35rem; font-size: 1.05rem; font-family: var(--font-serif); }
+  .tile p { margin: 0 0 .5rem; font-size: .92rem; line-height: 1.65; color: var(--ink-soft); }
+  .tile .eyebrow { font-size: .76rem; margin-bottom: .3rem; }
+  .thread { list-style: none; margin: .6rem 0 0; padding: 0; max-width: 66ch; }
+  .thread li { padding: .5rem 0; border-bottom: 1px solid var(--line-soft); font-size: .93rem; line-height: 1.65; }
+  .thread b { color: var(--navy); }
+  .src { font-size: .85rem; line-height: 1.75; color: var(--ink-faint); max-width: 74ch; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="course.html?id=metadata-2026-2">← 메타데이터와아카이빙연구 과목 안내</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 대학원 · 목 19:30–22:15 · 사회과학대학 328호</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">수업 자료 한눈에</h1>
+      <p style="max-width:60ch; font-size:1.05rem; color:var(--ink-soft)">
+        이 학기에 만든 수업 자료를 한자리에 모았습니다. 교재로 배우는 <b>이론</b> 두 묶음, 손으로 익히는 <b>실습</b> 두 묶음, 그리고 <b>참고</b> 페이지 둘입니다. 모두 브라우저에서 바로 쓰고, 설치와 가입은 필요 없습니다. 실습에서 입력한 내용은 내 브라우저 밖으로 나가지 않습니다.
+      </p>
+      <div class="row" style="margin-top:1.4rem">
+        <a class="btn" href="materials/metadata-2026-2/overview/">교재 1장부터 시작</a>
+        <a class="btn btn--ghost" href="upload.html?course=metadata-2026-2">결과물 올리기</a>
+        <a class="btn btn--ghost" href="gallery.html?course=metadata-2026-2">결과물 갤러리</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>한눈에 보기</h2>
+        <p>묶음 여섯 개. 이론은 교재 장 순서, 실습 묶음은 2강 → 3강 순서입니다.</p>
+      </div>
+      <div class="grid3">
+        <div class="tile"><p class="eyebrow">이론 · 교재 1장</p><h3><a href="materials/metadata-2026-2/overview/">메타데이터 개요</a></h3><p>정의, 서술문, 중요성, 역사, 기능과 유형, 표준, 개념모델, 구성 원칙, 서비스 사례, 레지스트리.</p><p class="small muted">이론 10부 · 실습 7개 · 슬라이드 PDF 79장</p></div>
+        <div class="tile"><p class="eyebrow">이론 · 교재 2장</p><h3><a href="materials/metadata-2026-2/vocabulary/">메타데이터 어휘</a></h3><p>요소와 요소세트, 더블린 코어, 덤 다운, RDF, DC terms.</p><p class="small muted">이론 5부 · 실습 6개</p></div>
+        <div class="tile"><p class="eyebrow">실습 · 2강 ①②</p><h3><a href="materials/metadata-2026-2/xml-json/">XML과 JSON</a></h3><p>그릇(XML·JSON 읽고 쓰기)에서 API·링크드 데이터·SPARQL·LRM까지.</p><p class="small muted">두 주 · 실습 6개 + 오류 찾기 게임 · 안내서 PDF</p></div>
+        <div class="tile"><p class="eyebrow">실습 · 3강 ①②</p><h3><a href="materials/metadata-2026-2/sql-db/">데이터베이스와 SQL</a></h3><p>작은 도서관 DB의 구조(ERD)를 읽고 브라우저 SQL 실습실에서 질의.</p><p class="small muted">두 주 · 실습 5개(26문제) · 슬라이드 PDF 2편</p></div>
+        <div class="tile"><p class="eyebrow">참고</p><h3><a href="materials/metadata-2026-2/uri-url/">URI와 URL, 무엇이 다른가요?</a></h3><p>도서관 비유와 실제 예시, 확인 문제.</p></div>
+        <div class="tile"><p class="eyebrow">참고</p><h3><a href="materials/metadata-2026-2/aggregators-registry/">유로피아나, DPLA, 메타데이터 레지스트리</a></h3><p>두 집계 서비스의 데이터 모델과 바로가기, 레지스트리란 무엇인가.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>교재로 배우는 이론</h2>
+        <p>『메타데이터의 이해와 적용』(이미화 등)을 쉬운 말로 다시 쓴 요약과 확인 문제, 그리고 장마다 브라우저 실습입니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">교재 1장</span><div class="w-body"><a href="materials/metadata-2026-2/overview/">메타데이터 개요: 이론과 실습</a>
+          <p class="why">메타데이터가 무엇이고 왜 필요한지부터 표준·개념모델·구성 원칙, 실제 서비스(Europeana·DSpace@MIT)와 레지스트리까지. 관통 사례는 『어린 왕자』.</p>
+          <span class="links"><a href="materials/metadata-2026-2/overview/theory.html">이론 10부</a><a href="materials/metadata-2026-2/overview/lab.html">실습 7개</a><a href="materials/metadata-2026-2/overview/metadata-overview-slides-20261010.pdf" target="_blank" rel="noopener">슬라이드 PDF</a></span></div><span class="w-meta">교재 2~47쪽</span></li>
+        <li><span class="w-no">교재 2장</span><div class="w-body"><a href="materials/metadata-2026-2/vocabulary/">메타데이터 어휘: 이론과 실습</a>
+          <p class="why">칸 하나(요소)에서 양식(요소세트), 더블린 코어와 덤 다운, RDF 트리플, DC terms와 네임스페이스까지 다섯 단계.</p>
+          <span class="links"><a href="materials/metadata-2026-2/vocabulary/theory.html">이론 5부</a><a href="materials/metadata-2026-2/vocabulary/lab.html">실습 6개</a></span></div><span class="w-meta">교재 52~85쪽</span></li>
+      </ul>
+
+      <div class="section-head" style="margin-top:2.6rem">
+        <h2>손으로 익히는 실습 묶음</h2>
+        <p>각 묶음은 두 주로 나뉩니다. 모두 브라우저에서 바로 하며, 2강 ②와 3강은 인터넷이 필요합니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">2강 ①</span><div class="w-body"><a href="materials/metadata-2026-2/xml-json/">그릇: XML과 JSON 읽고 쓰기</a>
+          <p class="why">book.xml·book.json을 직접 쓰고, 일부러 틀린 파일 9개를 고치고, 오류 찾기 게임으로 마무리합니다.</p>
+          <span class="links"><a href="materials/metadata-2026-2/xml-json/fix.html#x">실습 1 XML</a><a href="materials/metadata-2026-2/xml-json/fix.html#j">실습 2 JSON</a><a href="materials/metadata-2026-2/xml-json/quiz.html">오류 찾기 게임</a><a href="materials/metadata-2026-2/xml-json/xml-json-guide-20261031.pdf" target="_blank" rel="noopener">안내서 PDF</a></span></div><span class="w-meta">약 40분 · 실습 2개</span></li>
+        <li><span class="w-no">2강 ②</span><div class="w-body"><a href="materials/metadata-2026-2/xml-json/">가져오고 잇기: API에서 LRM까지</a>
+          <p class="why">API 주소를 바꿔 자료를 받아 구조를 읽고, 국립중앙도서관 LOD → Wikidata로 링크를 따라가며, SPARQL로 묻고, 『어린 왕자』를 LRM 네 층으로 나눕니다.</p>
+          <span class="links"><a href="materials/metadata-2026-2/xml-json/files/실습3-5_링크모음.html#p3" target="_blank" rel="noopener">실습 3 API</a><a href="materials/metadata-2026-2/xml-json/files/실습3-5_링크모음.html#p4" target="_blank" rel="noopener">실습 4 링크드 데이터</a><a href="materials/metadata-2026-2/xml-json/sparql.html">실습 5 SPARQL</a><a href="materials/metadata-2026-2/xml-json/lrm.html">실습 6 LRM</a></span></div><span class="w-meta">약 40분 · 실습 4개 · 인터넷</span></li>
+        <li><span class="w-no">3강 ①</span><div class="w-body"><a href="materials/metadata-2026-2/sql-db/">구조: 관계형 DB 읽기와 한 테이블 질의</a>
+          <p class="why">테이블·행·열, 기본 키와 외래 키, ERD를 읽고 SELECT 8문제로 한 테이블에 묻습니다.</p>
+          <span class="links"><a href="materials/metadata-2026-2/sql-db/structure.html">DB 구조 보기</a><a href="materials/metadata-2026-2/sql-db/lab.html#1-1">실습실 1-1부터</a><a href="materials/metadata-2026-2/sql-db/db-sql-week1-slides-20261031.pdf" target="_blank" rel="noopener">슬라이드 PDF</a></span></div><span class="w-meta">약 55분 · 실습 2개 · 인터넷</span></li>
+        <li><span class="w-no">3강 ②</span><div class="w-body"><a href="materials/metadata-2026-2/sql-db/">잇기: JOIN·집계·데이터 바꾸기</a>
+          <p class="why">여러 테이블을 잇고, 묶어 세고, 넣고·고치고·지운 뒤, DB 설계를 LRM·메타데이터 관점으로 다시 봅니다.</p>
+          <span class="links"><a href="materials/metadata-2026-2/sql-db/lab.html#2-1">실습실 2-1부터</a><a href="materials/metadata-2026-2/sql-db/db-sql-week2-slides-20261031.pdf" target="_blank" rel="noopener">슬라이드 PDF</a></span></div><span class="w-meta">약 70분 · 실습 3개 · 인터넷</span></li>
+      </ul>
+
+      <div class="section-head" style="margin-top:2.6rem">
+        <h2>참고 페이지</h2>
+        <p>수업 중 자주 나오는 질문을 따로 정리했습니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">참고</span><div class="w-body"><a href="materials/metadata-2026-2/uri-url/">URI와 URL, 무엇이 다른가요?</a>
+          <p class="why">개념과 차이를 도서관 비유와 실제 예시로 설명합니다. 확인 문제가 있습니다. 1장 2부·9부, 2장 5부, XML 2주차와 이어집니다.</p></div><span class="w-meta">10분</span></li>
+        <li><span class="w-no">참고</span><div class="w-body"><a href="materials/metadata-2026-2/aggregators-registry/">유로피아나, DPLA, 메타데이터 레지스트리</a>
+          <p class="why">두 집계 서비스의 설명과 바로가기, 원본과 디지털본을 나누는 데이터 모델, 레지스트리란 무엇인가. 1장 4부·9부·10부와 이어집니다.</p></div><span class="w-meta">15분</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>자료 사이의 연결</h2>
+        <p>같은 개념이 여러 자료에서 단계적으로 깊어집니다. 관통 사례는 『어린 왕자』입니다.</p>
+      </div>
+      <ul class="thread">
+        <li><b>트리플</b> 1장 2부(레코드에서 서술문으로) → 2장 4부(RDF) → XML 2강 ② 실습 5(SPARQL로 국립중앙도서관 데이터에 묻기)</li>
+        <li><b>요소와 표준</b> 1장 1부(요소세트·스키마·온톨로지)·6부(네 유형의 표준) → 2장 1~3부(요소·요소세트·더블린 코어)·5부(DC terms와 네임스페이스)</li>
+        <li><b>LRM</b> 1장 7부(저작·표현형·구현형·개별자료, 이용자 과업) → XML 2강 ② 실습 6(『어린 왕자』 네 층 나누기) → SQL 3강 ② 생각 2(book 세 행을 LRM으로 읽기)</li>
+        <li><b>통제된 값</b> 1장 5부(패싯)·6부(값표준)·9부(Europeana 필터) → 2장 1부(세 도구: 내용규칙·어휘 인코딩스킴·구문 인코딩스킴)</li>
+        <li><b>URI</b> 1장 4부(링크를 위한 URI)·9부(RDF로 쓴 『레미제라블』) → 참고 ‘URI와 URL’ → 2장 5부(URI와 QName) → XML 2강 ② 실습 4(링크드 데이터 따라가기)</li>
+        <li><b>집계와 레지스트리</b> 1장 4부·9부·10부 → 참고 ‘유로피아나, DPLA, 메타데이터 레지스트리’</li>
+        <li><b>『어린 왕자』</b> 1장(트리플·DCMES 15개 요소·LRM·목록 사례) → 2장 실습 2(15개 요소 채우기) → XML 실습 4·6(국립중앙도서관 LOD·LRM) → SQL(book 테이블의 세 판)</li>
+      </ul>
+      <p class="src" style="margin-top:1.4rem">자료는 교재 『메타데이터의 이해와 적용』(이미화 등)의 1·2장과 수업 슬라이드를 바탕으로 만들었습니다. 비유와 ‘수업용’, ‘가상’으로 표시한 예시는 강의를 위해 만든 것입니다. 수업 일정과 과제는 수업 시간에 안내합니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>

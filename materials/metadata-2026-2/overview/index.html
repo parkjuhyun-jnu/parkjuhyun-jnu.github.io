@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>메타데이터 개요 이론과 실습 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 수업 자료. 교재 1장 메타데이터 개요의 이론 정리(10부)와 브라우저에서 바로 하는 실습 7개, 강의 슬라이드 PDF.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="materials/metadata-2026-2/overview/overview.css">
+<style>
+  .weeks .w-body { flex: 1; min-width: 0; }
+  .weeks .w-meta { flex: none; font-size: .84rem; color: var(--ink-faint); text-align: right; }
+  .why { margin: .35rem 0 .45rem; font-size: .9rem; line-height: 1.65; color: var(--ink-soft); max-width: 66ch; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="course.html?id=metadata-2026-2">← 메타데이터와아카이빙연구</a> · <a href="materials/metadata-2026-2/">수업 자료 한눈에</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 수업 자료 · 교재 1장</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">메타데이터 개요: 이론과 실습</h1>
+      <p style="max-width:60ch; font-size:1.05rem; color:var(--ink-soft)">
+        메타데이터가 무엇이고 왜 필요한지, 어떤 표준과 모델로 만들며 실제 서비스에서 어떻게 쓰이는지 배웁니다. 이 분야를 처음 접하는 분을 기준으로 쉬운 말과 일상 사례로 풀었습니다. 브라우저만 있으면 되고, 설치와 가입은 필요 없습니다.
+      </p>
+      <div class="row" style="margin-top:1.4rem">
+        <a class="btn" href="materials/metadata-2026-2/overview/theory.html">이론 읽기</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/overview/lab.html">실습 시작</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/overview/metadata-overview-slides-20261010.pdf" target="_blank" rel="noopener">강의 슬라이드 (PDF, 79장)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>이론</h2>
+        <p>교재 1장(2~47쪽)을 강의 순서에 따라 열 부로 묶었습니다. 중간중간 확인 문제가 있습니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">1</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p1">개념 다지기</a>
+          <p class="why">데이터에 대한 데이터, 구조화(속성-값), 요소세트·스키마·온톨로지의 차이</p></div><span class="w-meta">교재 1.1~1.2.1 · 2~8쪽</span></li>
+        <li><span class="w-no">2</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p2">레코드에서 서술문으로</a>
+          <p class="why">MARC 레코드의 한계, 서술문·기술·기술세트, 주어–술어–목적어 트리플</p></div><span class="w-meta">교재 1.2.2 · 8~9쪽</span></li>
+        <li><span class="w-no">3</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p3">메타데이터의 중요성</a>
+          <p class="why">비용을 들이는 아홉 가지 이유, 혼동하기 쉬운 다섯 가지</p></div><span class="w-meta">교재 1.2.3 · 10~12쪽</span></li>
+        <li><span class="w-no">4</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p4">메타데이터의 역사</a>
+          <p class="why">Metadata 1.0~4.0, 1990년대 더블린 코어, 시맨틱웹 표준(RDF·OWL·SKOS·FOAF·Schema.org)</p></div><span class="w-meta">교재 1.3 · 13~16쪽</span></li>
+        <li><span class="w-no">5</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p5">메타데이터의 기능과 유형</a>
+          <p class="why">가장 중요한 기능은 검색, 패싯과 하베스팅, NISO의 네 유형과 학자별 구분, 메타-메타데이터</p></div><span class="w-meta">교재 1.4 · 16~26쪽</span></li>
+        <li><span class="w-no">6</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p6">메타데이터 표준</a>
+          <p class="why">구조·내용·값·교환표준을 이력서 양식에 빗대어, 도서관의 KCR4와 KORMARC</p></div><span class="w-meta">교재 1.5 · 26~31쪽</span></li>
+        <li><span class="w-no">7</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p7">메타데이터 개념모델</a>
+          <p class="why">E-R 모델, 온톨로지 모델링, LRM의 저작·표현형·구현형·개별자료와 이용자 과업 다섯 가지</p></div><span class="w-meta">교재 1.6 · 32~35쪽</span></li>
+        <li><span class="w-no">8</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p8">메타데이터 구성 원칙</a>
+          <p class="why">간결성, 모듈화·확장성·구체화·다중언어·상호운용성, FAIR 원칙</p></div><span class="w-meta">교재 1.7 · 36~37쪽</span></li>
+        <li><span class="w-no">9</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p9">메타데이터 서비스 사례</a>
+          <p class="why">프론트엔드와 백엔드, Europeana의 필드 검색·필터·EDM, DSpace@MIT의 DC 응용프로파일</p></div><span class="w-meta">교재 1.8 · 38~43쪽</span></li>
+        <li><span class="w-no">10</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#p10">메타데이터 레지스트리</a>
+          <p class="why">요소의 카탈로그, LOV·Open Metadata Registry·RDA 레지스트리</p></div><span class="w-meta">교재 1.9 · 43~46쪽</span></li>
+        <li><span class="w-no">정리</span><div class="w-body"><a href="materials/metadata-2026-2/overview/theory.html#summary">한눈에 정리와 연습문제 요지</a>
+          <p class="why">열 부 한 줄 요약, 교재 47쪽 연습문제 일곱 개의 요지와 관련 부, 용어 한 장</p></div><span class="w-meta">교재 47쪽</span></li>
+      </ul>
+
+      <div class="section-head" style="margin-top:2.6rem">
+        <h2>실습</h2>
+        <p>순서대로 해도 되고 필요한 것만 골라도 됩니다. 입력한 내용은 내 브라우저 밖으로 나가지 않습니다.</p>
+      </div>
+      <ul class="weeks">
+        <li><span class="w-no">실습 1</span><div class="w-body">데이터인가, 메타데이터인가
+          <p class="why">스마트폰 사진·책·음악에서 자원 자체와 자원에 대한 정보를 가려내고, 기기가 자동으로 적은 것과 사람이 붙인 것을 나눕니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#1">시작</a></div><span class="w-meta">5분</span></li>
+        <li><span class="w-no">실습 2</span><div class="w-body">레코드를 트리플로 풀기
+          <p class="why">『어린 왕자』 레코드 한 건을 주어–술어–목적어 네 개로 쪼갭니다. 저자를 글자가 아니라 다른 자원으로 두면 무엇이 좋아지는지 봅니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#2">시작</a></div><span class="w-meta">7분</span></li>
+        <li><span class="w-no">실습 3</span><div class="w-body">유형 가려내기
+          <p class="why">전자책 한 권에 붙는 메타데이터를 NISO의 기술·테크니컬·보존·저작권·구조·마크업으로 나누고, 학자별 구분의 차이를 확인합니다(연습문제 3번 예습).</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#3">시작</a></div><span class="w-meta">8분</span></li>
+        <li><span class="w-no">실습 4</span><div class="w-body">표준 네 유형 분류하기
+          <p class="why">표준 이름 15개와 규칙 문장 8개를 구조·내용·값·교환표준으로 분류합니다(연습문제 4번 예습).</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#4">시작</a></div><span class="w-meta">8분</span></li>
+        <li><span class="w-no">실습 5</span><div class="w-body">이용자 과업 다섯 가지
+          <p class="why">『어린 왕자』 번역본을 찾는 장면 10개를 LRM의 발견·식별·선정·획득·탐험에 맞춥니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#5">시작</a></div><span class="w-meta">5분</span></li>
+        <li><span class="w-no">실습 6</span><div class="w-body">FAIR 가려내기
+          <p class="why">연구데이터를 리포지토리에 올리는 행동 12개가 F·A·I·R 가운데 어디에 해당하는지 고릅니다.</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#6">시작</a></div><span class="w-meta">5분</span></li>
+        <li><span class="w-no">실습 7</span><div class="w-body">개념모델 그리기
+          <p class="why">가상 사례의 개체 세 개와 속성, 관계 두 개를 적으면 개체-관계 그림이 그려집니다. 글로 정리해 과제 초안으로 쓸 수 있습니다(연습문제 5번 준비).</p>
+          <a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#7">시작</a></div><span class="w-meta">10분</span></li>
+      </ul>
+      <p class="src" style="margin-top:1.4rem">교재: 『메타데이터의 이해와 적용』(이미화 등) 1장 ‘메타데이터 개요’. 이어지는 자료: <a href="materials/metadata-2026-2/vocabulary/">교재 2장 메타데이터 어휘</a>, <a href="materials/metadata-2026-2/xml-json/">XML과 JSON 실습</a>. 관련 참고: <a href="materials/metadata-2026-2/aggregators-registry/">유로피아나, DPLA, 메타데이터 레지스트리</a>, <a href="materials/metadata-2026-2/uri-url/">URI와 URL</a>.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>

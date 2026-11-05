@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>메타데이터 개요 이론 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 수업 자료. 교재 1장 메타데이터 개요(정의, 서술문, 중요성, 역사, 기능과 유형, 표준, 개념모델, 구성 원칙, 서비스 사례, 레지스트리)를 쉬운 말과 예시로 정리하고 확인 문제로 점검합니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="materials/metadata-2026-2/overview/overview.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="materials/metadata-2026-2/overview/">← 메타데이터 개요 이론과 실습</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 수업 자료 · 교재 1장</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">메타데이터 개요: 이론</h1>
+
+      <div class="answer"><b>메타데이터</b>는 ‘데이터에 대한 데이터’, 곧 어떤 자원을 설명하는 정보입니다. 스마트폰 사진이 데이터라면, 그 사진의 촬영일·위치·기기 정보가 메타데이터입니다. 사진 수만 장 가운데 ‘작년 여름 제주’를 바로 찾아 주는 것은 사진이 아니라 이 메타데이터입니다.</div>
+
+      <h3 class="sub">오늘의 지도: 열 부로 읽는 1장</h3>
+      <nav class="steps-map" aria-label="이론 차례">
+        <a href="materials/metadata-2026-2/overview/theory.html#p1"><b>1. 개념</b>데이터에 대한 데이터</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#p2"><b>2. 서술문</b>레코드에서 트리플로</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#p3"><b>3. 중요성</b>왜 돈을 들이나</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#p4"><b>4. 역사</b>점토판에서 위키데이터까지</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#p5"><b>5. 기능·유형</b>검색이 으뜸</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#p6"><b>6. 표준</b>구조·내용·값·교환</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#p7"><b>7. 개념모델</b>E-R·온톨로지·LRM</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#p8"><b>8. 구성 원칙</b>간결성과 FAIR</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#p9"><b>9. 서비스 사례</b>Europeana·DSpace@MIT</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#p10"><b>10. 레지스트리</b>요소의 카탈로그</a>
+        <a href="materials/metadata-2026-2/overview/theory.html#glossary"><b>용어 한 장</b>복습용</a>
+      </nav>
+      <p class="small muted">교재를 펼 때는 이 페이지의 부 번호가 아니라 각 부 제목 옆의 교재 절 번호(1.1~1.9)와 쪽을 보세요.</p>
+
+      <!-- 1부 -->
+      <h2 class="part" id="p1">1. 개념 다지기 <small class="muted">교재 1.1~1.2.1 · 2~8쪽</small></h2>
+      <h3 class="sub">정의에서 공통된 두 가지</h3>
+      <p class="prose">여러 학자의 정의를 모으면 공통점이 둘입니다. 첫째, <b>구조화된 데이터</b>입니다. 자유로운 메모가 아니라 정해진 요소(속성)에 값을 채운 데이터이고, 인코딩되어 있어 기계도 처리할 수 있습니다. 둘째, <b>개체의 특성을 기술해 검색 등에 활용</b>합니다. 찾고, 알아보고, 가치를 따져 보고, 관리하고, 오래 남기기 위해 만듭니다. 교재는 이를 묶어 식별·발견·평가·관리·보존에 쓰려고 만든, 구조화되고 인코딩된 데이터라고 정리합니다.</p>
+      <p class="prose">일상에도 메타데이터가 있습니다. 책의 표제면, 한글 문서를 저장할 때 저절로 생기는 작성자·작성일, 음악 앱의 곡 정보가 그렇습니다.</p>
+
+      <h3 class="sub">구조화란: 자유 메모와 속성-값</h3>
+      <div class="two">
+        <div class="box"><h4>자유 메모 (비구조)</h4><p>“생텍쥐페리가 1943년에 펴낸 『어린 왕자』. 프랑스어로 쓴 동화.” 사람은 읽지만 기계는 어디가 저자인지 모릅니다.</p></div>
+        <div class="box"><h4>속성-값 (구조화)</h4><p>표제 = 어린 왕자 · 저자 = 생텍쥐페리 · 발행년 = 1943 · 언어 = 프랑스어. ‘저자가 생텍쥐페리인 자료’만 골라낼 수 있습니다.</p></div>
+      </div>
+      <p class="prose">속성에 들어간 값을 교재는 <b>속성값</b> 또는 <b>속성치</b>라고 부릅니다. 기술되지 않은 속성은 검색에도 쓸 수 없고 화면에도 나타나지 않습니다. 같은 책이라도 서점과 도서관이 기록하는 속성이 다른 까닭은 쓰는 목적이 다르기 때문입니다.</p>
+
+      <h3 class="sub">요소세트·스키마·온톨로지: 같은 듯 다른 셋</h3>
+      <p class="prose">메타데이터를 통일되고 일관되게 기술하려고 각 분야는 <b>메타데이터 표준</b>을 만들었습니다. 표준과 함께 쓰이는 말 가운데 자주 헷갈리는 셋을 설문지에 비유해 보면 이렇습니다(비유는 수업용).</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>용어</th><th>무엇인가</th><th>예</th><th>설문지 비유</th></tr></thead>
+          <tbody>
+            <tr><th>요소세트<br><small class="muted">element set</small></th><td>요소의 구조와 의미를 정의한 것. 스킴(scheme)·데이터 사전이라고도 부름</td><td>DCMES: 15개 핵심 요소와 그 의미</td><td>문항 목록</td></tr>
+            <tr><th>스키마<br><small class="muted">metadata schema</small></th><td>요소세트를 XML 스키마나 DTD 같은 공식 스키마 언어로 인코딩해 기계가 처리하게 한 명세서</td><td>XML 스키마로 쓴 명세</td><td>문항을 입력 양식으로 만든 것</td></tr>
+            <tr><th>온톨로지<br><small class="muted">ontology</small></th><td>클래스(사물의 종류)·속성·공리로 한 도메인의 지식을 표현하는 공식 모델</td><td>DCMES가 요소세트라면 DC terms는 온톨로지</td><td>문항 사이 관계·규칙까지 정한 것</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="q" data-why="맞습니다. 스킴(scheme)은 요소세트 자체의 다른 이름이고, 스키마(schema)는 그것을 스키마 언어로 인코딩한 명세서입니다.">
+        <p class="ask">‘스킴(scheme)’과 ‘스키마(schema)’는 이름이 비슷합니다. 요소세트를 XML 스키마 언어로 적어 기계가 읽게 만든 명세서는?</p>
+        <div class="opts"><button data-no="스킴은 요소세트의 별칭입니다. 인코딩한 명세서가 아닙니다.">스킴</button><button data-ok>스키마</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#1">실습 1 · 데이터인가 메타데이터인가</a></p>
+
+      <!-- 2부 -->
+      <h2 class="part" id="p2">2. 레코드에서 서술문으로 <small class="muted">교재 1.2.2 · 8~9쪽</small></h2>
+      <p class="prose">도서관은 오래 <b>MARC 레코드</b>를 기술 단위로 써 왔습니다. 레코드는 한 자원에 관한 정보를 상자 하나에 전부 담는 방식입니다. 교재 그림 1-2를 보면 작품 ‘황제’ 협주곡의 전거레코드와 작곡가 베토벤의 전거레코드에 ‘Beethoven, Ludwig van, 1770-1827’이 되풀이해 들어 있습니다. 이름 표기를 바꾸려면 이 이름이 든 레코드를 하나하나 찾아 모두 고쳐야 하고, 다른 레코드에 적힌 내용을 다시 쓰기도 어렵습니다.</p>
+      <p class="prose">그래서 레코드를 <b>서술문(statement)</b>, 곧 속성-값 한 쌍으로 쪼갭니다. 같은 자원에 대한 서술문을 모은 것이 <b>기술(description)</b>, 기술끼리 연결된 묶음이 <b>기술세트(description set)</b>입니다. 베토벤은 한 번만 기술하고 작품 쪽에서 가리키기만 하면 되니 데이터를 재사용하고 링크로 의미를 처리할 수 있습니다.</p>
+      <h3 class="sub">트리플: 주어–술어–목적어</h3>
+      <p class="prose">서술문이 어느 자원에 대한 것인지(주어)를 앞에 붙이면 세 부분이 됩니다. 이것이 <b>트리플</b>입니다. 목적어 자리에는 글자·숫자 같은 값도, 또 다른 자원도 올 수 있습니다(예는 수업용).</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>주어 (자원)</th><th>술어 (속성)</th><th>목적어 (값 또는 다른 자원)</th></tr></thead>
+          <tbody>
+            <tr><td>『어린 왕자』</td><td>발행년</td><td>1943</td></tr>
+            <tr><td>『어린 왕자』</td><td>저자</td><td>생텍쥐페리 <small class="muted">← 다른 자원</small></td></tr>
+            <tr><td>생텍쥐페리</td><td>출생년</td><td>1900</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">둘째 줄의 목적어와 셋째 줄의 주어는 같은 자원입니다. ‘작곡가’나 ‘저자’의 값이 글자가 아니라 또 다른 자원이라는 점이 핵심입니다. 그래야 베토벤의 다른 작품을 기계가 연결을 따라가 찾을 수 있습니다. 트리플은 4부에서 RDF의 기본 단위로 다시 나오고, <a href="materials/metadata-2026-2/vocabulary/theory.html#p4">교재 2장</a>에서 자세히 배웁니다.</p>
+      <div class="q" data-why="맞습니다. 값이 또 다른 자원이면 그 자원의 정보(이름·생몰년)는 한 곳에만 적고, 다른 작품도 같은 자원을 가리키면 됩니다.">
+        <p class="ask">서술문 방식에서 ‘작곡가’ 속성의 값을 글자 “베토벤”이 아니라 자원 ‘베토벤’으로 두면 얻는 것은?</p>
+        <div class="opts"><button data-no="글자로 적어도 검색은 됩니다. 핵심은 재사용과 연결입니다.">검색이 비로소 가능해진다</button><button data-ok>한 번만 기술하고 여러 작품이 함께 쓴다</button><button data-no="레코드가 길어지는 것과는 관계가 없습니다.">레코드가 짧아진다</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#2">실습 2 · 레코드를 트리플로 풀기</a></p>
+
+      <!-- 3부 -->
+      <h2 class="part" id="p3">3. 메타데이터의 중요성 <small class="muted">교재 1.2.3 · 10~12쪽</small></h2>
+      <p class="prose">메타데이터를 만들고 유지하는 데는 많은 비용이 듭니다. 그래서 정보전문가는 왜 필요한지 근거를 댈 수 있어야 합니다. 교재는 Gilliland(2016)를 따라 아홉 가지 이유를 듭니다(오른쪽 예는 수업용).</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>이유</th><th>한 줄 풀이</th><th>예</th></tr></thead>
+          <tbody>
+            <tr><th>① 접근성 향상</th><td>풍부하고 일관된 기술 메타데이터는 검색 효율을 크게 높이고, 흩어진 자료로 ‘가상 컬렉션’을 만든다</td><td>작가의 편지(기록관)·초판본(도서관)·사진(박물관)을 한 화면에</td></tr>
+            <tr><th>② 맥락 유지</th><td>객체를 디지털화하면 관계에서 떨어져 ‘탈맥락화’된다. 메타데이터가 관계·진본성·무결성을 지킨다</td><td>앨범에서 떼어 낸 사진은 뒷면 메모가 없으면 누구·언제·어디인지 모른다</td></tr>
+            <tr><th>③ 사용성 확대</th><td>전 세계 이용자에게 디지털 버전을 배포. 새 이용자는 요구·언어·탐색 행동이 다르다</td><td>해외 연구자가 보는 옛 지도 설명이 한국어 전문용어뿐이면 어렵다</td></tr>
+            <tr><th>④ 교수-학습 지원</th><td>교사·학생은 연구자와 다르게 찾는다. 통제어휘와 폭소노미를 함께 쓰면 접근성이 높아진다</td><td>통제어휘 ‘광합성’, 폭소노미 #초등과학</td></tr>
+            <tr><th>⑤ 시스템 개발·개선</th><td>이용 기록을 시스템 개발 결정에 피드백</td><td>‘출판연도’ 필터를 가장 많이 쓴다면 다음 개편 때 맨 위로</td></tr>
+            <tr><th>⑥ 다중 버전 관리</th><td>보존용 원본·섬네일·전시용 파생본을 서로 잇고 차이를 알려 준다</td><td>유물 사진 하나에서 나온 세 파일이 같은 유물임을 이어 준다</td></tr>
+            <tr><th>⑦ 법적 권한 확인</th><td>권한·라이선스·복제 정보와 기증자 요구를 문서화</td><td>‘일정 기간 비공개’ 조건을 적어 두어야 담당자가 바뀌어도 지킨다</td></tr>
+            <tr><th>⑧ 보존·지속가능성</th><td>시스템이 바뀌어도 이해할 수 있게, 메타데이터 자체도 보존·마이그레이션</td><td>20년 전 디스켓 속 문서는 어떤 프로그램으로 만들었는지 알아야 연다</td></tr>
+            <tr><th>⑨ 시스템 평가·경제성</th><td>자동 수집되는 테크니컬 메타데이터로 시스템을 평가·계획</td><td>파일 포맷·압축률 분포를 보고 포맷 변환을 계획</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="sub">혼동하기 쉬운 다섯 가지</h3>
+      <p class="prose">교재 12쪽 상자글은 초심자의 오해 다섯 가지를 바로잡습니다. 메타데이터는 <b>꼭 디지털일 필요가 없고</b>(카드목록·레이블도 메타데이터), <b>기술 정보만이 아니며</b>(맥락·관리·보존·이용 정보 포함), <b>전문가만 만들지 않고</b>(이용자·알고리즘도), <b>한 번 만들면 끝이 아니며</b>(생애주기 내내 생성·수정·폐기), <b>데이터와 뚜렷이 구분되지도 않습니다</b>. 책의 서평은 그 책에는 메타데이터지만 서평 연구에는 데이터입니다(예는 수업용).</p>
+      <div class="q" data-why="맞습니다. 메타데이터는 활용 방식에 따라 데이터가 되기도 합니다. 둘의 경계는 고정되어 있지 않습니다.">
+        <p class="ask">책의 서평 100편을 모아 서평의 문체를 연구한다면, 이 연구에서 서평은?</p>
+        <div class="opts"><button data-no="책을 설명할 때는 메타데이터이지만, 서평 자체를 연구할 때는 다릅니다.">메타데이터</button><button data-ok>데이터</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+
+      <!-- 4부 -->
+      <h2 class="part" id="p4">4. 메타데이터의 역사 <small class="muted">교재 1.3 · 13~16쪽</small></h2>
+      <p class="prose">‘메타데이터’라는 말은 비교적 최근 것이지만, 정보객체를 기술해 찾기 쉽게 하는 역할은 도서관의 역사만큼 오래되었습니다(Alemu 2022). Baker(2021)는 이를 넷으로 나눕니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>단계</th><th>예시</th><th>특징</th></tr></thead>
+          <tbody>
+            <tr><th>Metadata 1.0<br><small class="muted">목록 시작부터</small></th><td>점토판 목록(청동기 시대), 19세기 도서관 카드목록</td><td>물리적인 형태</td></tr>
+            <tr><th>Metadata 2.0<br><small class="muted">1970년대~</small></th><td>관계형 데이터베이스, 온라인목록, 스프레드시트, XML</td><td>디지털화·기계가독형, 고정 데이터 구조, 폐쇄시스템</td></tr>
+            <tr><th>Metadata 3.0<br><small class="muted">1990년대~</small></th><td>시맨틱웹(1999), 링크드오픈데이터(2006), 지식그래프(2011), 위키데이터(2012)</td><td>웹 메타데이터, 글로벌 식별자와 링크를 위한 URI, 그래프 구조, 기계이해</td></tr>
+            <tr><th>Metadata 4.0</th><td>앞으로 출현</td><td>기계학습, 자동색인</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">2.0의 ‘기계가독’은 컴퓨터가 레코드를 읽고 저장할 수 있다는 뜻이고, 3.0의 ‘기계이해’는 URI로 이어진 그래프 덕분에 데이터 사이의 관계까지 따라갈 수 있다는 뜻입니다. 교재는 WWW 바로 다음 해인 1995년에 메타데이터의 주된 개념이 등장했다고 보아 본격적인 역사를 1990년대부터 다룹니다.</p>
+      <h3 class="sub">1990년대: 분야마다 자기 표준을 만들다</h3>
+      <div class="flow">
+        <span><b>1992</b> FGDC의 CSDGM<br><small>지리공간 메타데이터</small></span><i>→</i>
+        <span><b>1994</b> TEI 가이드라인<br><small>인문학 텍스트</small></span><i>→</i>
+        <span><b>1994</b> OCLC 실험<br><small>AACR2·MARC로 웹 자원 목록</small></span><i>→</i>
+        <span><b>1995</b> 더블린 코어 탄생<br><small>미국 오하이오주 더블린</small></span><i>→</i>
+        <span><b>1996</b> AITF의 CDWA<br><small>미술작품</small></span>
+      </div>
+      <p class="prose">더블린 코어의 ‘더블린’은 아일랜드가 아니라 미국 오하이오주의 도시입니다. 첫 DC 워크숍 뒤 메타데이터 개발은 여러 나라와 기관으로 빠르게 퍼졌고, 1990~2005년에 EAD(기록물), VRA Core(시각자원), ONIX(출판), LOM(교육), MODS(도서관), MPEG-7(멀티미디어), FOAF(사람 관계) 같은 구조표준이 자리 잡았습니다. 이름을 다 외울 필요는 없습니다. 분야마다 저마다의 배경과 목적으로 표준을 만들었다는 흐름이 중요합니다.</p>
+      <h3 class="sub">시맨틱웹 표준과 오늘</h3>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>표준</th><th>한 줄 풀이</th></tr></thead>
+          <tbody>
+            <tr><th>RDF</th><td>링크드데이터를 위해 선택된 언어. 기본 단위는 주어–술어–목적어 트리플. Turtle·RDF/XML·JSON-LD 같은 직렬화 포맷으로 파일에 적는다</td></tr>
+            <tr><th>OWL</th><td>RDF를 확장해 온톨로지를 정의하는 지식표현 언어. 제한사항과 속성을 더하는 장치</td></tr>
+            <tr><th>SKOS</th><td>시소러스·분류표·주제명표목표를 RDF로 표현하는 어휘. 웹상의 LCSH와 RDA 일부 어휘집에 사용</td></tr>
+            <tr><th>FOAF</th><td>사람과 사람의 관계(소셜 네트워크)를 기술하는 어휘. 2000년 소개</td></tr>
+            <tr><th>Schema.org</th><td>2011년 Bing·Google·Yahoo·Yandex가 함께 만든 거대 어휘. 웹마스터가 검색엔진에 사이트를 기술. 2012년 OCLC가 WorldCat에 적용</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">오늘날에는 NSDL, Europeana, DPLA 같은 대규모 디지털도서관이 여러 데이터 제공자의 메타데이터를 모아 서비스하고, 시맨틱웹·링크드오픈데이터·빅데이터가 메타데이터 연구에 새 시너지를 일으키고 있습니다. 집계 서비스는 <a href="materials/metadata-2026-2/aggregators-registry/">유로피아나, DPLA, 메타데이터 레지스트리</a> 참고 페이지에서 더 볼 수 있습니다.</p>
+      <div class="q" data-why="맞습니다. 더블린 코어는 1995년 미국 오하이오주 더블린에서 열린 회의에서 탄생했습니다.">
+        <p class="ask">더블린 코어 이름의 ‘더블린’은 어디인가요?</p>
+        <div class="opts"><button data-no="아일랜드의 수도가 아닙니다.">아일랜드 더블린</button><button data-ok>미국 오하이오주 더블린</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+
+      <!-- 5부 -->
+      <h2 class="part" id="p5">5. 메타데이터의 기능과 유형 <small class="muted">교재 1.4 · 16~26쪽</small></h2>
+      <h3 class="sub">가장 중요한 기능은 검색</h3>
+      <p class="prose">메타데이터가 없으면 이용자는 컬렉션에서 정보객체를 찾지도, 그것이 원하던 자료인지 알아보지도 못합니다. Hoffman, NISO, Gilliland가 꼽은 기능 목록은 조금씩 다르지만 모두 <b>검색</b>을 담고 있습니다. 교재는 이를 종합해 일곱 기능으로 정리합니다. ① 생성·다중 버전 관리·재사용, ② 조직과 기술, ③ 내용 검증, ④ 검색 및 탐색, ⑤ 이용 및 보존, ⑥ 처분, ⑦ 상호운용성.</p>
+      <div class="two">
+        <div class="box"><h4>④ 후검색과 패싯</h4><p>결과가 많을 때 자원유형·언어·연도 같은 <b>패싯</b>으로 좁혀 보는 것이 후검색입니다. 쇼핑몰의 브랜드·가격 필터와 같은 원리인데, 값이 통제되어야 합니다. ‘한국·Korea·대한민국’이 섞이면 필터가 셋으로 갈라집니다(예는 수업용).</p></div>
+        <div class="box"><h4>⑦ 상호운용성의 두 방식</h4><p><b>통합검색</b>은 Z39.50 같은 프로토콜로 각 시스템에 같은 질문을 보내 각자 답하게 합니다. <b>하베스팅</b>은 데이터 제공자(DP)가 공통 요소로 변환해 내놓은 메타데이터를 서비스 제공자(SP)가 중앙 색인에 모읍니다. Europeana·DPLA가 이 방식입니다.</p></div>
+      </div>
+      <h3 class="sub">NISO의 네 유형</h3>
+      <p class="prose">기능을 제대로 하려면 그 기능에 맞는 유형이 필요합니다. 가장 널리 쓰는 구분이 NISO의 네 유형입니다(Riley 2017).</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>유형</th><th></th><th>무엇을 담나</th><th>대표 속성</th><th>이용 목적</th></tr></thead>
+          <tbody>
+            <tr><th>기술<br><small class="muted">descriptive</small></th><td></td><td>자원의 발견과 이해</td><td>표제, 저자, 주제, 장르, 발행일</td><td>발견(검색), 디스플레이, 상호운용성</td></tr>
+            <tr><th rowspan="3">관리<br><small class="muted">administrative</small></th><td>테크니컬</td><td>파일의 디코딩과 렌더링</td><td>파일 유형, 크기, 생성일자, 압축스킴</td><td>상호운용성, 디지털 객체 관리, 보존</td></tr>
+            <tr><td>보존</td><td>파일의 장기관리</td><td>체크섬, 보존활동</td><td>상호운용성, 디지털 객체 관리, 보존</td></tr>
+            <tr><td>저작권</td><td>내용에 포함된 지적재산권</td><td>저작권 상태, 라이선스 기간, 소유자</td><td>상호운용성, 디지털 객체 관리</td></tr>
+            <tr><th>구조<br><small class="muted">structural</small></th><td></td><td>자원의 한 부분과 다른 부분의 관계</td><td>순서, 계층 내 위치</td><td>항해</td></tr>
+            <tr><th>마크업 언어</th><td></td><td>콘텐츠 속 플래그로 구조·의미를 표시</td><td>단락, 헤딩, 리스트, 이름, 날짜</td><td>항해, 상호운용성</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">전자책 『어린 왕자』 한 권에 대입하면(수업용, 값은 가상) 표제·저자·주제는 <b>기술</b>, EPUB 형식·3.2MB는 <b>테크니컬</b>, 체크섬은 <b>보존</b>, 저작권자·라이선스 기간은 <b>저작권</b>, 장 순서와 목차→본문 링크는 <b>구조</b>, 본문 속 <code>&lt;h1&gt;</code>·<code>&lt;p&gt;</code> 태그는 <b>마크업 언어</b>입니다. 자원 하나에 여러 유형이 동시에 붙고, 유형마다 맡는 목적이 다릅니다.</p>
+      <h3 class="sub">학자마다 다른 구분</h3>
+      <p class="prose">Gilliland(2016)는 관리·기술·보존·테크니컬·<b>이용</b>의 다섯 유형을 두고, Joudrey와 Taylor(2018)는 관리·구조·기술 셋으로 나눈 뒤 관리 아래에 여덟 하위 유형(이미지 품질 평가, 메타-메타데이터, 보존, 레코드 관리, 저작권, 테크니컬, 추적, 이용)을 둡니다. Miller(2022)도 기술·관리·구조 셋이되 테크니컬과 보존을 ‘테크니컬 및 보존’ 하나로 다룹니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>유형</th><th>NISO</th><th>Gilliland</th><th>Joudrey &amp; Taylor</th><th>Miller</th></tr></thead>
+          <tbody>
+            <tr><th>기술·관리</th><td colspan="4" class="ctr">네 학자 모두 독립 유형</td></tr>
+            <tr><th>구조</th><td>독립</td><td>없음</td><td>독립</td><td>독립</td></tr>
+            <tr><th>테크니컬·보존</th><td>관리의 하위</td><td>독립</td><td>관리의 하위</td><td>관리의 하위(하나로)</td></tr>
+            <tr><th>이용</th><td>없음</td><td>독립</td><td>관리의 하위</td><td>관리의 하위</td></tr>
+            <tr><th>마크업 언어</th><td>독립</td><td>없음</td><td>없음</td><td>없음</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">이 표는 수업용 정리이니 과제에서는 교재의 표 1-2~1-5를 직접 인용하세요. 교재는 유형 구분이 유용하지만 <b>인공적</b>이어서 절대적이지도 배타적이지도 않다고 덧붙입니다. creator나 파일 크기는 기술 메타데이터이면서 관리 기능도 하고, 테크니컬 메타데이터 일부는 컴퓨터가 자동으로 만듭니다. 제주 사진으로 돌아가면 촬영 일시·해상도는 기기가 적지만 ‘제주 가족여행’이라는 앨범 제목은 사람이 붙입니다.</p>
+      <h3 class="sub">메타-메타데이터</h3>
+      <p class="prose">메타데이터에 대한 메타데이터입니다. 누가·어디서·어떤 표준으로·언제 기술했고, 누가 접근 권한을 갖는지를 적습니다. 목록 레코드에서 표제·저자는 책에 대한 정보이고, 입력자·입력 기관·적용 규칙·입력일은 그 레코드 자체에 대한 정보입니다(예는 수업용).</p>
+      <div class="q" data-why="맞습니다. 파일 형식·크기처럼 파일을 열어 보여 주는 데 필요한 정보는 테크니컬 메타데이터이고, NISO는 이를 관리 메타데이터의 하위로 둡니다.">
+        <p class="ask">전자책 파일의 ‘EPUB 형식, 3.2MB, 생성일’은 NISO 구분에서 어디에 들어가나요?</p>
+        <div class="opts"><button data-no="표제·저자처럼 자원을 찾고 이해하는 정보가 기술 메타데이터입니다.">기술</button><button data-ok>관리 — 테크니컬</button><button data-no="구조는 장 순서처럼 부분과 부분의 관계입니다.">구조</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#3">실습 3 · 유형 가려내기</a></p>
+
+      <!-- 6부 -->
+      <h2 class="part" id="p6">6. 메타데이터 표준 <small class="muted">교재 1.5 · 26~31쪽</small></h2>
+      <p class="prose">메타데이터가 제 기능을 하려면 일관되게 만들어져야 합니다. Miller(2022)는 조건 셋을 듭니다. 표준화된 속성(요소세트)으로 <b>구조화</b>하고, 컴퓨터가 처리하게 표준 방식으로 <b>인코딩</b>하며, 주제·장르처럼 필터에 쓰는 <b>값</b>은 통제어휘나 표준 구문으로 적습니다. 이 약속을 공식 문서로 정리한 것이 표준이고, 수백 개가 있습니다. 표준은 주된 특성에 따라 네 가지로 나눕니다. 이력서 양식에 비유하면 이렇습니다(비유는 수업용).</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>유형</th><th>정하는 것</th><th>이력서 양식에 비유하면</th><th>실제 표준의 예</th></tr></thead>
+          <tbody>
+            <tr><th>데이터 구조표준</th><td>어떤 칸을 둘까 — 요소세트·스키마</td><td>이름·학력·경력처럼 채울 칸이 정해져 있다</td><td>Dublin Core, MARC, MODS, EAD, VRA Core</td></tr>
+            <tr><th>데이터 내용표준</th><td>어떻게 적을까 — 목록규칙·규정</td><td>날짜는 ‘2024.03’처럼, 경력은 최근 것부터, 이름은 성부터</td><td>RDA, KCR4, DACS, CCO, AACR, ISBD</td></tr>
+            <tr><th>데이터 값표준</th><td>무엇 중에서 고를까 — 통제어휘·시소러스·전거·코드</td><td>학위는 학사·석사·박사 중에서, 지역은 코드 목록에서</td><td>LCSH, DDC, LCNAF, ULAN, VIAF, ISO 639</td></tr>
+            <tr><th>데이터 교환표준<br><small class="muted">형식표준</small></th><td>어떤 파일로 낼까 — 기계가독 형식</td><td>정해진 파일 형식으로 내야 시스템이 자동으로 읽는다</td><td>ISO 2709(MARC21), XML, JSON-LD</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="sub">값표준이 패싯을 살린다</h3>
+      <p class="prose">언어 칸에 ‘한국어’, ‘Korean’, ‘한글’이 섞여 있으면 필터가 셋으로 갈라집니다. ISO 639-2 코드 <code>kor</code>로 통일하면 한 묶음이 됩니다(예는 수업용). 5부의 패싯 내비게이션은 이런 값 통제를 전제로 합니다. 값표준은 종류가 많아 메타데이터 표준 가운데 가장 방대한 분야이고, 어떤 값표준을 쓸지는 구조표준과 내용표준이 지정해 줍니다.</p>
+      <h3 class="sub">같은 표제, 다른 옷</h3>
+      <p class="prose">교환표준은 같은 내용에 입히는 옷과 같습니다(비유는 수업용). 표제 ‘어린 왕자’를 단순화해 적어 보면 이렇습니다.</p>
+      <pre class="code">MARC21     245 ▼a 어린 왕자
+MARCXML    &lt;datafield tag="245"&gt;&lt;subfield code="a"&gt;어린 왕자&lt;/subfield&gt;&lt;/datafield&gt;
+JSON-LD    {"@context": {"dcterms": "http://purl.org/dc/terms/"}, "dcterms:title": "어린 왕자"}</pre>
+      <h3 class="sub">도서관은 네 유형을 함께 쓴다</h3>
+      <p class="prose">표준 하나가 한 특성만 갖지는 않아서 분류는 주된 특성을 따릅니다. 교재 그림 1-7을 보면 <b>한국목록규칙 제4판(KCR4)</b>은 내용표준이지만 표제 및 책임표시사항·발행사항 같은 구조에 관한 내용과 값표준에 속하는 내용도 담고, <b>KORMARC</b>는 교환표준이면서 구조·값표준의 사항까지 포함합니다. 『어린 왕자』 번역본 한 권을 목록한다면 구조표준으로 칸을 마련하고, KCR4 규칙대로 적고, 저자명은 전거·분류는 KDC·언어는 부호표로 맞춘 뒤, KORMARC로 인코딩해 다른 도서관과 주고받습니다. 실제로는 목록자가 레코드 하나를 만들면서 넷을 동시에 적용합니다.</p>
+      <div class="q" data-why="맞습니다. ‘사람 이름은 성을 먼저 쓴다’처럼 값을 어떻게 적을지 정한 규칙은 내용표준입니다. 어느 표기를 대표로 삼을지 묶어 주는 전거파일은 값표준입니다.">
+        <p class="ask">“사람 이름은 성을 먼저 쓴다”는 규칙은 어느 표준에 속하나요?</p>
+        <div class="opts"><button data-no="구조표준은 어떤 칸을 둘지 정합니다.">구조표준</button><button data-ok>내용표준</button><button data-no="값표준은 정해진 용어·코드 목록입니다. 적는 방법의 규칙은 아닙니다.">값표준</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#4">실습 4 · 표준 네 유형 분류하기</a></p>
+
+      <!-- 7부 -->
+      <h2 class="part" id="p7">7. 메타데이터 개념모델 <small class="muted">교재 1.6 · 32~35쪽</small></h2>
+      <p class="prose"><b>개념모델</b>은 특정 도메인에서 메타데이터가 기술할 사물과 사물 사이의 관계를 나타낸 것입니다. 집을 짓기 전에 평면 설계도를 그리듯(비유는 수업용) 무엇을 기술하고 어떻게 이어지는지 먼저 정한 다음 요소세트나 데이터베이스를 구조화합니다. 개념 수준에서는 의미와 구조를 정의하고, 인코딩 수준에서는 컴퓨터가 처리할 포맷으로 바꿉니다. 대표 모델로 LRM, BIBFRAME 개념모델, RDF, DCAM이 있습니다.</p>
+      <h3 class="sub">개체-관계(E-R) 모델</h3>
+      <p class="prose">1970년대부터 데이터베이스 설계에 써 온 방법으로 <b>개체</b>, <b>속성</b>, <b>관계</b> 셋으로 대상을 표현합니다. 교재 그림 1-9에서 ‘개인’과 ‘단체’가 개체, 이름·생몰년·고유번호·직업이 속성, ‘소속되다’가 관계입니다. 여러분에게 대입하면 대학원생과 학과가 개체, 학번·전공이 속성, ‘소속되다’가 관계입니다(수업용). 속성이 많을수록 같은 이름을 구별하기 쉽지만 만드는 비용도 늘어납니다.</p>
+      <h3 class="sub">온톨로지 모델링</h3>
+      <p class="prose">온톨로지는 개념과 관계를 컴퓨터가 이해하도록 명확히 적은 명세로, E-R 모델보다 재사용성과 공유성이 좋습니다. E-R의 개체는 <b>클래스</b>가 되고, 속성과 관계는 모두 <b>속성(property)</b>이 됩니다. 속성의 값은 ‘홍길동’ 같은 문자열일 수도, Organization 같은 다른 클래스일 수도 있습니다. 클래스 이름은 대문자로, 속성 이름은 소문자로 시작합니다. RDF 구문과 OWL로 표현하고 Protégé 같은 도구로 편집합니다.</p>
+      <h3 class="sub">LRM: 저작·표현형·구현형·개별자료</h3>
+      <p class="prose">IFLA의 FR 모형 계열(FRBR 1998, FRAD 2009, FRSAD 2010)을 하나로 통합한 것이 2017년 승인된 <b>LRM(도서관 참조모형)</b>입니다. 최상위 개체 ‘레(Res, 사물)’ 아래 저작·표현형·구현형·개별자료·에이전트·노멘(이름)·장소·시간범위가 있고, 에이전트 아래에 개인과 집합에이전트가 있습니다. 상위 클래스의 속성과 관계를 하위가 물려받아 모델이 단순해집니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>개체</th><th>『어린 왕자』로 보면 (수업용)</th><th>관계</th></tr></thead>
+          <tbody>
+            <tr><th>저작 Work</th><td>생텍쥐페리의 작품 『어린 왕자』. 언어나 판과 상관없이 하나</td><td rowspan="2">저작은 표현형으로 <b>실현</b>된다</td></tr>
+            <tr><th>표현형 Expression</th><td>프랑스어 원문, A의 한국어 번역, B의 한국어 번역. 번역가가 다르면 표현형도 다르다</td></tr>
+            <tr><th>구현형 Manifestation</th><td>○○출판사 2015년 종이책판, △△출판사 전자책판(가상)</td><td>표현형은 구현형으로 <b>구현</b>된다</td></tr>
+            <tr><th>개별자료 Item</th><td>우리 도서관 서가에 꽂힌 바로 그 한 권, 등록번호로 구분</td><td>구현형은 개별자료에 의해 <b>예시</b>된다</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">LRM은 이용자 과업 다섯 가지도 기능적 요건으로 정의했습니다. <b>발견</b>(find)·<b>식별</b>(identify)·<b>선정</b>(select)·<b>획득</b>(obtain)·<b>탐험</b>(explore)입니다. 『어린 왕자』 번역본을 찾는 대학원생이라면 검색으로 찾아내고, 번역본이 맞는지 확인하고, 번역자·출판사·형태를 비교해 고르고, 청구기호로 빌리거나 전자책에 접속하고, 다른 번역이나 작가의 다른 작품으로 넓혀 갑니다(풀이는 수업용). 좋은 메타데이터는 이 다섯 단계를 모두 수월하게 해 줍니다. 『어린 왕자』를 네 층으로 직접 나눠 보는 활동은 <a href="materials/metadata-2026-2/xml-json/lrm.html">XML·JSON 실습 6</a>에 있습니다.</p>
+      <div class="q" data-why="맞습니다. 번역가가 다르면 텍스트가 다르므로 표현형이 다릅니다. 같은 번역을 종이책과 전자책으로 낸 것은 구현형의 차이입니다.">
+        <p class="ask">같은 『어린 왕자』를 두 번역가가 각각 한국어로 옮겼습니다. 두 번역은 LRM에서 어느 층이 다른가요?</p>
+        <div class="opts"><button data-no="저작은 생텍쥐페리의 작품 하나입니다. 번역이 달라도 저작은 같습니다.">저작</button><button data-ok>표현형</button><button data-no="구현형은 같은 텍스트가 책의 형태로 나온 판입니다.">구현형</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#5">실습 5 · 이용자 과업 다섯 가지</a> <a class="btn btn--sm btn--ghost" href="materials/metadata-2026-2/overview/lab.html#7">실습 7 · 개념모델 그리기</a></p>
+
+      <!-- 8부 -->
+      <h2 class="part" id="p8">8. 메타데이터 구성 원칙 <small class="muted">교재 1.7 · 36~37쪽</small></h2>
+      <p class="prose">DCMI는 국제 표준과 일치하고 다른 시스템과 상호운용되는 <b>간결한</b> 요소세트를 만들자는 원칙에서 출발했고, 그 결과가 15개 요소의 DCMES입니다. 덕분에 사서가 아닌 일반 이용자도 메타데이터를 기술할 수 있게 되었습니다. 간결성에는 두 뜻이 있습니다. 필요한 요소만 골라 쓸 수 있는 최소한의 요소세트일 것, 그리고 구조를 흔들지 않고 새 요소를 덧붙일 수 있을 것. 작은도서관 봉사자가 15개 중 네 칸만 채워도 되고, 학교도서관이 ‘권장 학년’ 칸을 더해도 DC의 틀은 그대로입니다(예는 수업용).</p>
+      <p class="prose">메타데이터가 발전하면서 원칙은 다섯으로 넓어졌습니다(Duval et al. 2002).</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>원칙</th><th>뜻</th><th>예</th></tr></thead>
+          <tbody>
+            <tr><th>모듈화</th><td>다른 스키마의 요소·어휘를 블록처럼 가져와 새 스키마로 조합</td><td>Europeana의 EDM은 DC·SKOS·CIDOC-CRM 등을 가져다 쓴다</td></tr>
+            <tr><th>확장성</th><td>새 요소를 추가하거나 기존 요소를 하위 요소로 세분. 지나치면 상호운용성이 떨어진다</td><td>contributor 아래 author</td></tr>
+            <tr><th>구체화</th><td>요소의 의미를 더 좁히거나 그 요소에 쓸 값 인코딩스킴을 밝힌다</td><td>dc.date.issued(간행일), dc.language.iso(ISO 코드)</td></tr>
+            <tr><th>다중언어</th><td>언어와 문화의 다양성을 고려</td><td>요소명과 값을 한국어·영어로 함께</td></tr>
+            <tr><th>상호운용성</th><td>구문·기능 수준을 넘어 <b>의미 수준</b>까지</td><td>author·creator·저자가 같은 개념임을 시스템이 안다</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="sub">FAIR 원칙</h3>
+      <p class="prose">FAIR는 Findable·Accessible·Interoperable·Reusable의 머리글자입니다(Wilkinson et al. 2016). 데이터와 메타데이터를 찾을 수 있게, 접근할 수 있게, 함께 쓸 수 있게, 다시 쓸 수 있게 만들자는 원칙입니다.</p>
+      <div class="two">
+        <div class="box"><h4>F 발견성</h4><p>F1 고유하고 영구한 식별자 · F2 풍부한 메타데이터로 기술 · F3 메타데이터에 데이터 식별자 포함 · F4 검색자원에 등록·색인</p></div>
+        <div class="box"><h4>A 접근성</h4><p>A1 표준 프로토콜로 식별자를 통해 검색(공개·무료, 필요하면 인증 허용) · A2 데이터가 사라져도 메타데이터는 접근 가능</p></div>
+        <div class="box"><h4>I 상호운용성</h4><p>I1 공식적이고 공유되는 지식표현 언어 · I2 FAIR한 어휘 사용 · I3 다른 메타데이터로의 구체적 참조</p></div>
+        <div class="box"><h4>R 재사용성</h4><p>R1 여러 속성으로 풍부하게 기술 · R1.1 명확한 이용 라이선스 · R1.2 상세한 출처 · R1.3 커뮤니티 표준 부합</p></div>
+      </div>
+      <p class="prose">석사과정생이 설문 응답 데이터를 학교 리포지토리에 올린다면(가상) DOI를 받고(F1), 표제·연구자·주제어·조사 기간을 적고(F2), 민감한 응답은 승인 뒤 열람하게 하고(A1.2), 데이터를 내려도 설명 페이지는 남기고(A2), 주제어는 통제어휘에서 고르고(I2), CC BY 같은 라이선스와 수집·가공 과정을 밝히면(R1.1·R1.2) FAIR에 가까워집니다. FAIR가 곧 무조건 공개는 아닙니다.</p>
+      <div class="q" data-why="맞습니다. A2는 데이터가 더는 없더라도 메타데이터는 남아 접근할 수 있어야 한다는 원칙입니다. 5부 기능 ⑥ 처분에서 폐기 뒤에도 메타데이터는 확인할 수 있어야 한다고 한 것과 같은 생각입니다.">
+        <p class="ask">연구가 끝나 데이터 파일을 내렸지만 설명 페이지는 그대로 두었습니다. FAIR의 어느 원칙을 지킨 것인가요?</p>
+        <div class="opts"><button data-no="F는 찾을 수 있게 하는 원칙입니다. 식별자·풍부한 기술·등록이 핵심입니다.">F1</button><button data-ok>A2</button><button data-no="R1.1은 이용 라이선스를 밝히는 원칙입니다.">R1.1</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <p class="small"><a class="btn btn--sm" href="materials/metadata-2026-2/overview/lab.html#6">실습 6 · FAIR 가려내기</a></p>
+
+      <!-- 9부 -->
+      <h2 class="part" id="p9">9. 메타데이터 서비스 사례 <small class="muted">교재 1.8 · 38~43쪽</small></h2>
+      <h3 class="sub">프론트엔드와 백엔드</h3>
+      <p class="prose">이용자가 직접 보고 쓰는 검색 화면이 <b>프론트엔드</b>, 그 뒤편에서 데이터베이스 안에 메타데이터를 구조화해 기술·처리하는 영역이 <b>백엔드</b>입니다. 식당의 홀과 주방에 비유할 수 있습니다(수업용). 대부분의 메타데이터는 자원과 따로 데이터베이스에 저장되지만, HTML 문서의 <code>&lt;head&gt;</code>처럼 자원 안에 들어가는 경우도 있습니다. 백엔드에 요소별로 기술한 만큼 프론트엔드에서 찾고 거를 수 있습니다.</p>
+      <h3 class="sub">Europeana</h3>
+      <p class="prose">수천 개 문화기관의 예술·도서·필름·음악 정보를 검색하는 서비스입니다. 검색창에 ‘Gogh’를 넣으면 전체 색인을 뒤져 Gogh가 그린 작품, Gogh를 주제로 한 자원, Gogh라는 기관명이 모두 나옵니다. 필드 목록에서 <b>creator</b>를 고르고 찾으면 창작자로서 Gogh가 든 것만 나옵니다. 이런 <b>필드 검색</b>이 되려면 그 요소가 메타데이터에 있고 요소별로 값이 나뉘어 입력되어 있어야 합니다. theme·type of media·providing country·language 같은 <b>필터</b>는 미리 정한 값 리스트(어휘 인코딩스킴)에서 값을 골라 입력하기 때문에 가능합니다. 검색결과 간략 화면에는 표제·제공기관·출판사·주제·자원유형이, 한 건을 열면 열여덟 가지 요소가 나옵니다.</p>
+      <p class="prose">백엔드의 데이터모델 <b>EDM(Europeana Data Model)</b>은 기술 메타데이터로 DCMES와 DC terms, 개념어휘로 SKOS, 객체 간 관계에 CIDOC-CRM 등을 쓰는 RDF 모델링입니다. 핵심 클래스 ProvidedCHO(제공기관이 제공한 문화유산 객체)의 속성을 네임스페이스별로 세면 dc 15개, dcterms 22개, edm 12개, owl 1개입니다. 8부의 모듈화가 실제로 쓰인 모습입니다. 교재 그림 1-13은 ‘레미제라블의 저자는 빅토르 위고’를 트리플 셋으로 적습니다.</p>
+      <pre class="code">lesMiserables  —dc:creator→      victorHugo
+lesMiserables  —dc:title→        "Les Misérables"@fr
+victorHugo     —skos:prefLabel→  "Victor Hugo"@en</pre>
+      <p class="prose">책과 사람은 URI(세상에 하나뿐인 이름표)로 식별하고, <code>@fr</code>·<code>@en</code>은 값의 언어를 표시하는 언어 태그이며, <code>skos:prefLabel</code>은 여러 이름 가운데 대표로 쓸 이름입니다.</p>
+      <h3 class="sub">DSpace@MIT</h3>
+      <p class="prose">MIT의 기관 리포지토리입니다. 기본 검색은 전체 색인을, 고급검색은 리포지토리 단위로 찾고, 결과를 저자명·학과명·학위명·주제명·간행일로 거릅니다. 결과 화면의 표제·저자명·초록·발행일·URI는 백엔드의 <code>dc.title</code>, <code>dc.contributor.author</code>, <code>dc.description.abstract</code>, <code>dc.date.issued</code>, <code>dc.identifier.uri</code>에서 옵니다. 이 표준은 DC의 <b>응용프로파일</b>, 곧 이미 있는 표준의 요소를 가져와 기관에 맞게 골라 다듬은 명세입니다. 요소 이름이 ‘dc.요소.한정어’ 꼴인데, 8부의 확장성과 구체화가 이렇게 나타납니다. 날짜는 구문 인코딩스킴(2024-03-15 같은 형식), 포맷은 MIME Type(application/pdf), 언어는 ISO 표준(en)으로 통제해 입력합니다.</p>
+      <div class="q" data-why="맞습니다. 필드 검색은 그 요소가 메타데이터에 따로 있고, 요소별로 값이 나뉘어 입력되어 있어야 됩니다. 백엔드에 기술한 만큼 프론트엔드에서 찾을 수 있습니다.">
+        <p class="ask">검색 화면에 ‘creator로 찾기’ 필드가 생기려면 백엔드에 무엇이 있어야 하나요?</p>
+        <div class="opts"><button data-ok>creator 요소에 값이 따로 입력되어 있어야 한다</button><button data-no="전체 색인만으로는 필드와 상관없는 결과가 섞여 나옵니다.">전체 색인만 있으면 된다</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+
+      <!-- 10부 -->
+      <h2 class="part" id="p10">10. 메타데이터 레지스트리 <small class="muted">교재 1.9 · 43~46쪽</small></h2>
+      <p class="prose">DCMES 이후 표준이 많아지고 응용프로파일도 늘면서 무엇이 있는지 알기 어려워졌습니다. 요소세트·스키마·응용프로파일·어휘·인코딩스킴·요소 이용정보·크로스워크를 한곳에 모아 찾고 재사용하게 한 공식 시스템이 <b>메타데이터 레지스트리</b>입니다. 권위 있는 기관이 웹으로 출판하고, 등록된 어휘는 URI로 식별합니다. 정비사가 부품 카탈로그에서 규격에 맞는 부품을 찾아 쓰듯, 응용프로파일을 만들 때 이미 정의된 요소를 찾아 재사용합니다(비유는 수업용). 크로스워크는 서로 다른 표준의 요소를 짝지은 대응표입니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>레지스트리</th><th>무엇을 모으나</th></tr></thead>
+          <tbody>
+            <tr><th>LOV<br><small class="muted">Linked Open Vocabularies</small></th><td>RDFS·OWL로 쓴 <b>속성어휘</b>(creator·title처럼 칸의 이름). 2011년 시작, 교재 기준 800개 넘음. 안정적 URI·표준 포맷·문서화·신뢰할 발행기관·버전 관리 다섯 기준으로 질을 통제. XML로만 된 어휘는 없다</td></tr>
+            <tr><th>Open Metadata Registry</th><td>도서관 커뮤니티의 표준 레지스트리. RDA·ISBD·FR 모형 계열의 용어와 표준이 정의한 데이터 값</td></tr>
+            <tr><th>RDA 레지스트리</th><td>RDA의 요소세트(Elements)와 값어휘(Values)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">LOV에서 creator를 검색하면 dce:creator(DCMES), dcterms:creator(DC terms), schema:creator(Schema.org) 같은 여러 후보가 나옵니다. 대부분의 어휘는 다른 어휘의 요소를 빌려 조합하며, DC terms는 수백 개 이상의 어휘에서 재사용됩니다. 여기서 ‘어휘’는 주제명표목표 같은 값어휘가 아니라 속성어휘라는 점에 주의하세요.</p>
+      <div class="q" data-why="맞습니다. LOV는 칸의 이름을 정의한 속성어휘를 모읍니다. 주제명표목표처럼 칸에 들어갈 값을 정한 것은 값어휘(통제어휘)입니다.">
+        <p class="ask">LOV에 등록된 ‘어휘’는 어느 쪽인가요?</p>
+        <div class="opts"><button data-ok>creator·title처럼 칸의 이름을 정의한 속성어휘</button><button data-no="주제명표목표 같은 값어휘는 LOV의 대상이 아닙니다.">LCSH처럼 칸에 넣을 값을 정한 값어휘</button></div>
+        <p class="say" aria-live="polite"></p>
+      </div>
+      <p class="small"><a class="btn btn--sm btn--ghost" href="https://lov.linkeddata.es/dataset/lov/" target="_blank" rel="noopener">LOV 열어 보기 (외부)</a> <a class="btn btn--sm btn--ghost" href="materials/metadata-2026-2/aggregators-registry/#registry">레지스트리 참고 페이지</a></p>
+
+      <!-- 정리 -->
+      <h2 class="part" id="summary">한눈에 정리</h2>
+      <ul class="read-list">
+        <li><b>1. 개념</b> 속성-값으로 구조화한 ‘데이터에 대한 데이터’. 요소세트·스키마·온톨로지는 다르다</li>
+        <li><b>2. 서술문</b> 레코드 대신 주어–술어–목적어 트리플로 연결·재사용</li>
+        <li><b>3. 중요성</b> 접근성·맥락 유지·보존 등 아홉 가지 이유로 비용을 들인다</li>
+        <li><b>4. 역사</b> 역할은 점토판 목록부터, 본격적 역사는 1990년대 웹과 더블린 코어부터</li>
+        <li><b>5. 기능·유형</b> 가장 중요한 기능은 검색. 유형 구분은 학자마다 다르고 절대적이지 않다</li>
+        <li><b>6. 표준</b> 구조·내용·값·교환표준을 함께 써서 일관되게 만들고 주고받는다</li>
+        <li><b>7. 개념모델</b> 개체·관계를 먼저 설계. E-R·온톨로지·LRM(저작→표현형→구현형→개별자료)</li>
+        <li><b>8. 구성 원칙</b> 간결성에서 모듈화·확장성·구체화·다중언어·상호운용성으로, 그리고 FAIR</li>
+        <li><b>9. 서비스 사례</b> 백엔드에 요소별로 기술한 만큼 프론트엔드에서 찾고 거른다</li>
+        <li><b>10. 레지스트리</b> 이미 있는 요소를 찾아 재사용하게 해 주는 공식 시스템</li>
+      </ul>
+      <p class="prose">한 줄로 줄이면, <b>잘 설계하고 통제해서 기술한 만큼 찾을 수 있고 다시 쓸 수 있다</b>는 것입니다.</p>
+
+      <h3 class="sub">교재 47쪽 연습문제 요지와 관련 부</h3>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>번호</th><th>요지 (정확한 문구는 교재)</th><th>관련</th></tr></thead>
+          <tbody>
+            <tr><th>1</th><td>일상에서 메타데이터를 만들어 두면 좋을 사례 찾기</td><td>1·3부 · 실습 1</td></tr>
+            <tr><th>2</th><td>메타데이터가 왜 필요한지 정리하기</td><td>3부</td></tr>
+            <tr><th>3</th><td>학자별 유형 구분을 비교해 공통점과 차이점 찾기</td><td>5부 · 실습 3</td></tr>
+            <tr><th>4</th><td>표준을 구조·내용·값·교환으로 나누고 도서관 표준을 분류하기</td><td>6부 · 실습 4</td></tr>
+            <tr><th>5</th><td>가상 사례로 개체·속성·관계를 갖춘 개념모델 그리기</td><td>7부 · 실습 7</td></tr>
+            <tr><th>6</th><td>한 시스템의 프론트엔드를 보고 백엔드 메타데이터 설계해 보기</td><td>9부</td></tr>
+            <tr><th>7</th><td>레지스트리에서 title·author·creator를 찾고 하나를 골라 이유 설명하기</td><td>10부 · LOV</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">7번은 정답이 하나인 문제가 아닙니다. LOV 수록 기준의 눈으로 후보를 비교하고(URI 안정성·문서화·발행기관·버전 관리), 얼마나 널리 재사용되는지, 내 응용프로파일의 다른 요소와 같은 어휘인지를 근거로 고른 이유를 쓰면 됩니다.</p>
+
+      <!-- 용어 -->
+      <h2 class="part" id="glossary">용어 한 장</h2>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>용어</th><th>쉬운 말</th><th>용어</th><th>쉬운 말</th></tr></thead>
+          <tbody>
+            <tr><th>메타데이터</th><td>데이터에 대한 데이터</td><th>트리플</th><td>주어·술어·목적어 세 조각 문장</td></tr>
+            <tr><th>속성 / 속성값(속성치)</th><td>칸 이름 / 칸 내용</td><th>서술문 / 기술 / 기술세트</th><td>속성-값 한 쌍 / 한 자원의 서술문 묶음 / 기술끼리 이은 것</td></tr>
+            <tr><th>요소세트(스킴)</th><td>어떤 칸을 둘지 정한 목록</td><th>패싯</th><td>결과를 나눠 보는 기준</td></tr>
+            <tr><th>스키마</th><td>요소세트를 기계가 읽게 인코딩한 명세서</td><th>통제어휘 / 폭소노미</th><td>미리 정한 표준 용어 / 이용자가 자유롭게 붙인 태그</td></tr>
+            <tr><th>온톨로지</th><td>클래스·속성·규칙까지 정한 지식 모델</td><th>하베스팅</th><td>여러 제공자의 메타데이터를 모아 중앙 색인으로</td></tr>
+            <tr><th>구조 / 내용 / 값 / 교환표준</th><td>어떤 칸 / 어떻게 적나 / 무엇 중 고르나 / 어떤 파일로</td><th>응용프로파일</th><td>여러 표준의 요소를 골라 기관 용도에 맞게 조합한 명세</td></tr>
+            <tr><th>전거파일</th><td>이름의 대표 표기를 정해 다른 표기를 묶는 값표준</td><th>크로스워크</th><td>서로 다른 표준의 요소를 짝지은 대응표</td></tr>
+            <tr><th>개체 / 속성 / 관계</th><td>E-R 모델의 세 요소</td><th>클래스 / 인스턴스</th><td>사물의 종류 / 그 구체적 사례</td></tr>
+            <tr><th>저작·표현형·구현형·개별자료</th><td>작품 / 텍스트 / 판 / 그 한 권</td><th>FAIR</th><td>찾을 수 있게·접근할 수 있게·함께 쓸 수 있게·다시 쓸 수 있게</td></tr>
+            <tr><th>프론트엔드 / 백엔드</th><td>이용자가 보는 화면 / 뒤편의 데이터베이스</td><th>레지스트리</th><td>요소세트·어휘를 등록·출판·관리하는 공식 시스템</td></tr>
+            <tr><th>메타-메타데이터</th><td>메타데이터에 대한 메타데이터(누가·언제·어떤 표준으로)</td><th>속성어휘 / 값어휘</th><td>칸의 이름을 정한 어휘 / 칸에 넣을 값을 정한 어휘</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:1.4rem">
+        <a class="btn" href="materials/metadata-2026-2/overview/lab.html">실습하러 가기</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/overview/">이론과 실습 안내</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/vocabulary/theory.html">다음: 교재 2장 메타데이터 어휘</a>
+      </div>
+
+      <h2 class="part" style="font-size:1.1rem">근거</h2>
+      <p class="src">
+        이 페이지는 수업 교재 『메타데이터의 이해와 적용』(이미화 등) 1장 ‘메타데이터 개요’(2~47쪽)의 흐름을 강의 슬라이드(79장) 순서에 따라 열 부로 묶고 쉬운 말로 다시 쓴 요약입니다. 교재의 그림과 표를 옮긴 것이 아니므로 자세한 내용은 교재를 읽어 주세요. 비유와 ‘수업용’, ‘가상’으로 표시한 예시는 강의를 위해 만든 것입니다. 교재가 인용한 문헌(Gilliland 2016; Miller 2022; Riley 2017; Zeng &amp; Qin 2022; Joudrey &amp; Taylor 2018; Duval et al. 2002; Wilkinson et al. 2016 등)은 교재 1장 참고문헌을 보세요. 외부 링크 LOV는 2026-11-06 기준 주소입니다.
+      </p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script src="materials/metadata-2026-2/overview/overview.js"></script>
+</body>
+</html>

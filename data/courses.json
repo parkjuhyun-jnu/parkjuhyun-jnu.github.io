@@ -51,22 +51,34 @@
       "weeks": [],
       "materials": [
         {
-          "no": "2강",
-          "title": "XML과 JSON 실습 자료",
-          "url": "materials/metadata-2026-2/xml-json/",
-          "note": "두 주(2강 ①·②) 실습 파일(zip) · 실습 안내서(PDF) · API 링크 모음"
+          "no": "전체",
+          "title": "수업 자료 한눈에",
+          "url": "materials/metadata-2026-2/",
+          "note": "교재 1·2장 이론, 2강·3강 실습 묶음, 참고 2편을 배우는 순서와 자료 사이의 연결로 정리"
         },
         {
-          "no": "3강",
-          "title": "데이터베이스와 SQL 실습",
-          "url": "materials/metadata-2026-2/sql-db/",
-          "note": "두 주(3강 ①·②) 도서관 DB 구조 보기(ERD) · 브라우저 SQL 실습실(설치 없음, 26문제)"
+          "no": "교재 1장",
+          "title": "메타데이터 개요: 이론과 실습",
+          "url": "materials/metadata-2026-2/overview/",
+          "note": "이론 10부 요약과 확인 문제 · 브라우저 실습 7개(설치 없음): 데이터와 메타데이터, 트리플, 유형, 표준, 이용자 과업, FAIR, 개념모델 · 강의 슬라이드 PDF(79장)"
         },
         {
           "no": "교재 2장",
           "title": "메타데이터 어휘: 이론과 실습",
           "url": "materials/metadata-2026-2/vocabulary/",
           "note": "이론 5부 요약과 확인 문제 · 브라우저 실습 6개(설치 없음): 더블린 코어, 덤 다운, RDF 그래프, 네임스페이스, 내 요소세트"
+        },
+        {
+          "no": "2강",
+          "title": "XML과 JSON 실습 자료",
+          "url": "materials/metadata-2026-2/xml-json/",
+          "note": "두 주(2강 ①·②) 웹에서 바로 하는 실습 6개 · 오류 찾기 게임 · 실습 파일(zip) · 실습 안내서(PDF)"
+        },
+        {
+          "no": "3강",
+          "title": "데이터베이스와 SQL 실습",
+          "url": "materials/metadata-2026-2/sql-db/",
+          "note": "두 주(3강 ①·②) 도서관 DB 구조 보기(ERD) · 브라우저 SQL 실습실(설치 없음, 26문제) · 슬라이드 PDF"
         },
         {
           "no": "참고",
