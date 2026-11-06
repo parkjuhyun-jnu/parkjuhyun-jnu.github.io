@@ -134,6 +134,24 @@
       </div>
       <p class="prose">사람과 ‘사람을 설명한 문서’는 다른 대상입니다. 저자는 1900년에 태어났지만, 그 문서는 그렇지 않습니다. 두 대상에 주소를 따로 주어야 ‘누구의 생년인가’가 섞이지 않습니다.</p>
 
+      <h2 class="part">웹페이지 속 사진은 무엇으로 가리키나요?</h2>
+      <p class="prose">이 사이트 <a href="index.html">첫 화면</a>의 프로필 사진을 예로 들어 봅시다. 사진은 페이지에 붙어 있는 그림처럼 보여서 주소가 없을 것 같지만, 페이지와 별개인 파일이고 자기 <b>URL</b>이 있습니다. 그래서 URI이기도 합니다.</p>
+      <p class="prose"><a href="assets/img/profile.jpg" target="_blank" rel="noopener"><code>https://parkjuhyun-jnu.github.io/assets/img/profile.jpg</code></a></p>
+      <p class="prose">주소창에 보이는 <code>https://parkjuhyun-jnu.github.io/</code>는 페이지의 URL입니다. 브라우저는 페이지를 받은 뒤 사진을 따로 한 번 더 요청합니다. 사진을 오른쪽 클릭해 ‘새 탭에서 이미지 열기’를 누르면 사진의 주소를 볼 수 있습니다.</p>
+      <p class="prose">페이지 코드에는 이렇게 적혀 있습니다. <code>&lt;img src="assets/img/profile.jpg" alt="박주현 교수"&gt;</code> 여기서 <code>assets/img/profile.jpg</code>는 스킴이 없는 <b>상대 참조</b>라 그대로는 URI가 아니고, 페이지 주소를 기준으로 풀어야 위의 URL이 됩니다. <code>alt</code>의 ‘박주현 교수’는 사진을 글로 설명하는 값이고 식별자가 아닙니다.</p>
+      <p class="prose">다만 이 URL이 사진에 관한 모든 것을 가리키지는 않습니다. 무엇을 가리키려는지에 따라 필요한 식별자가 달라집니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>가리키려는 대상</th><th>식별자</th></tr></thead>
+          <tbody>
+            <tr><th>이 서버에 있는 사진 파일</th><td>위의 URL로 가리킵니다.</td></tr>
+            <tr><th>파일 위치와 상관없는 그 사진 자체</th><td>아직 없습니다. 파일을 옮기면 URL이 바뀌므로, 오래 가리켜야 한다면 DOI나 ARK 같은 영구 식별자를 새로 받아야 합니다.</td></tr>
+            <tr><th>사진 속 사람</th><td>이 URL로는 가리킬 수 없습니다. ORCID처럼 사람을 가리키는 URI가 따로 필요합니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">세 번째 경우가 특히 중요합니다. 이 URL을 사람의 식별자로 쓰면 ‘이 사람의 생년’이 아니라 ‘이 JPEG 파일의 생년’을 적는 셈이 됩니다. 위에서 본 사람과 문서의 구분과 같은 문제입니다.</p>
+
       <h2 class="part">자주 하는 실수</h2>
       <ul class="prose">
         <li><b>글자 하나만 달라도 다른 URI입니다.</b> 브라우저에서는 <code>http</code>와 <code>https</code>가 같은 곳으로 이어지는 일이 많지만, 식별자로서는 다릅니다. 국립중앙도서관 SPARQL 서버에 물어보니 <code>http://lod.nl.go.kr/resource/KAC199623935</code>에 관한 자료는 있고, <code>https://</code>로 쓰면 없다고 답합니다(2026-11-05). 실습 5에서 <code>http</code>로 쓰는 까닭입니다.</li>
@@ -149,7 +167,7 @@
       <div id="quiz"></div>
 
       <h2 class="part" style="font-size:1rem; font-family:inherit">출처</h2>
-      <p class="src"><a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener">RFC 3986 (URI 일반 문법)</a> 1.1.3절과 3절, <a href="https://url.spec.whatwg.org/" target="_blank" rel="noopener">WHATWG URL Standard</a>, <a href="https://www.w3.org/TR/cooluris/" target="_blank" rel="noopener">W3C Cool URIs for the Semantic Web</a>. 주소의 응답은 2026-11-05에 확인했습니다. 서가 위치의 ‘○○도서관’은 비유로 든 가상의 예입니다.</p>
+      <p class="src"><a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener">RFC 3986 (URI 일반 문법)</a> 1.1.3절과 3절, <a href="https://url.spec.whatwg.org/" target="_blank" rel="noopener">WHATWG URL Standard</a>, <a href="https://www.w3.org/TR/cooluris/" target="_blank" rel="noopener">W3C Cool URIs for the Semantic Web</a>. 주소의 응답은 2026-11-05에, 사진 주소는 2026-11-06에 확인했습니다. 서가 위치의 ‘○○도서관’은 비유로 든 가상의 예입니다.</p>
     </div>
   </section>
 </main>
@@ -167,6 +185,7 @@
     { s: 'urn:isbn:8949190133', a: 1, why: '스킴(urn:)이 있으니 URI입니다. 다만 어디서 찾을지는 알려 주지 않습니다.' },
     { s: '8949190133', a: 2, why: '스킴이 없습니다. ISBN이지만 이대로는 URI가 아닙니다.' },
     { s: 'http://www.wikidata.org/entity/Q25338', a: 0, why: '작품 『어린 왕자』를 가리키는 식별자이면서, 열면 설명 문서로 이어집니다. 이름과 위치 구실을 함께 합니다.' },
+    { s: 'assets/img/profile.jpg', a: 2, why: '스킴이 없는 상대 참조입니다. 페이지 주소를 기준으로 풀어야 URL이 됩니다.' },
   ];
   const box = document.getElementById('quiz');
   box.innerHTML = QS.map((q, n) => `<div class="q" data-n="${n}"><code>${esc(q.s)}</code><div class="opts">${OPTS.map((o, i) => `<button type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><p class="say" aria-live="polite"></p></div>`).join('');
