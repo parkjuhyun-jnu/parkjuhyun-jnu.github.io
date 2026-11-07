@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
 <base href="../../../">
-<title>URI와 URL의 차이 | 박주현</title>
-<meta name="description" content="메타데이터와아카이빙연구 참고 자료. URI와 URL의 개념과 차이를 도서관 비유와 실제 예시로 설명합니다.">
+<title>URI·URL·URN의 차이 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 참고 자료. URI, URL, URN의 개념과 차이를 도서관 비유와 실제 예시로 설명합니다.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,9 +70,9 @@
     <div class="wrap">
       <p class="small"><a href="course.html?id=metadata-2026-2">← 메타데이터와아카이빙연구</a></p>
       <span class="course-card__term">2026학년도 2학기 · 참고 자료</span>
-      <h1 style="font-family:var(--font-serif); margin-top:.3rem">URI와 URL, 무엇이 다른가요?</h1>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">URI, URL, URN, 무엇이 다른가요?</h1>
 
-      <div class="answer"><b>URI</b>는 대상을 가려내는 식별자 전체를 말합니다. <b>URL</b>은 그중에서 <b>어디서 찾을 수 있는지까지 알려 주는</b> 것입니다. 그래서 모든 URL은 URI이지만, 모든 URI가 URL인 것은 아닙니다.</div>
+      <div class="answer"><b>URI</b>는 대상을 가려내는 식별자 전체를 말합니다. <b>URL</b>은 그중에서 <b>어디서 찾을 수 있는지까지 알려 주는</b> 것이고, <b>URN</b>은 <b>위치와 상관없이 오래 쓰려고 붙인 이름</b>입니다. 그래서 URL과 URN은 모두 URI이지만, 모든 URI가 URL인 것은 아닙니다.</div>
 
       <h2 class="part">도서관으로 생각해 보기</h2>
       <p class="prose">문학동네판 『어린 왕자』를 가리키는 방법을 두 가지 떠올려 봅시다.</p>
@@ -105,6 +105,40 @@
         <span>?output=json<small>질의: 덧붙이는 조건</small></span>
       </div>
       <p class="prose">맨 앞의 <b>스킴</b>이 URI의 필수 요소입니다. <code>https:</code>, <code>mailto:</code>, <code>urn:</code>처럼 쌍점 앞에 오는 부분입니다. 그래서 숫자만 적은 <code>9788954603096</code>은 ISBN이기는 해도 URI는 아닙니다. 주소 끝에 <code>#</code>이 붙으면 문서 안의 한 부분을 가리킵니다. 예: <code>http://www.w3.org/2002/07/owl#sameAs</code></p>
+
+      <h2 class="part">URN 뜯어 보기</h2>
+      <p class="prose">URN은 항상 <code>urn:</code>으로 시작하고, 어느 이름 체계의 이름인지를 함께 적습니다.</p>
+      <div class="parts" aria-label="URN을 부분별로 나눈 것">
+        <span>urn:<small>스킴: URN이라는 표시</small></span>
+        <span>isbn:<small>이름공간: 어느 이름 체계인지</small></span>
+        <span>9788954603096<small>이름: 그 체계 안의 값</small></span>
+      </div>
+      <p class="prose">이름공간은 <a href="https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml" target="_blank" rel="noopener">IANA 등록부</a>에서 관리하며, 100개가 넘습니다. 도서관과 학술 분야에서 만날 만한 것은 다음과 같습니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>URN</th><th>이름공간</th><th>가리키는 것</th></tr></thead>
+          <tbody>
+            <tr><th><code>urn:isbn:9788954603096</code></th><td>ISBN (국제표준도서번호)</td><td>문학동네판 『어린 왕자』</td></tr>
+            <tr><th><code>urn:issn:0028-0836</code></th><td>ISSN (국제표준연속간행물번호)</td><td>학술지 <i>Nature</i></td></tr>
+            <tr><th><code>urn:nbn:de:101-20210518113</code></th><td>NBN (국가서지번호)</td><td>독일국립도서관에 메타데이터를 보내는 방법을 안내한 문서</td></tr>
+            <tr><th><code>urn:doi:10.1038/sdata.2016.18</code></th><td>DOI (디지털 객체 식별자)</td><td>논문 한 편</td></tr>
+            <tr><th><code>urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6</code></th><td>UUID (프로그램이 만드는 고유 번호)</td><td>표준 문서 RFC 9562에 실린 예시 값</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose"><b>위치가 없는데 어떻게 찾아갈까요?</b> URN을 지금의 위치로 바꿔 주는 <b>해석 서비스(resolver)</b>를 거칩니다. 위 표의 NBN을 <a href="https://nbn-resolving.org/urn:nbn:de:101-20210518113" target="_blank" rel="noopener">독일국립도서관의 해석 서비스</a>에 넣으면 <code>https://d-nb.info/1382831285/34</code>에 있는 PDF로 옮겨 갑니다. 문서를 옮겨도 해석 서비스의 정보만 고치면 되므로, URN은 그대로 쓸 수 있습니다.</p>
+      <p class="prose">다만 <code>urn:</code>을 붙인다고 저절로 영구해지는 것은 아닙니다. 표준(RFC 8141)도 URN을 오래 가는 식별자로 쓰려는 의도를 말할 뿐이고, 실제로 오래 가는지는 이름을 관리하는 기관에 달려 있습니다. 모든 URN에 해석 서비스가 있는 것도 아닙니다.</p>
+      <p class="prose"><b>같은 식별자도 적는 방법에 따라 달라집니다.</b> DOI를 예로 들어 봅시다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>적는 방법</th><th>무엇인가</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><th><code>10.1038/sdata.2016.18</code></th><td>URI가 아님</td><td>스킴이 없는 DOI 값 그대로입니다.</td></tr>
+            <tr><th><code>urn:doi:10.1038/sdata.2016.18</code></th><td><b>URN</b></td><td>이름으로 적은 것입니다. 브라우저 주소창에 넣어도 바로 열리지 않습니다.</td></tr>
+            <tr><th><a href="https://doi.org/10.1038/sdata.2016.18" target="_blank" rel="noopener"><code>https://doi.org/10.1038/sdata.2016.18</code></a></th><td><b>URL</b></td><td>DOI 해석 서비스의 주소를 앞에 붙인 것입니다. 눌러서 찾아갈 수 있습니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <h2 class="part">실제 예시</h2>
       <div class="wrapt">
@@ -145,7 +179,7 @@
           <thead><tr><th>가리키려는 대상</th><th>식별자</th></tr></thead>
           <tbody>
             <tr><th>이 서버에 있는 사진 파일</th><td>위의 URL로 가리킵니다.</td></tr>
-            <tr><th>파일 위치와 상관없는 그 사진 자체</th><td>아직 없습니다. 파일을 옮기면 URL이 바뀌므로, 오래 가리켜야 한다면 DOI나 ARK 같은 영구 식별자를 새로 받아야 합니다.</td></tr>
+            <tr><th>파일 위치와 상관없는 그 사진 자체</th><td>아직 없습니다. 파일을 옮기면 URL이 바뀌므로, 오래 가리켜야 한다면 URN이나 DOI, ARK 같은 식별자를 새로 정해야 합니다.</td></tr>
             <tr><th>사진 속 사람</th><td>이 URL로는 가리킬 수 없습니다. ORCID처럼 사람을 가리키는 URI가 따로 필요합니다.</td></tr>
           </tbody>
         </table>
@@ -167,7 +201,7 @@
       <div id="quiz"></div>
 
       <h2 class="part" style="font-size:1rem; font-family:inherit">출처</h2>
-      <p class="src"><a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener">RFC 3986 (URI 일반 문법)</a> 1.1.3절과 3절, <a href="https://url.spec.whatwg.org/" target="_blank" rel="noopener">WHATWG URL Standard</a>, <a href="https://www.w3.org/TR/cooluris/" target="_blank" rel="noopener">W3C Cool URIs for the Semantic Web</a>. 주소의 응답은 2026-11-05에, 사진 주소는 2026-11-06에 확인했습니다. 서가 위치의 ‘○○도서관’은 비유로 든 가상의 예입니다.</p>
+      <p class="src"><a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener">RFC 3986 (URI 일반 문법)</a> 1.1.3절과 3절, <a href="https://www.rfc-editor.org/rfc/rfc8141" target="_blank" rel="noopener">RFC 8141 (URN)</a>, <a href="https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml" target="_blank" rel="noopener">IANA URN 이름공간 등록부</a>, <a href="https://www.rfc-editor.org/rfc/rfc9562" target="_blank" rel="noopener">RFC 9562 (UUID)</a>, <a href="https://url.spec.whatwg.org/" target="_blank" rel="noopener">WHATWG URL Standard</a>, <a href="https://www.w3.org/TR/cooluris/" target="_blank" rel="noopener">W3C Cool URIs for the Semantic Web</a>. 주소의 응답은 2026-11-05에, 사진 주소는 2026-11-06에, URN 등록과 해석 예시는 2026-11-07에 확인했습니다. 서가 위치의 ‘○○도서관’은 비유로 든 가상의 예입니다.</p>
     </div>
   </section>
 </main>
@@ -185,6 +219,7 @@
     { s: 'urn:isbn:8949190133', a: 1, why: '스킴(urn:)이 있으니 URI입니다. 다만 어디서 찾을지는 알려 주지 않습니다.' },
     { s: '8949190133', a: 2, why: '스킴이 없습니다. ISBN이지만 이대로는 URI가 아닙니다.' },
     { s: 'http://www.wikidata.org/entity/Q25338', a: 0, why: '작품 『어린 왕자』를 가리키는 식별자이면서, 열면 설명 문서로 이어집니다. 이름과 위치 구실을 함께 합니다.' },
+    { s: 'urn:doi:10.1038/sdata.2016.18', a: 1, why: '스킴(urn:)이 있고 이름공간이 doi인 URN입니다. https://doi.org/를 붙여 적으면 URL이 됩니다.' },
     { s: 'assets/img/profile.jpg', a: 2, why: '스킴이 없는 상대 참조입니다. 페이지 주소를 기준으로 풀어야 URL이 됩니다.' },
   ];
   const box = document.getElementById('quiz');
