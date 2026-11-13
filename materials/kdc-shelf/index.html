@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>KDC 서가 정리 | 박주현</title>
+<meta name="description" content="한국십진분류법(KDC) 주류 열 개 서가에 책을 꽂는 60초 분류 연습 게임. 문헌분류 수업용.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<script>/* 사이트에서 고른 밝은·어두운 모드를 따른다 */try{var m=localStorage.getItem("theme");if(m==="light"||m==="dark")document.documentElement.setAttribute("data-theme",m);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+</head>
+<body>
+<style>
+/* 레이아웃: 위 점수판 → 남은 시간 막대 → 가운데 꽂을 책 한 권과 안내 → 아래 열 칸 서가(000~900). 굵은 것은 서가 판자 하나. */
+:root {
+  --bg: #edf1f4;
+  --card: #ffffff;
+  --ink: #17202b;
+  --ink-2: #566272;
+  --edge: #d2dae3;
+  --shelf: #7a5236;
+  --cover: #1f3a5f;
+  --on-cover: #f3efe6;
+  --label: #f2c230;
+  --on-label: #1d1704;
+  --good: #17784d;
+  --bad: #c4332b;
+  --focus: #2860c8;
+  --font-display: "Black Han Sans", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  --font-body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f141b;
+    --card: #18212c;
+    --ink: #e7edf4;
+    --ink-2: #9aa7b6;
+    --edge: #2a3646;
+    --shelf: #a2774f;
+    --cover: #2a4c79;
+    --on-cover: #f3efe6;
+    --label: #f2c230;
+    --on-label: #1d1704;
+    --good: #4cc38a;
+    --bad: #ff6b5f;
+    --focus: #7aa8ff;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f141b;
+  --card: #18212c;
+  --ink: #e7edf4;
+  --ink-2: #9aa7b6;
+  --edge: #2a3646;
+  --shelf: #a2774f;
+  --cover: #2a4c79;
+  --on-cover: #f3efe6;
+  --label: #f2c230;
+  --on-label: #1d1704;
+  --good: #4cc38a;
+  --bad: #ff6b5f;
+  --focus: #7aa8ff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--font-body); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 22px 40px; display: grid; gap: 16px; }
+
+.crumb { margin: 0; font-size: 0.85rem; color: var(--ink-2); }
+.crumb a { color: inherit; }
+.top { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font: 400 2rem/1.1 var(--font-display); letter-spacing: 0.01em; text-wrap: balance; }
+.board { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: end; }
+.stat { display: grid; gap: 0; }
+.stat > span { font-size: 0.75rem; color: var(--ink-2); letter-spacing: 0.04em; }
+.stat b { font: 600 1.5rem/1.1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.stat .mult { font: 600 0.8rem var(--font-mono); color: var(--good); margin-left: 4px; }
+.ghost { padding: 5px 12px; border: 1px solid var(--edge); border-radius: 999px; background: var(--card); cursor: pointer; font-size: 0.85rem; }
+.timebar { height: 6px; border-radius: 3px; background: var(--edge); overflow: hidden; }
+.timebar i { display: block; height: 100%; background: var(--ink); transform-origin: left center; }
+.timebar.low i { background: var(--bad); }
+
+.stage { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 24px; align-items: center; min-height: 19rem; }
+@media (max-width: 640px) { .stage { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 16px; min-height: 0; } }
+.book { position: relative; width: 100%; max-width: 15rem; aspect-ratio: 3 / 4; border-radius: 4px 10px 10px 4px; background: var(--cover); color: var(--on-cover);
+  box-shadow: inset 10px 0 0 rgba(0, 0, 0, 0.18), inset 11px 0 0 rgba(255, 255, 255, 0.08); display: grid; grid-template-rows: 1fr auto; padding: 22px 18px 18px 30px; }
+.book-title { align-self: center; font: 400 1.65rem/1.25 var(--font-display); word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance; }
+.book-label { justify-self: end; min-width: 4.6rem; padding: 5px 10px; border-radius: 4px; background: var(--label); color: var(--on-label); font: 600 1.05rem/1 var(--font-mono); text-align: center; letter-spacing: 0.06em; }
+.book-label.wrong { background: var(--card); color: var(--bad); outline: 2px solid var(--bad); }
+.side { min-width: 0; display: grid; gap: 10px; align-content: center; }
+.feedback { margin: 0; min-height: 3.2em; font-size: 1rem; max-width: 46ch; }
+.feedback .ok { color: var(--good); font-weight: 600; }
+.feedback .no { color: var(--bad); font-weight: 600; }
+.panel { display: grid; gap: 10px; max-width: 46ch; }
+.panel h2 { margin: 0; font: 400 1.35rem/1.25 var(--font-display); }
+.panel p { margin: 0; }
+.panel .small { font-size: 0.85rem; color: var(--ink-2); }
+.panel .record { color: var(--good); font-weight: 600; }
+.primary { justify-self: start; padding: 9px 22px; border: 0; border-radius: 999px; background: var(--ink); color: var(--bg); font-weight: 600; cursor: pointer; }
+.results { display: flex; flex-wrap: wrap; gap: 10px 26px; }
+.results div { display: grid; }
+.results span { font-size: 0.75rem; color: var(--ink-2); }
+.results b { font: 600 1.4rem/1.2 var(--font-mono); font-variant-numeric: tabular-nums; }
+.misses { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 0.88rem; max-height: 11rem; overflow: auto; }
+.misses b { font-weight: 600; }
+
+.shelf { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px; padding: 3px 3px 0; background: var(--shelf); border-bottom: 12px solid var(--shelf); border-radius: 4px; }
+@media (min-width: 820px) { .shelf { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
+.slot { min-width: 0; display: grid; gap: 2px; justify-items: center; padding: 12px 4px 10px; border: 0; background: var(--card); cursor: pointer; position: relative; }
+.slot .num { font: 600 1.15rem/1 var(--font-mono); letter-spacing: 0.04em; }
+.slot .name { font-size: 0.82rem; color: var(--ink-2); white-space: nowrap; }
+.slot kbd { position: absolute; top: 4px; right: 6px; font: 500 0.68rem var(--font-mono); color: var(--ink-2); }
+.slot:hover { background: var(--bg); }
+.slot.hit-ok { box-shadow: inset 0 0 0 3px var(--good); }
+.slot.hit-no { box-shadow: inset 0 0 0 3px var(--bad); }
+.slot.answer { box-shadow: inset 0 0 0 3px var(--good); }
+.slot.answer::after { content: "정답"; position: absolute; top: 4px; left: 6px; font-size: 0.68rem; font-weight: 600; color: var(--good); }
+footer { font-size: 0.8rem; color: var(--ink-2); }
+footer p { margin: 0; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .book { transition: transform 0.28s ease, opacity 0.28s ease; }
+  .book.drop { transform: translateY(46px) scale(0.92); opacity: 0; }
+  .book.enter { transform: translateY(-18px); opacity: 0; transition: none; }
+  .book.shake { animation: shake 0.4s; }
+  @keyframes shake { 20% { transform: translateX(-8px); } 40% { transform: translateX(7px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(3px); } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .book { transition: opacity 0.2s; }
+  .book.drop, .book.enter { opacity: 0; }
+}
+</style>
+
+<div class="wrap">
+  <p class="crumb"><a href="../../index.html">박주현</a> · <a href="../../courses.html">수업</a></p>
+  <header class="top">
+    <h1>KDC 서가 정리</h1>
+    <div class="board">
+      <div class="stat"><span>점수</span><b id="score">0</b></div>
+      <div class="stat"><span>연속 정답</span><b><span id="streak">0</span><span class="mult" id="mult"></span></b></div>
+      <div class="stat"><span>남은 시간</span><b id="time">60</b></div>
+      <button type="button" class="ghost" id="btn-sound" aria-pressed="false">소리 켜기</button>
+    </div>
+  </header>
+  <div class="timebar" id="timebar" aria-hidden="true"><i id="timefill"></i></div>
+
+  <section class="stage" aria-label="꽂을 책">
+    <div class="book" id="book">
+      <div class="book-title" id="book-title">심리학 개론</div>
+      <div class="book-label" id="book-label" aria-label="청구기호">???</div>
+    </div>
+    <div class="side">
+      <p class="feedback" id="feedback" aria-live="polite" hidden></p>
+      <div class="panel" id="panel"></div>
+    </div>
+  </section>
+
+  <section class="shelf" id="shelf" aria-label="서가: 주류를 골라 책을 꽂으세요"></section>
+
+  <footer>
+    <p>한국십진분류법(KDC)의 주류 열 개로 나눈 서가입니다. 서가를 누르거나 숫자 키 0~9를 쓰세요. 책은 실제 제목이 아니라 주제로 나타냅니다. 최고 점수는 이 브라우저에만 남습니다.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById(id); }
+  var CLASSES = [["000", "총류"], ["100", "철학"], ["200", "종교"], ["300", "사회과학"], ["400", "자연과학"],
+    ["500", "기술과학"], ["600", "예술"], ["700", "언어"], ["800", "문학"], ["900", "역사"]];
+  // 주제 → KDC 주류. n은 헷갈리기 쉬운 주제에 붙이는 설명
+  var ITEMS = [
+    { t: "백과사전", c: 0 },
+    { t: "문헌정보학 개론", c: 0, n: "문헌정보학은 총류(000)에 둡니다." },
+    { t: "도서관 경영의 실제", c: 0, n: "도서관학·문헌정보학은 총류(000)입니다." },
+    { t: "신문과 저널리즘", c: 0, n: "신문·저널리즘은 총류(000)입니다." },
+    { t: "책의 역사와 서지학", c: 0 },
+    { t: "컴퓨터 프로그래밍 입문", c: 0, n: "KDC는 컴퓨터과학과 프로그래밍을 총류(000)에 둡니다." },
+    { t: "독서법", c: 0, n: "독서와 독서법은 문헌정보학과 함께 총류(000)입니다." },
+    { t: "논리학 입문", c: 1 },
+    { t: "윤리학의 기초", c: 1 },
+    { t: "심리학 개론", c: 1, n: "KDC는 심리학을 철학 류(100)에 둡니다." },
+    { t: "동양철학과 유가 사상", c: 1 },
+    { t: "칸트의 철학", c: 1 },
+    { t: "형이상학 강의", c: 1 },
+    { t: "불교 경전 해설", c: 2 },
+    { t: "기독교 신학", c: 2 },
+    { t: "이슬람교의 이해", c: 2 },
+    { t: "비교종교학", c: 2 },
+    { t: "경제학 원론", c: 3 },
+    { t: "정치학 개론", c: 3 },
+    { t: "헌법 해설", c: 3, n: "법학은 사회과학(300)입니다." },
+    { t: "교육학 개론", c: 3, n: "교육학은 사회과학(300)에 속합니다." },
+    { t: "사회학 이론", c: 3 },
+    { t: "행정학 원론", c: 3 },
+    { t: "세시풍속과 민속", c: 3, n: "풍속과 민속학은 사회과학(300)입니다." },
+    { t: "국방과 군사학", c: 3, n: "국방과 군사학은 사회과학(300)입니다." },
+    { t: "미적분학", c: 4 },
+    { t: "양자 물리학", c: 4 },
+    { t: "유기 화학", c: 4 },
+    { t: "천문학 입문", c: 4 },
+    { t: "지질학과 화석", c: 4 },
+    { t: "식물도감", c: 4 },
+    { t: "동물의 행동", c: 4 },
+    { t: "내과 의학", c: 5, n: "의학은 기술과학(500)입니다." },
+    { t: "벼농사 기술", c: 5, n: "농업은 기술과학(500)입니다." },
+    { t: "집밥 요리책", c: 5, n: "요리는 기술과학(500)의 생활과학에 둡니다." },
+    { t: "전기·전자공학", c: 5 },
+    { t: "자동차 정비", c: 5 },
+    { t: "화학공학", c: 5, n: "화학공학은 자연과학(400)이 아니라 기술과학(500)입니다." },
+    { t: "피아노 연주법", c: 6 },
+    { t: "사진 촬영 기법", c: 6 },
+    { t: "서예 입문", c: 6 },
+    { t: "축구 전술", c: 6, n: "스포츠는 예술(600) 류의 오락·스포츠에 둡니다." },
+    { t: "도자기 공예", c: 6 },
+    { t: "영화 이론", c: 6, n: "영화는 연극과 함께 예술(600)입니다." },
+    { t: "바둑 첫걸음", c: 6, n: "바둑 같은 오락은 예술(600) 류입니다." },
+    { t: "한국어 문법", c: 7 },
+    { t: "영어 회화", c: 7 },
+    { t: "일본어 첫걸음", c: 7 },
+    { t: "중국어 발음", c: 7 },
+    { t: "언어학 개론", c: 7, n: "언어학은 문학(800)이 아니라 언어(700)입니다." },
+    { t: "한국 현대 시집", c: 8 },
+    { t: "한국 장편 소설", c: 8 },
+    { t: "셰익스피어 희곡", c: 8 },
+    { t: "일본 단편 소설", c: 8, n: "일본 소설은 언어(700)가 아니라 문학(800)입니다." },
+    { t: "문학 비평 이론", c: 8 },
+    { t: "한국 근현대사", c: 9 },
+    { t: "세계사 연표", c: 9 },
+    { t: "유럽 여행기", c: 9, n: "여행기와 지리는 역사(900) 류입니다." },
+    { t: "세계 지도책", c: 9, n: "지리와 지도는 역사(900) 류입니다." },
+    { t: "위인 전기", c: 9, n: "전기는 역사(900) 류에 둡니다." }
+  ];
+  var ROUND = 60, PENALTY = 3, BEST_KEY = "kdc-shelf-best-v1";
+
+  var book = $("book"), titleEl = $("book-title"), labelEl = $("book-label"), feedback = $("feedback"), panel = $("panel");
+  var shelf = $("shelf"), timeEl = $("time"), timefill = $("timefill"), timebar = $("timebar");
+  var state = "ready", deck = [], cur = ITEMS[9], score = 0, streak = 0, right = 0, total = 0, misses = [];
+  var endAt = 0, pausedLeft = null, lock = false, soundOn = false, audio = null, best = readBest();
+
+  CLASSES.forEach(function (k, i) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "slot"; b.dataset.c = String(i);
+    b.setAttribute("aria-label", k[0] + " " + k[1]);
+    b.innerHTML = '<span class="num">' + k[0] + '</span><span class="name">' + k[1] + "</span><kbd>" + i + "</kbd>";
+    shelf.appendChild(b);
+  });
+  var slots = Array.prototype.slice.call(shelf.children);
+
+  function readBest() { try { return parseInt(localStorage.getItem(BEST_KEY) || "0", 10) || 0; } catch (e) { return 0; } }
+  function writeBest(v) { try { localStorage.setItem(BEST_KEY, String(v)); } catch (e) { /* 저장할 수 없으면 이번 판만 기억한다 */ } }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function mult() { return Math.min(4, 1 + Math.floor(streak / 3)); }
+  function className(c) { return CLASSES[c][0] + " " + CLASSES[c][1]; }
+
+  function board() {
+    $("score").textContent = score;
+    $("streak").textContent = streak;
+    $("mult").textContent = state === "playing" && mult() > 1 ? "×" + mult() : "";
+  }
+
+  function showBook(item) {
+    titleEl.textContent = item.t;
+    labelEl.textContent = "???";
+    labelEl.className = "book-label";
+  }
+
+  function clearSlots() { slots.forEach(function (s) { s.classList.remove("hit-ok", "hit-no", "answer"); }); }
+
+  function nextBook() {
+    if (state !== "playing") return; // 시간이 끝난 뒤에는 새 책을 꺼내지 않는다
+    if (!deck.length) deck = shuffle(ITEMS.slice());
+    cur = deck.pop();
+    clearSlots();
+    book.classList.remove("drop", "shake");
+    book.classList.add("enter");
+    showBook(cur);
+    void book.offsetWidth; // 들어오는 움직임을 다시 시작한다
+    book.classList.remove("enter");
+    lock = false;
+  }
+
+  function readyPanel() {
+    panel.innerHTML = "<h2>책을 알맞은 서가에 꽂으세요</h2>" +
+      "<p>60초 동안 책의 주제를 보고 KDC 주류 서가를 고릅니다. 맞히면 10점이고, 세 권을 잇달아 맞히면 2배, 여섯 권이면 3배가 됩니다. 틀리면 3초가 줄어듭니다.</p>" +
+      '<p class="small">서가를 누르거나 숫자 키 0~9를 쓰세요. 지금 보이는 책은 연습용입니다.' + (best ? " 최고 점수 " + best + "점." : "") + "</p>" +
+      '<button type="button" class="primary" data-action="start">시작</button>';
+    panel.hidden = false;
+    feedback.hidden = true;
+  }
+
+  function start() {
+    state = "playing"; score = 0; streak = 0; right = 0; total = 0; misses = []; pausedLeft = null;
+    deck = shuffle(ITEMS.slice());
+    endAt = performance.now() + ROUND * 1000;
+    panel.hidden = true;
+    feedback.hidden = false;
+    feedback.innerHTML = "책의 주제를 보고 서가를 고르세요.";
+    board();
+    nextBook();
+    tick();
+  }
+
+  function beep(ok) {
+    if (!soundOn) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      var o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime;
+      o.type = ok ? "sine" : "square";
+      o.frequency.value = ok ? 880 : 196;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(ok ? 0.08 : 0.04, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + (ok ? 0.15 : 0.25));
+      o.connect(g); g.connect(audio.destination);
+      o.start(t); o.stop(t + 0.3);
+    } catch (e) { /* 소리를 낼 수 없는 환경이면 조용히 넘어간다 */ }
+  }
+
+  function answer(c) {
+    if (state !== "playing") { if (state === "ready") start(); return; }
+    if (lock) return;
+    lock = true;
+    total++;
+    var slot = slots[c];
+    if (c === cur.c) {
+      right++; streak++;
+      var gain = 10 * mult();
+      score += gain;
+      slot.classList.add("hit-ok");
+      labelEl.textContent = CLASSES[c][0];
+      feedback.innerHTML = '<span class="ok">맞았습니다 +' + gain + "</span> " + esc(cur.t) + " → " + esc(className(c));
+      book.classList.add("drop");
+      beep(true);
+      board();
+      setTimeout(nextBook, 340);
+    } else {
+      streak = 0;
+      endAt -= PENALTY * 1000;
+      if (!misses.some(function (m) { return m.t === cur.t; })) misses.push(cur);
+      slot.classList.add("hit-no");
+      slots[cur.c].classList.add("answer");
+      labelEl.textContent = CLASSES[cur.c][0];
+      labelEl.className = "book-label wrong";
+      feedback.innerHTML = '<span class="no">아쉽습니다 −3초</span> 정답은 ' + esc(className(cur.c)) + "입니다." + (cur.n ? " " + esc(cur.n) : "");
+      book.classList.add("shake");
+      beep(false);
+      board();
+      setTimeout(nextBook, 1500);
+    }
+  }
+
+  function tick() {
+    if (state !== "playing" || pausedLeft !== null) return;
+    var left = Math.max(0, endAt - performance.now());
+    timeEl.textContent = Math.ceil(left / 1000);
+    timefill.style.transform = "scaleX(" + (left / (ROUND * 1000)) + ")";
+    timebar.classList.toggle("low", left < 10000);
+    if (left <= 0) { finish(); return; }
+    window.requestAnimationFrame(tick);
+  }
+
+  function finish() {
+    state = "over"; lock = false;
+    var record = score > best;
+    if (record) { best = score; writeBest(best); }
+    clearSlots();
+    var acc = total ? Math.round(right / total * 100) : 0;
+    var list = misses.map(function (m) {
+      return "<li><b>" + esc(m.t) + "</b> → " + esc(className(m.c)) + (m.n ? ". " + esc(m.n) : "") + "</li>";
+    }).join("");
+    panel.innerHTML = "<h2>서가 정리 끝</h2>" +
+      '<div class="results"><div><span>점수</span><b>' + score + "</b></div><div><span>맞힌 책</span><b>" + right + " / " + total +
+      "</b></div><div><span>정확도</span><b>" + acc + "%</b></div><div><span>최고 점수</span><b>" + best + "</b></div></div>" +
+      (record && score > 0 ? '<p class="record">새 최고 기록입니다.</p>' : "") +
+      (list ? '<p class="small">틀린 책</p><ul class="misses">' + list + "</ul>" : '<p class="small">틀린 책이 없습니다.</p>') +
+      '<button type="button" class="primary" data-action="start">다시 하기</button>';
+    feedback.hidden = true;
+    panel.hidden = false;
+    board();
+    timeEl.textContent = "0";
+  }
+
+  shelf.addEventListener("click", function (e) {
+    var b = e.target.closest(".slot");
+    if (b) answer(parseInt(b.dataset.c, 10));
+  });
+  panel.addEventListener("click", function (e) {
+    if (e.target.closest('[data-action="start"]')) start();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (/^[0-9]$/.test(e.key)) { e.preventDefault(); answer(parseInt(e.key, 10)); return; }
+    if ((e.key === "Enter" || e.key === " ") && state !== "playing" && !(e.target.closest && e.target.closest("button"))) {
+      e.preventDefault(); start();
+    }
+  });
+  $("btn-sound").addEventListener("click", function () {
+    soundOn = !soundOn;
+    this.setAttribute("aria-pressed", String(soundOn));
+    this.textContent = soundOn ? "소리 끄기" : "소리 켜기";
+    if (soundOn) beep(true);
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (state !== "playing") return;
+    if (document.hidden) { pausedLeft = Math.max(0, endAt - performance.now()); }
+    else if (pausedLeft !== null) { endAt = performance.now() + pausedLeft; pausedLeft = null; tick(); }
+  });
+
+  showBook(cur);
+  readyPanel();
+  board();
+})();
+</script>
+</body>
+</html>

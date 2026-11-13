@@ -60,6 +60,7 @@ python -m http.server 5173
 | `about.html` | 소개 글, 약력, 학회 활동 |
 | `research.html` | 학술발표 목록 |
 | `data/media.json` | 미디어·강연 페이지(방송·보도·기고·강연·토론회). 포스터·사진은 `assets/img/media/` 에 |
+| `materials/kdc-shelf/index.html` | 수업 페이지 '수업 도구'의 KDC 서가 정리 게임(혼자 서는 페이지, 문제는 파일 안 `ITEMS`). 수업 도구 목록은 `courses.html`의 '수업 도구' 절 |
 | `assets/css/style.css` 맨 위 `:root` | 사이트 전체 색 |
 | `assets/css/style.css` 20~22절 | 디자인 고르기 단추와 두 디자인(다듬은 판·장서 카드). 단추 동작은 `assets/js/common.js`의 '디자인 선택' |
 | `PRODUCT.md` | impeccable 스킬이 디자인 판단의 기준으로 읽는 사이트 설명(주 방문자, 목적) |
