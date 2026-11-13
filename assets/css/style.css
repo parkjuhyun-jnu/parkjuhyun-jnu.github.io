@@ -242,6 +242,18 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .portrait img { width: 100%; height: 100%; object-fit: cover; }
 /* 사진이 들어오면 자리표시 문구용 안쪽 여백을 없애 꽉 채웁니다. */
 .portrait:has(img) { padding: 0; background: var(--surface-2); }
+/* 사진 오른쪽 아래에 겹치는 캐릭터 아바타 */
+.portrait:has(img) { position: relative; }
+.portrait img.portrait__avatar {
+  position: absolute; right: 6%; bottom: 4%; width: 34%; height: auto; aspect-ratio: 1;
+  object-fit: contain; border-radius: 50%; border: 3px solid var(--surface);
+  box-shadow: 0 2px 10px rgba(0,0,0,.18); background: var(--surface);
+}
+[data-design="catalog"] .portrait img.portrait__avatar { bottom: calc(1.6rem + 4%); right: calc(.55rem + 5%); }
+@media (max-width: 819px) {
+  .portrait img.portrait__avatar { border-width: 2px; }
+  [data-design="catalog"] .portrait img.portrait__avatar { bottom: calc(1rem + 4%); right: calc(.35rem + 4%); }
+}
 
 /* ---------- 6. 두 갈래 진입 카드 ---------- */
 .gateway { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
@@ -796,6 +808,8 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 .press-photo { margin: 0; display: grid; gap: .7rem; max-width: 260px; }
 .press-photo img { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--line); }
 .press-photo figcaption { display: grid; gap: .35rem; justify-items: start; }
+.press-photos { display: grid; gap: 1.4rem; }
+.press-photo--avatar img { border-radius: 50%; border: 0; max-width: 200px; }
 .press-list { margin: 0; padding-left: 1.1em; display: grid; gap: .45rem; font-size: .94rem; }
 .press-list .muted { font-size: .84rem; margin-left: .3rem; }
 

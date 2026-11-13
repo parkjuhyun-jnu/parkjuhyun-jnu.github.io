@@ -184,7 +184,14 @@
   const img = new Image();
   img.onload = () => {
     const box = document.getElementById('portrait');
-    if (box) { box.innerHTML = ''; box.appendChild(img); img.alt = '박주현 교수'; }
+    if (box) {
+      box.innerHTML = ''; box.appendChild(img); img.alt = '박주현 교수';
+      // 사진 오른쪽 아래에 캐릭터 아바타를 겹쳐 보여 줍니다(사진은 그대로).
+      const av = new Image();
+      av.className = 'portrait__avatar'; av.src = 'assets/img/avatar.png';
+      av.alt = '박주현 교수 캐릭터 아바타'; av.width = 512; av.height = 512;
+      box.appendChild(av);
+    }
   };
   img.src = 'assets/img/profile.jpg';
 })();
