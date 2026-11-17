@@ -130,8 +130,8 @@ footer p { margin: 0; }
     <div class="screen" id="screen"><div class="panel" id="panel"></div></div>
   </div>
 
-  <p class="help">컴퓨터: 마우스를 움직이거나 ← → 키로 받침대를 옮기고, 클릭이나 스페이스로 공을 쏩니다. P 키로 멈춥니다.
-    휴대폰·태블릿: 판 위에서 손가락을 좌우로 움직이고, 톡 치면 공을 쏩니다.</p>
+  <p class="help">공이 받침대에 있을 때 정답이라고 생각하는 벽돌을 누르면(키보드는 ← → 로 고르고 스페이스) 공이 그 벽돌로 곧장 날아갑니다.
+    맞으면 벽돌이 깨지고 공이 받침대로 돌아옵니다. 틀리면 공이 튕겨 떨어지니, 마우스·손가락·← → 키로 받침대를 옮겨 받아 내세요. 받으면 다시 고를 수 있고, 놓치면 생명이 줄어듭니다. P 키로 멈춥니다.</p>
 
   <details>
     <summary>한국십진분류표 보기 (주류와 이 게임에 나오는 강목)</summary>
@@ -319,6 +319,7 @@ footer p { margin: 0; }
   var bricks = [], questions = [], qi = 0, wrongs = 0, log = [];
   var score = 0, streak = 0, lives = 3, speed = 300, speedUp = 1;
   var paddle = { x: 300, w: 100, h: 12, y: 0 }, ball = { x: 0, y: 0, vx: 0, vy: 0, r: 7, stuck: true };
+  var sel = null;   // 쏠 벽돌로 고른 것
   var keys = { left: false, right: false }, parts = [], last = 0, clearAt = 0, soundOn = false, audio = null;
   var best = readBest();
 
@@ -383,7 +384,7 @@ footer p { margin: 0; }
     readColors();
     $("stage-name").textContent = stage.name + "  (" + (stageIdx + 1) + "/" + stageList.length + ")";
     showQuestion();
-    say('<span class="tip">받침대 위의 공을 클릭·터치·스페이스로 쏘세요.</span>');
+    say('<span class="tip">정답이라고 생각하는 벽돌을 누르면 공이 그 벽돌로 날아가요.</span>');
     state = "play"; screen.hidden = true; $("btn-pause").disabled = false;
     hud();
   }
@@ -397,13 +398,15 @@ footer p { margin: 0; }
   function say(html) { $("say").innerHTML = html; }
 
   function resetBall() {
-    ball.stuck = true; ball.vx = 0; ball.vy = 0;
+    ball.stuck = true; ball.vx = 0; ball.vy = 0; ball.target = null; sel = null;
     ball.x = paddle.x; ball.y = paddle.y - ball.r - 1;
   }
+  // 고른 벽돌을 향해 곧장 쏜다. 날아가는 동안 다른 벽돌은 지나친다(아래 줄이 위 줄을 가리지 않게).
   function launch() {
     if (state !== "play" || !ball.stuck || clearAt) return;
-    var a = (Math.random() * 0.6 - 0.3);
-    ball.vx = speed * Math.sin(a); ball.vy = -speed * Math.cos(a); ball.stuck = false;
+    if (!sel || !sel.alive) { say('<span class="tip">정답이라고 생각하는 벽돌을 눌러 고르세요. 키보드는 ← → 로 고르고 스페이스.</span>'); return; }
+    var dx = sel.x + sel.w / 2 - ball.x, dy = sel.y + sel.h / 2 - ball.y, len = Math.hypot(dx, dy) || 1;
+    ball.vx = speed * 1.5 * dx / len; ball.vy = speed * 1.5 * dy / len; ball.target = sel; ball.stuck = false;   // 고른 벽돌로는 빠르게
   }
 
   function hitBrick(b) {
@@ -422,7 +425,9 @@ footer p { margin: 0; }
       say('<span class="ok">정답! +' + gain + "</span> " + esc(q.t) + " → " + esc(where) + (q.n ? ' <span class="tip">' + esc(q.n) + "</span>" : ""));
       qi++; wrongs = 0;
       if (qi >= questions.length) { clearAt = performance.now() + 700; ball.vx = 0; ball.vy = 0; ball.stuck = true; }
-      else { showQuestion(); speed *= 1.03; rescaleBall(); }
+      else { showQuestion(); speed *= 1.03; resetBall(); }
+      hud();
+      return true;
     } else {
       streak = 0; wrongs++;
       b.flash = 1;
@@ -437,15 +442,11 @@ footer p { margin: 0; }
         bricks.forEach(function (x) { if (x.alive && x.code === answerOf(q)) x.glow = true; });
         msg += ' <span class="tip">빛나는 벽돌을 맞혀 보세요.</span>';
       }
+      if (wrongs === 1) msg += ' <span class="tip">튕겨 나온 공을 받침대로 받으면 다시 쏠 수 있어요.</span>';
       say(msg);
     }
     hud();
-  }
-
-  function rescaleBall() {
-    if (ball.stuck) return;
-    var s = Math.hypot(ball.vx, ball.vy) || 1;
-    ball.vx = ball.vx / s * speed; ball.vy = ball.vy / s * speed;
+    return false;
   }
 
   function loseBall() {
@@ -509,7 +510,7 @@ footer p { margin: 0; }
     say("");
     function bestOf(m) { return best[m] ? " · 최고 " + best[m] + "점" : ""; }
     panel.innerHTML = "<h2>단계를 고르세요</h2>" +
-      '<p class="small">공을 놓치면 생명이 하나 줄고, 세 번 놓치면 끝나요. 정답을 잇달아 맞히면 점수가 2배, 3배로 올라가요.</p>' +
+      '<p class="small">정답이라고 생각하는 벽돌을 누르면 공이 날아가요. 틀리면 공이 튕겨 떨어지니 받침대로 받아 내야 해요. 공을 세 번 놓치면 끝나요. 정답을 잇달아 맞히면 점수가 2배, 3배로 올라가요.</p>' +
       '<div class="choices">' +
       '<button type="button" class="choice main" data-mode="all"><b>처음부터 끝까지</b><span>1단계 주류 → 2단계 강목(네 묶음) → 3단계 실제 책을 차례로' + bestOf("all") + "</span></button>" +
       '<button type="button" class="choice" data-mode="s1"><b>1단계 · 주류 10개</b><span>000 총류부터 900 역사까지' + bestOf("s1") + "</span></button>" +
@@ -552,48 +553,57 @@ footer p { margin: 0; }
 
   function update(dt) {
     var move = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
-    if (move) paddle.x += move * W * 1.2 * dt;
+    if (move && !ball.stuck) paddle.x += move * W * 1.2 * dt;
     paddle.x = Math.max(paddle.w / 2, Math.min(W - paddle.w / 2, paddle.x));
 
     if (clearAt && performance.now() >= clearAt) { clearAt = 0; stageClear(); return; }
     if (ball.stuck) { ball.x = paddle.x; ball.y = paddle.y - ball.r - 1; return; }
 
-    var steps = Math.max(1, Math.ceil(speed * dt / (ball.r * 0.7)));
-    var h = dt / steps;
+    var steps = Math.max(1, Math.ceil(Math.hypot(ball.vx, ball.vy) * dt / (ball.r * 0.7)));
+    var h = dt / steps, r = ball.r;
     for (var s = 0; s < steps; s++) {
       ball.x += ball.vx * h; ball.y += ball.vy * h;
-      if (ball.x < ball.r) { ball.x = ball.r; ball.vx = Math.abs(ball.vx); }
-      if (ball.x > W - ball.r) { ball.x = W - ball.r; ball.vx = -Math.abs(ball.vx); }
-      if (ball.y < ball.r) { ball.y = ball.r; ball.vy = Math.abs(ball.vy); }
-      // 받침대: 맞은 자리에 따라 튀는 각도가 달라진다(가운데는 위로, 끝은 비스듬히)
-      if (ball.vy > 0 && ball.y + ball.r >= paddle.y && ball.y - ball.r <= paddle.y + paddle.h &&
-          Math.abs(ball.x - paddle.x) <= paddle.w / 2 + ball.r) {
-        var rel = Math.max(-1, Math.min(1, (ball.x - paddle.x) / (paddle.w / 2)));
-        var ang = rel * 1.05;
-        ball.vx = speed * Math.sin(ang); ball.vy = -speed * Math.cos(ang);
-        ball.y = paddle.y - ball.r;
-        beep(null);
-      }
-      // 벽돌: 한 걸음에 하나만
-      for (var i = 0; i < bricks.length; i++) {
-        var b = bricks[i];
-        if (!b.alive) continue;
-        var nx = Math.max(b.x, Math.min(ball.x, b.x + b.w)), ny = Math.max(b.y, Math.min(ball.y, b.y + b.h));
-        var dx = ball.x - nx, dy = ball.y - ny;
-        if (dx * dx + dy * dy <= ball.r * ball.r) {
-          var ox = Math.min(ball.x + ball.r - b.x, b.x + b.w - (ball.x - ball.r));
-          var oy = Math.min(ball.y + ball.r - b.y, b.y + b.h - (ball.y - ball.r));
-          if (ox < oy) { ball.vx = ball.x < b.x + b.w / 2 ? -Math.abs(ball.vx) : Math.abs(ball.vx); }
-          else { ball.vy = ball.y < b.y + b.h / 2 ? -Math.abs(ball.vy) : Math.abs(ball.vy); }
-          hitBrick(b);
-          break;
+      // 고른 벽돌로 날아가는 중: 닿으면 맞았는지 가린다
+      if (ball.target) {
+        var b = ball.target;
+        if (ball.x > b.x - r && ball.x < b.x + b.w + r && ball.y > b.y - r && ball.y < b.y + b.h + r) {
+          ball.target = null;
+          if (hitBrick(b)) return;           // 정답: 공은 받침대로 돌아간다
+          // 틀림: 벽돌에서 튕겨 아래로 비스듬히 떨어진다
+          var a = Math.max(-0.8, Math.min(0.8, -Math.atan2(ball.vx, -ball.vy) * 0.7 + (Math.random() - 0.5) * 0.5));
+          ball.vx = speed * Math.sin(a); ball.vy = speed * Math.cos(a);
+          ball.y = b.y + b.h + r + 1;
         }
+        continue;
       }
-      if (ball.stuck) return;
-      // 거의 수평으로 도는 공은 위아래로 조금 세운다
-      if (Math.abs(ball.vy) < speed * 0.3) { ball.vy = (ball.vy < 0 ? -1 : 1) * speed * 0.3; ball.vx = Math.sign(ball.vx || 1) * Math.sqrt(speed * speed - ball.vy * ball.vy); }
-      if (ball.y - ball.r > H) { loseBall(); return; }
+      if (ball.x < r) { ball.x = r; ball.vx = Math.abs(ball.vx); }
+      if (ball.x > W - r) { ball.x = W - r; ball.vx = -Math.abs(ball.vx); }
+      if (ball.y < r) { ball.y = r; ball.vy = Math.abs(ball.vy); }
+      // 받침대로 받으면 공이 붙어 다시 고를 수 있다
+      if (ball.vy > 0 && ball.y + r >= paddle.y && ball.y - r <= paddle.y + paddle.h &&
+          Math.abs(ball.x - paddle.x) <= paddle.w / 2 + r) {
+        beep(null);
+        resetBall();
+        say('<span class="tip">받았어요! 다시 벽돌을 골라 쏘세요.</span>');
+        return;
+      }
+      if (ball.y - r > H) { loseBall(); return; }
     }
+  }
+
+  function brickAt(px, py) {
+    for (var i = 0; i < bricks.length; i++) {
+      var b = bricks[i];
+      if (b.alive && px >= b.x && px <= b.x + b.w && py >= b.y && py <= b.y + b.h) return b;
+    }
+    return null;
+  }
+  // 키보드로 고르기: 살아 있는 벽돌을 차례로 옮겨 다닌다
+  function stepSel(dir) {
+    var alive = bricks.filter(function (b) { return b.alive; });
+    if (!alive.length) return;
+    var i = alive.indexOf(sel);
+    sel = i < 0 ? alive[dir > 0 ? 0 : alive.length - 1] : alive[(i + dir + alive.length) % alive.length];
   }
 
   function burst(b) {
@@ -661,8 +671,16 @@ footer p { margin: 0; }
     ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
     ctx.fillStyle = colors["--ball"] || "#f2c230"; ctx.fill();
     if (state === "play" && ball.stuck && !clearAt) {
-      ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.font = "500 13px " + sans; ctx.textAlign = "center";
-      ctx.fillText("클릭 · 터치 · 스페이스로 공 쏘기", W / 2, paddle.y - 26);
+      ctx.save();
+      if (sel && sel.alive) {
+        ctx.setLineDash([6, 7]); ctx.lineWidth = 2; ctx.strokeStyle = "rgba(255,255,255,0.8)";
+        ctx.beginPath(); ctx.moveTo(ball.x, ball.y); ctx.lineTo(sel.x + sel.w / 2, sel.y + sel.h / 2); ctx.stroke();
+        ctx.setLineDash([]); ctx.lineWidth = 3; ctx.strokeStyle = "#fff";
+        roundRect(sel.x - 3, sel.y - 3, sel.w + 6, sel.h + 6, 9); ctx.stroke();
+      }
+      ctx.fillStyle = "rgba(255,255,255,0.75)"; ctx.font = "500 13px " + sans; ctx.textAlign = "center";
+      ctx.fillText(W < 600 ? "정답 벽돌을 톡 누르면 공이 날아가요" : "정답 벽돌을 클릭하면 공이 날아가요 (키보드: ← → 고르고 스페이스)", W / 2, paddle.y - 22);
+      ctx.restore();
     }
   }
 
@@ -694,11 +712,18 @@ footer p { margin: 0; }
 
   /* ------------------------------------------------------------------ 입력 */
   function pointerX(e) { var r = cv.getBoundingClientRect(); return (e.clientX - r.left) * (W / r.width); }
-  field.addEventListener("pointermove", function (e) { if (state === "play") paddle.x = pointerX(e); });
+  function pointerY(e) { var r = cv.getBoundingClientRect(); return (e.clientY - r.top) * (H / r.height); }
+  // 공이 받침대에 있을 때: 벽돌을 가리키면 고르고, 누르면 쏜다. 공이 날아가는 동안: 받침대를 옮긴다.
+  field.addEventListener("pointermove", function (e) {
+    if (state !== "play") return;
+    if (ball.stuck) { if (e.pointerType === "mouse") { var b = brickAt(pointerX(e), pointerY(e)); if (b) sel = b; } }
+    else paddle.x = pointerX(e);
+  });
   field.addEventListener("pointerdown", function (e) {
     if (state !== "play" || !screen.hidden) return;
-    paddle.x = pointerX(e);
-    launch();
+    if (!ball.stuck) { paddle.x = pointerX(e); return; }
+    var b = brickAt(pointerX(e), pointerY(e));
+    if (b) { sel = b; launch(); }
   });
   panel.addEventListener("click", function (e) {
     var m = e.target.closest("[data-mode]");
@@ -713,9 +738,12 @@ footer p { margin: 0; }
   });
   document.addEventListener("keydown", function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
-    if (e.key === "ArrowLeft") { keys.left = true; if (state === "play") e.preventDefault(); }
-    else if (e.key === "ArrowRight") { keys.right = true; if (state === "play") e.preventDefault(); }
-    else if (e.key === " " && state === "play") { e.preventDefault(); launch(); }
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      var dir = e.key === "ArrowLeft" ? -1 : 1;
+      if (state === "play") { e.preventDefault(); if (ball.stuck && !clearAt) stepSel(dir); }
+      if (dir < 0) keys.left = true; else keys.right = true;
+    }
+    else if (e.key === " " && state === "play") { e.preventDefault(); if (!sel) stepSel(1); else launch(); }
     else if (e.key === "p" || e.key === "P" || e.key === "Escape") { if (state === "play") pause(true); else if (state === "pause") pause(false); }
   });
   document.addEventListener("keyup", function (e) {
