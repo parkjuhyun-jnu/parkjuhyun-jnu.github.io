@@ -85,6 +85,9 @@ h1 { margin: 0; font: 400 2rem/1.1 var(--font-display); }
 .choice.main { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .choice.main span { color: inherit; opacity: 0.8; }
 .row { display: flex; flex-wrap: wrap; gap: 8px; }
+.row.sub { gap: 6px; margin: -2px 0 2px 12px; }
+.row.sub::before { content: "묶음 하나만:"; font-size: 0.8rem; color: var(--ink-2); align-self: center; }
+.row.sub .ghost { padding: 3px 10px; font-size: 0.8rem; }
 .primary { padding: 9px 22px; border: 0; border-radius: 999px; background: var(--ink); color: var(--bg); font-weight: 600; cursor: pointer; }
 .results { display: flex; flex-wrap: wrap; gap: 8px 24px; }
 .results div { display: grid; }
@@ -177,9 +180,13 @@ footer p { margin: 0; }
     "470": ["생명과학", "생명, 세포, 유전, 진화"], "480": ["식물학", "식물, 나무, 꽃"], "490": ["동물학", "동물, 곤충, 새, 물고기"],
     "510": ["의학", "우리 몸, 병, 건강"], "520": ["농업·농학", "농사, 텃밭, 가축"], "540": ["건축", "건물과 건축"],
     "550": ["기계공학", "기계와 자동차"], "560": ["전기·전자공학", "전기, 전자, 통신"], "590": ["생활과학", "요리, 옷, 집안 살림"],
+    "530": ["토목·환경공학", "다리, 도로, 환경을 지키는 기술"], "570": ["화학공학", "플라스틱처럼 물질을 만드는 공업"], "580": ["제조업", "종이, 섬유, 가구 같은 물건을 만드는 공업"],
+    "620": ["조각·조형미술", "조각과 입체 작품"], "630": ["공예", "도자기처럼 손으로 만드는 공예품"],
     "640": ["서예", "붓글씨"], "650": ["회화·디자인", "그림, 만화, 디자인"], "660": ["사진예술", "사진 찍기"],
     "670": ["음악", "노래, 악기, 악보"], "680": ["공연·매체예술", "연극, 영화, 방송"], "690": ["오락·스포츠", "운동, 놀이, 바둑"],
     "710": ["한국어", "우리말과 한글"], "720": ["중국어", "중국어 배우기"], "730": ["일본어", "일본어 배우기"], "740": ["영어", "영어 배우기"],
+    "750": ["독일어", "독일어 배우기"], "760": ["프랑스어", "프랑스어 배우기"], "770": ["스페인어·포르투갈어", "스페인어·포르투갈어 배우기"],
+    "780": ["이탈리아어", "이탈리아어 배우기"], "790": ["기타 제어", "러시아어 등 그 밖의 언어"],
     "810": ["한국문학", "우리 작가의 문학"], "820": ["중국문학", "중국 작가의 문학"], "830": ["일본문학", "일본 작가의 문학"],
     "840": ["영미문학", "영국·미국 작가의 문학"], "850": ["독일문학", "독일어로 쓴 문학"], "860": ["프랑스문학", "프랑스어로 쓴 문학"],
     "870": ["스페인·포르투갈문학", "스페인어·포르투갈어로 쓴 문학"], "880": ["이탈리아문학", "이탈리아어로 쓴 문학"], "890": ["기타 제문학", "러시아 등 그 밖의 나라 문학"],
@@ -225,7 +232,12 @@ footer p { margin: 0; }
     { t: "자동차는 어떻게 움직일까", d: "엔진과 기계의 원리", a: "550" },
     { t: "전자 회로 만들기", d: "전기와 전자 부품 다루기", a: "560" },
     { t: "중학생 요리책", d: "쉽게 만드는 집밥", a: "590", n: "요리는 기술과학(500)의 생활과학(590)이에요." },
+    { t: "다리와 터널은 어떻게 만들까", d: "도로·다리·터널을 짓는 토목 기술", a: "530" },
+    { t: "플라스틱의 탄생", d: "석유에서 플라스틱을 만드는 과정", a: "570", n: "물질을 만드는 공업은 자연과학의 화학(430)이 아니라 기술과학의 화학공학(570)이에요." },
+    { t: "종이는 어떻게 만들어질까", d: "나무에서 종이가 되기까지 공장 이야기", a: "580", n: "종이·섬유처럼 물건을 만드는 공업은 기술과학의 제조업(580)이에요." },
     { t: "붓글씨 서예 교본", d: "붓으로 글씨 쓰는 법", a: "640" },
+    { t: "로댕과 세계의 조각", d: "생각하는 사람 같은 조각 작품 이야기", a: "620" },
+    { t: "도자기 만들기", d: "흙을 빚어 그릇을 만드는 공예", a: "630" },
     { t: "웹툰·만화 그리기", d: "그림과 만화 그리는 법", a: "650" },
     { t: "스마트폰 사진 잘 찍는 법", d: "사진 찍기 기술", a: "660" },
     { t: "피아노 명곡 악보집", d: "피아노로 치는 악보", a: "670" },
@@ -236,6 +248,11 @@ footer p { margin: 0; }
     { t: "중국어 첫걸음", d: "중국어 발음과 인사", a: "720" },
     { t: "일본어 회화", d: "일본어로 말하기", a: "730" },
     { t: "중학 영문법", d: "영어 문법 공부", a: "740", n: "영어를 배우는 책은 언어(700)예요. 영어로 쓴 소설은 문학(800)이에요." },
+    { t: "독일어 첫걸음", d: "독일어 발음과 인사", a: "750" },
+    { t: "프랑스어 회화", d: "프랑스어로 말하기", a: "760" },
+    { t: "스페인어 여행 회화", d: "여행에서 쓰는 스페인어", a: "770" },
+    { t: "이탈리아어 기초", d: "이탈리아어 발음과 문법", a: "780" },
+    { t: "러시아어 알파벳 익히기", d: "러시아 문자 읽고 쓰기", a: "790", n: "러시아어는 따로 칸이 없어 기타 제어(790)에 들어가요." },
     { t: "『홍길동전』", d: "허균이 쓴 우리 고전 소설", a: "810" },
     { t: "『소나기』", d: "황순원의 단편 소설", a: "810" },
     { t: "『삼국지』", d: "중국 나관중의 역사 소설", a: "820", n: "역사 이야기라도 소설이면 문학(800)이에요." },
@@ -276,7 +293,8 @@ footer p { margin: 0; }
       id: "2-" + main, name: "2단계 · 강목 — " + main + " " + MAIN[main][0],
       ask: main + " " + MAIN[main][0] + " 안에서 몇 번일까요?",
       build: function () {
-        var codes = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (i) { return main.charAt(0) + i + "0"; });
+        // 분류표에 있는 강목만 벽돌로(600 예술의 610은 비어 있는 번호)
+        var codes = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (i) { return main.charAt(0) + i + "0"; }).filter(function (c) { return DIV[c]; });
         return { bricks: codes, questions: shuffle(pickOnePer(codes, function (b) { return b.a; })) };
       }
     };
@@ -289,7 +307,7 @@ footer p { margin: 0; }
         return { bricks: codes, questions: shuffle(pickOnePer(codes, function (b) { return mainOf(b.a); })), main: true };
       }
     }],
-    s2: [divStage("300"), divStage("400"), divStage("800"), divStage("900")],
+    s2: ["300", "400", "500", "600", "700", "800", "900"].map(divStage),
     s3: [{
       id: "3", name: "3단계 · 실제 책 분류", ask: "세 자리 분류번호(강목)는 무엇일까요?",
       build: function () {
@@ -309,6 +327,12 @@ footer p { margin: 0; }
   var MODES = {
     all: "처음부터 끝까지", s1: "1단계 · 주류", s2: "2단계 · 강목", s3: "3단계 · 실제 책"
   };
+  // 2단계 묶음 하나만 하기
+  STAGES.s2.forEach(function (st) {
+    var m = st.id.slice(2);
+    STAGES["s2-" + m] = [st];
+    MODES["s2-" + m] = "2단계 · " + m + " " + MAIN[m][0];
+  });
 
   /* ------------------------------------------------------------------ 상태 */
   var BEST_KEY = "kdc-breakout-best-v1";
@@ -512,9 +536,13 @@ footer p { margin: 0; }
     panel.innerHTML = "<h2>단계를 고르세요</h2>" +
       '<p class="small">정답이라고 생각하는 벽돌을 누르면 공이 날아가요. 틀리면 공이 튕겨 떨어지니 받침대로 받아 내야 해요. 공을 세 번 놓치면 끝나요. 정답을 잇달아 맞히면 점수가 2배, 3배로 올라가요.</p>' +
       '<div class="choices">' +
-      '<button type="button" class="choice main" data-mode="all"><b>처음부터 끝까지</b><span>1단계 주류 → 2단계 강목(네 묶음) → 3단계 실제 책을 차례로' + bestOf("all") + "</span></button>" +
+      '<button type="button" class="choice main" data-mode="all"><b>처음부터 끝까지</b><span>1단계 주류 → 2단계 강목(일곱 묶음) → 3단계 실제 책을 차례로' + bestOf("all") + "</span></button>" +
       '<button type="button" class="choice" data-mode="s1"><b>1단계 · 주류 10개</b><span>000 총류부터 900 역사까지' + bestOf("s1") + "</span></button>" +
-      '<button type="button" class="choice" data-mode="s2"><b>2단계 · 강목</b><span>300 사회과학 · 400 자연과학 · 800 문학 · 900 역사를 세 자리로' + bestOf("s2") + "</span></button>" +
+      '<button type="button" class="choice" data-mode="s2"><b>2단계 · 강목</b><span>300 사회과학부터 900 역사까지 일곱 묶음을 세 자리로' + bestOf("s2") + "</span></button>" +
+      '<div class="row sub">' + STAGES.s2.map(function (st) {
+        var m = st.id.slice(2);
+        return '<button type="button" class="ghost" data-mode="s2-' + m + '" title="' + esc(MODES["s2-" + m]) + bestOf("s2-" + m) + '">' + m + " " + esc(MAIN[m][0]) + "</button>";
+      }).join("") + "</div>" +
       '<button type="button" class="choice" data-mode="s3"><b>3단계 · 실제 책 분류</b><span>여러 주류가 섞인 벽돌에서 세 자리 번호 찾기' + bestOf("s3") + "</span></button>" +
       "</div>";
     screen.hidden = false; focusPanel();
