@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>KDC 벽돌깨기 | 박주현</title>
+<meta name="description" content="문제에 나온 책의 한국십진분류(KDC) 번호가 적힌 벽돌을 공으로 맞혀 깨는 게임. 주류 → 강목 → 실제 책 분류의 세 단계. 중학생 도서관 이용 교육용.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<script>/* 사이트에서 고른 밝은·어두운 모드를 따른다 */try{var m=localStorage.getItem("theme");if(m==="light"||m==="dark")document.documentElement.setAttribute("data-theme",m);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* 레이아웃: 위 점수판 → 문제 카드 → 벽돌 판(캔버스, 그 위에 시작·통과 안내 판) → 조작 안내 → 분류표 */
+:root {
+  --bg: #edf1f4;
+  --card: #ffffff;
+  --ink: #17202b;
+  --ink-2: #566272;
+  --edge: #d2dae3;
+  --field: #1b2433;
+  --field-line: #2c3a4f;
+  --paddle: #f3efe6;
+  --ball: #f2c230;
+  --good: #17784d;
+  --bad: #c4332b;
+  --focus: #2860c8;
+  --font-display: "Black Han Sans", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  --font-body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f141b; --card: #18212c; --ink: #e7edf4; --ink-2: #9aa7b6; --edge: #2a3646;
+    --field: #0b1017; --field-line: #1f2a38; --good: #4cc38a; --bad: #ff6b5f; --focus: #7aa8ff;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f141b; --card: #18212c; --ink: #e7edf4; --ink-2: #9aa7b6; --edge: #2a3646;
+  --field: #0b1017; --field-line: #1f2a38; --good: #4cc38a; --bad: #ff6b5f; --focus: #7aa8ff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--font-body); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 980px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 40px; display: grid; gap: 12px; }
+
+.crumb { margin: 0; font-size: 0.85rem; color: var(--ink-2); }
+.crumb a { color: inherit; }
+.top { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font: 400 2rem/1.1 var(--font-display); }
+.board { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: end; }
+.stat { display: grid; }
+.stat > span { font-size: 0.75rem; color: var(--ink-2); letter-spacing: 0.04em; }
+.stat b { font: 600 1.35rem/1.1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.stat .mult { font: 600 0.8rem var(--font-mono); color: var(--good); margin-left: 4px; }
+.lives { color: var(--bad); letter-spacing: 2px; }
+.ghost { padding: 5px 12px; border: 1px solid var(--edge); border-radius: 999px; background: var(--card); cursor: pointer; font-size: 0.85rem; }
+
+.quest { display: grid; gap: 2px; padding: 12px 16px; border-radius: 10px; background: var(--card); border: 1px solid var(--edge); min-height: 5.6rem; align-content: center; }
+.quest .stage-name { font-size: 0.78rem; color: var(--ink-2); letter-spacing: 0.03em; }
+.quest .q { margin: 0; font-size: 1.15rem; line-height: 1.45; word-break: keep-all; }
+.quest .q b { font-weight: 600; }
+.quest .q small { display: block; font-size: 0.88rem; color: var(--ink-2); }
+.quest .say { margin: 4px 0 0; font-size: 0.92rem; min-height: 1.4em; word-break: keep-all; }
+.say .ok { color: var(--good); font-weight: 600; }
+.say .no { color: var(--bad); font-weight: 600; }
+.say .tip { color: var(--ink-2); }
+
+.field { position: relative; border-radius: 10px; overflow: hidden; background: var(--field); touch-action: none; user-select: none; -webkit-user-select: none; }
+.field canvas { display: block; width: 100%; cursor: none; }
+.screen { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; background: rgba(8, 12, 18, 0.55); }
+.screen[hidden] { display: none; }
+.panel { width: min(100%, 34rem); max-height: 100%; overflow: auto; display: grid; gap: 10px; padding: 18px 20px; border-radius: 12px; background: var(--card); color: var(--ink); box-shadow: 0 10px 40px rgba(0,0,0,0.35); }
+.panel h2 { margin: 0; font: 400 1.45rem/1.25 var(--font-display); }
+.panel p { margin: 0; }
+.panel .small { font-size: 0.85rem; color: var(--ink-2); }
+.panel .record { color: var(--good); font-weight: 600; }
+.choices { display: grid; gap: 8px; }
+.choice { display: grid; gap: 0; text-align: left; padding: 10px 14px; border: 1px solid var(--edge); border-radius: 10px; background: var(--bg); cursor: pointer; }
+.choice b { font-weight: 600; }
+.choice span { font-size: 0.85rem; color: var(--ink-2); }
+.choice.main { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.choice.main span { color: inherit; opacity: 0.8; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+.primary { padding: 9px 22px; border: 0; border-radius: 999px; background: var(--ink); color: var(--bg); font-weight: 600; cursor: pointer; }
+.results { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.results div { display: grid; }
+.results span { font-size: 0.75rem; color: var(--ink-2); }
+.results b { font: 600 1.3rem/1.2 var(--font-mono); font-variant-numeric: tabular-nums; }
+.learned { margin: 0; padding-left: 18px; display: grid; gap: 3px; font-size: 0.88rem; max-height: 12rem; overflow: auto; }
+.learned .miss { color: var(--bad); font-size: 0.8rem; }
+
+.help { margin: 0; font-size: 0.85rem; color: var(--ink-2); }
+details { background: var(--card); border: 1px solid var(--edge); border-radius: 10px; padding: 10px 16px; }
+summary { cursor: pointer; font-weight: 600; }
+.kdc { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: 12px 20px; margin-top: 10px; }
+.kdc h3 { margin: 0 0 4px; font-size: 0.95rem; }
+.kdc ul { margin: 0; padding-left: 0; list-style: none; font-size: 0.86rem; }
+.kdc li b { font: 600 0.86rem var(--font-mono); margin-right: 6px; }
+.kdc .main-list li { padding: 2px 0; }
+footer { font-size: 0.8rem; color: var(--ink-2); }
+footer p { margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="crumb"><a href="../../index.html">박주현</a> · <a href="../../courses.html">수업</a></p>
+  <header class="top">
+    <h1>KDC 벽돌깨기</h1>
+    <div class="board">
+      <div class="stat"><span>점수</span><b id="score">0</b></div>
+      <div class="stat"><span>연속 정답</span><b><span id="streak">0</span><span class="mult" id="mult"></span></b></div>
+      <div class="stat"><span>생명</span><b class="lives" id="lives" aria-label="생명 3개">♥♥♥</b></div>
+      <button type="button" class="ghost" id="btn-pause" disabled>멈춤</button>
+      <button type="button" class="ghost" id="btn-sound" aria-pressed="false">소리 켜기</button>
+    </div>
+  </header>
+
+  <section class="quest" aria-live="polite">
+    <span class="stage-name" id="stage-name">한국십진분류(KDC)</span>
+    <p class="q" id="question">문제에 나온 책의 분류번호 벽돌을 공으로 맞혀 깨세요.</p>
+    <p class="say" id="say"></p>
+  </section>
+
+  <div class="field" id="field">
+    <canvas id="cv" aria-label="벽돌깨기 게임 판. 받침대로 공을 튕겨 문제의 정답 벽돌을 맞히세요."></canvas>
+    <div class="screen" id="screen"><div class="panel" id="panel"></div></div>
+  </div>
+
+  <p class="help">컴퓨터: 마우스를 움직이거나 ← → 키로 받침대를 옮기고, 클릭이나 스페이스로 공을 쏩니다. P 키로 멈춥니다.
+    휴대폰·태블릿: 판 위에서 손가락을 좌우로 움직이고, 톡 치면 공을 쏩니다.</p>
+
+  <details>
+    <summary>한국십진분류표 보기 (주류와 이 게임에 나오는 강목)</summary>
+    <div class="kdc" id="kdc"></div>
+  </details>
+
+  <footer>
+    <p>한국십진분류법(KDC) 제6판의 주류와 강목을 바탕으로 했습니다. 책의 분류번호는 주제를 기준으로 한 예시이며, 도서관에 따라 조금 다를 수 있습니다. 최고 점수는 이 브라우저에만 남습니다.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+  /* ------------------------------------------------------------------ 분류표 */
+  // 주류: 번호 → [이름, 틀린 벽돌을 맞혔을 때 보여 줄 설명]
+  var MAIN = {
+    "000": ["총류", "백과사전·신문·도서관·컴퓨터처럼 여러 주제를 아우르는 책이 모여요."],
+    "100": ["철학", "생각과 마음을 다루는 책이 모여요. 철학, 심리학, 윤리가 여기예요."],
+    "200": ["종교", "불교, 기독교처럼 종교와 믿음에 관한 책이 모여요."],
+    "300": ["사회과학", "사회생활을 다루는 책이 모여요. 경제, 정치, 법, 교육, 풍속이 여기예요."],
+    "400": ["자연과학", "자연의 원리를 밝히는 책이 모여요. 수학, 물리, 화학, 천문, 생물이 여기예요."],
+    "500": ["기술과학", "과학을 생활에 쓰는 기술의 책이 모여요. 의학, 농업, 공학, 요리가 여기예요."],
+    "600": ["예술", "미술, 음악, 사진, 영화, 그리고 스포츠·놀이 책이 모여요."],
+    "700": ["언어", "한국어, 영어처럼 말과 글을 배우는 책이 모여요."],
+    "800": ["문학", "소설, 시, 희곡, 수필이 모여요. 작가가 쓴 언어로 나눠요."],
+    "900": ["역사", "역사, 지리·여행, 그리고 한 사람의 삶을 쓴 전기(위인전)가 모여요."]
+  };
+  // 강목: 번호 → [이름, 설명]
+  var DIV = {
+    "020": ["문헌정보학", "도서관과 사서"], "030": ["백과사전", "여러 지식을 모은 사전"], "070": ["신문·저널리즘", "신문과 기자, 언론"],
+    "140": ["경학", "논어·맹자 같은 유학 경전"], "180": ["심리학", "마음과 감정의 원리"], "190": ["윤리학", "옳고 그름, 도덕"],
+    "210": ["비교종교", "여러 종교 견주어 보기"], "220": ["불교", "부처님과 불교"], "230": ["기독교", "성경과 기독교"],
+    "310": ["통계자료", "숫자로 정리한 통계"], "320": ["경제학", "돈, 시장, 일과 소비"], "330": ["사회학·사회문제", "가족, 다문화, 인권 같은 사회 문제"],
+    "340": ["정치학", "선거, 민주주의, 나라 사이 관계"], "350": ["행정학", "정부와 공무원이 하는 일"], "360": ["법률·법학", "법과 재판"],
+    "370": ["교육학", "학교, 공부, 가르치고 배우기"], "380": ["풍습·예절·민속학", "명절, 세시풍속, 예절"], "390": ["국방·군사학", "군대와 국방"],
+    "410": ["수학", "숫자와 도형"], "420": ["물리학", "힘, 빛, 소리, 전기의 원리"], "430": ["화학", "물질과 원소, 화학 반응"],
+    "440": ["천문학", "우주, 별, 행성"], "450": ["지학", "땅, 화산, 지진, 날씨, 바다"], "460": ["광물학", "광물과 보석"],
+    "470": ["생명과학", "생명, 세포, 유전, 진화"], "480": ["식물학", "식물, 나무, 꽃"], "490": ["동물학", "동물, 곤충, 새, 물고기"],
+    "510": ["의학", "우리 몸, 병, 건강"], "520": ["농업·농학", "농사, 텃밭, 가축"], "540": ["건축", "건물과 건축"],
+    "550": ["기계공학", "기계와 자동차"], "560": ["전기·전자공학", "전기, 전자, 통신"], "590": ["생활과학", "요리, 옷, 집안 살림"],
+    "640": ["서예", "붓글씨"], "650": ["회화·디자인", "그림, 만화, 디자인"], "660": ["사진예술", "사진 찍기"],
+    "670": ["음악", "노래, 악기, 악보"], "680": ["공연·매체예술", "연극, 영화, 방송"], "690": ["오락·스포츠", "운동, 놀이, 바둑"],
+    "710": ["한국어", "우리말과 한글"], "720": ["중국어", "중국어 배우기"], "730": ["일본어", "일본어 배우기"], "740": ["영어", "영어 배우기"],
+    "810": ["한국문학", "우리 작가의 문학"], "820": ["중국문학", "중국 작가의 문학"], "830": ["일본문학", "일본 작가의 문학"],
+    "840": ["영미문학", "영국·미국 작가의 문학"], "850": ["독일문학", "독일어로 쓴 문학"], "860": ["프랑스문학", "프랑스어로 쓴 문학"],
+    "870": ["스페인·포르투갈문학", "스페인어·포르투갈어로 쓴 문학"], "880": ["이탈리아문학", "이탈리아어로 쓴 문학"], "890": ["기타 제문학", "러시아 등 그 밖의 나라 문학"],
+    "910": ["아시아", "한국·중국·일본 등 아시아의 역사"], "920": ["유럽", "유럽의 역사"], "930": ["아프리카", "아프리카의 역사"],
+    "940": ["북아메리카", "미국·캐나다 등의 역사"], "950": ["남아메리카", "남아메리카의 역사"], "960": ["오세아니아", "오스트레일리아 등의 역사"],
+    "970": ["양극지방", "북극과 남극"], "980": ["지리", "지리, 지도, 여행기"], "990": ["전기", "한 사람의 삶을 쓴 전기·위인전"]
+  };
+
+  // 문제: t 책(주제), d 한 줄 설명, a 정답 강목, n 헷갈리기 쉬운 까닭(선택), only1 1단계에만 쓰는 문제
+  var BOOKS = [
+    { t: "어린이 백과사전", d: "여러 분야의 지식을 가나다순으로 모은 책", a: "030" },
+    { t: "도서관과 사서 이야기", d: "도서관이 하는 일과 사서라는 직업", a: "020", n: "도서관과 사서에 관한 책은 총류(000)의 문헌정보학(020)이에요." },
+    { t: "신문 기자는 어떻게 일할까", d: "신문이 만들어지는 과정", a: "070", n: "신문과 언론은 총류(000)예요." },
+    { t: "파이썬 코딩 첫걸음", d: "컴퓨터 프로그래밍 입문서", a: "000", only1: true, n: "KDC는 컴퓨터와 프로그래밍 책을 총류(000)에 둬요." },
+    { t: "『논어』", d: "공자의 말씀을 모은 유학 경전", a: "140", n: "논어 같은 유학 경전은 철학(100)의 경학(140)이에요." },
+    { t: "십대를 위한 심리학", d: "마음과 감정이 움직이는 원리", a: "180", n: "KDC는 심리학을 철학(100)에 둬요." },
+    { t: "청소년을 위한 윤리 이야기", d: "옳고 그름을 생각해 보는 책", a: "190" },
+    { t: "부처님의 생애", d: "불교를 연 석가모니 이야기", a: "220" },
+    { t: "성경 이야기", d: "기독교 성경을 쉽게 풀어 쓴 책", a: "230" },
+    { t: "세계의 여러 종교", d: "여러 종교를 서로 견주어 보는 책", a: "210" },
+    { t: "숫자로 보는 대한민국", d: "인구와 경제를 정리한 통계 자료", a: "310" },
+    { t: "용돈으로 배우는 경제", d: "돈과 시장, 소비의 원리", a: "320" },
+    { t: "다문화 사회, 우리 이웃 이야기", d: "함께 사는 사회의 문제를 다룬 책", a: "330" },
+    { t: "선거와 민주주의", d: "투표와 정치의 원리", a: "340" },
+    { t: "공무원은 무슨 일을 할까", d: "정부와 행정이 하는 일", a: "350" },
+    { t: "청소년이 꼭 알아야 할 법", d: "법과 재판 이야기", a: "360", n: "법은 사회과학(300)이에요." },
+    { t: "공부 잘하는 학습법", d: "효과적으로 배우는 방법", a: "370", n: "공부와 학교, 교육은 사회과학(300)의 교육학(370)이에요." },
+    { t: "설날과 추석, 세시풍속", d: "명절과 전통 풍속", a: "380", n: "풍속과 예절은 사회과학(300)의 380이에요." },
+    { t: "군대와 국방 이야기", d: "나라를 지키는 군대", a: "390" },
+    { t: "수학 퍼즐 100", d: "숫자와 도형으로 푸는 수학 놀이", a: "410" },
+    { t: "빛과 소리의 과학", d: "힘·빛·소리가 움직이는 원리", a: "420" },
+    { t: "주기율표 속 원소 이야기", d: "물질과 원소", a: "430" },
+    { t: "『코스모스』", d: "칼 세이건이 쓴 우주와 별 이야기", a: "440" },
+    { t: "화산과 지진", d: "땅이 흔들리고 불을 뿜는 까닭", a: "450" },
+    { t: "날씨와 기후의 비밀", d: "비, 바람, 태풍이 생기는 까닭", a: "450", n: "날씨(기상)는 자연과학(400)의 지학(450)이에요." },
+    { t: "보석과 광물 도감", d: "다이아몬드부터 석영까지", a: "460" },
+    { t: "DNA와 유전 이야기", d: "생명이 이어지는 원리", a: "470" },
+    { t: "우리 산 나무 도감", d: "나무와 꽃 찾아보기", a: "480" },
+    { t: "곤충 도감", d: "우리 주변 곤충 관찰", a: "490" },
+    { t: "우리 몸과 병 이야기", d: "질병과 건강", a: "510", n: "의학은 자연과학이 아니라 기술과학(500)이에요." },
+    { t: "텃밭 가꾸기", d: "채소를 기르는 방법", a: "520" },
+    { t: "세계의 멋진 건축물", d: "유명한 건물과 건축", a: "540" },
+    { t: "자동차는 어떻게 움직일까", d: "엔진과 기계의 원리", a: "550" },
+    { t: "전자 회로 만들기", d: "전기와 전자 부품 다루기", a: "560" },
+    { t: "중학생 요리책", d: "쉽게 만드는 집밥", a: "590", n: "요리는 기술과학(500)의 생활과학(590)이에요." },
+    { t: "붓글씨 서예 교본", d: "붓으로 글씨 쓰는 법", a: "640" },
+    { t: "웹툰·만화 그리기", d: "그림과 만화 그리는 법", a: "650" },
+    { t: "스마트폰 사진 잘 찍는 법", d: "사진 찍기 기술", a: "660" },
+    { t: "피아노 명곡 악보집", d: "피아노로 치는 악보", a: "670" },
+    { t: "영화는 어떻게 만들어질까", d: "영화 제작 이야기", a: "680", n: "영화와 연극은 예술(600)의 공연·매체예술(680)이에요." },
+    { t: "축구 규칙과 전술", d: "축구를 더 잘하는 법", a: "690", n: "스포츠는 예술(600)의 오락·스포츠(690)예요." },
+    { t: "바둑 첫걸음", d: "바둑 두는 법", a: "690", n: "바둑 같은 놀이는 예술(600)의 오락·스포츠(690)예요." },
+    { t: "헷갈리는 한글 맞춤법", d: "우리말 바르게 쓰기", a: "710" },
+    { t: "중국어 첫걸음", d: "중국어 발음과 인사", a: "720" },
+    { t: "일본어 회화", d: "일본어로 말하기", a: "730" },
+    { t: "중학 영문법", d: "영어 문법 공부", a: "740", n: "영어를 배우는 책은 언어(700)예요. 영어로 쓴 소설은 문학(800)이에요." },
+    { t: "『홍길동전』", d: "허균이 쓴 우리 고전 소설", a: "810" },
+    { t: "『소나기』", d: "황순원의 단편 소설", a: "810" },
+    { t: "『삼국지』", d: "중국 나관중의 역사 소설", a: "820", n: "역사 이야기라도 소설이면 문학(800)이에요." },
+    { t: "『나미야 잡화점의 기적』", d: "일본 작가 히가시노 게이고의 소설", a: "830" },
+    { t: "『해리 포터와 마법사의 돌』", d: "영국 작가 J. K. 롤링의 판타지 소설", a: "840", n: "영국과 미국 작가의 문학은 840이에요." },
+    { t: "『톰 소여의 모험』", d: "미국 작가 마크 트웨인의 소설", a: "840", n: "영국과 미국 작가의 문학은 840이에요." },
+    { t: "『데미안』", d: "헤르만 헤세가 독일어로 쓴 소설", a: "850", n: "문학은 작가가 쓴 언어로 나눠요. 헤세는 독일어로 썼어요." },
+    { t: "『어린 왕자』", d: "프랑스 작가 생텍쥐페리의 소설", a: "860" },
+    { t: "『돈키호테』", d: "스페인 작가 세르반테스의 소설", a: "870" },
+    { t: "『피노키오』", d: "이탈리아 작가 콜로디의 동화", a: "880" },
+    { t: "『톨스토이 단편선』", d: "러시아 작가 톨스토이의 이야기", a: "890", n: "러시아 문학은 따로 칸이 없어 기타 제문학(890)에 들어가요." },
+    { t: "조선 왕조 500년 이야기", d: "조선의 역사", a: "910", n: "한국사는 역사(900)의 아시아(910)에 들어가요." },
+    { t: "로마 제국 이야기", d: "고대 로마의 역사", a: "920" },
+    { t: "고대 이집트와 피라미드", d: "이집트 문명의 역사", a: "930" },
+    { t: "미국 독립 전쟁", d: "미국이 세워진 과정", a: "940" },
+    { t: "잉카 제국의 비밀", d: "남아메리카 잉카 문명의 역사", a: "950" },
+    { t: "오스트레일리아의 역사", d: "호주가 걸어온 길", a: "960" },
+    { t: "남극과 북극 이야기", d: "얼음 대륙의 역사와 탐험", a: "970" },
+    { t: "세계 지도책", d: "나라와 도시를 찾아보는 지도", a: "980", n: "지리와 지도, 여행기는 역사(900)의 980이에요." },
+    { t: "유럽 배낭여행기", d: "유럽 여러 나라를 다닌 여행 이야기", a: "980", n: "여행기는 역사(900)의 지리(980)예요." },
+    { t: "『세종대왕』 위인전", d: "한글을 만든 임금의 일생", a: "990", n: "한 사람의 삶을 쓴 전기와 위인전은 역사(900)의 990이에요." }
+  ];
+
+  function mainOf(code) { return code.charAt(0) + "00"; }
+  function label(code) { return code.slice(1) === "00" ? MAIN[code][0] : DIV[code][0]; }
+  function fullName(code) { return code + " " + label(code); }
+
+  /* ------------------------------------------------------------------ 단계 */
+  // 각 단계는 벽돌(번호 목록)과 문제를 만든다. 정답 벽돌을 맞히면 깨지고, 문제가 다 풀리면 통과.
+  function pickOnePer(codes, key) {
+    return codes.map(function (c) {
+      var pool = BOOKS.filter(function (b) { return key(b) === c; });
+      return pool[Math.floor(Math.random() * pool.length)];
+    });
+  }
+  function divStage(main) {
+    return {
+      id: "2-" + main, name: "2단계 · 강목 — " + main + " " + MAIN[main][0],
+      ask: main + " " + MAIN[main][0] + " 안에서 몇 번일까요?",
+      build: function () {
+        var codes = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (i) { return main.charAt(0) + i + "0"; });
+        return { bricks: codes, questions: shuffle(pickOnePer(codes, function (b) { return b.a; })) };
+      }
+    };
+  }
+  var STAGES = {
+    s1: [{
+      id: "1", name: "1단계 · 주류 10개", ask: "몇 번대(주류)일까요?",
+      build: function () {
+        var codes = Object.keys(MAIN);
+        return { bricks: codes, questions: shuffle(pickOnePer(codes, function (b) { return mainOf(b.a); })), main: true };
+      }
+    }],
+    s2: [divStage("300"), divStage("400"), divStage("800"), divStage("900")],
+    s3: [{
+      id: "3", name: "3단계 · 실제 책 분류", ask: "세 자리 분류번호(강목)는 무엇일까요?",
+      build: function () {
+        // 정답 10개는 서로 다른 강목에서, 한 주류에서 많아야 둘. 나머지 5개는 같은 주류의 다른 강목(헷갈리게)
+        var pool = shuffle(BOOKS.filter(function (b) { return !b.only1; }));
+        var qs = [], used = {}, perMain = {};
+        pool.forEach(function (b) {
+          var m = mainOf(b.a);
+          if (qs.length < 10 && !used[b.a] && (perMain[m] || 0) < 2) { qs.push(b); used[b.a] = true; perMain[m] = (perMain[m] || 0) + 1; }
+        });
+        var extra = shuffle(Object.keys(DIV).filter(function (c) { return !used[c] && perMain[mainOf(c)]; })).slice(0, 5);
+        return { bricks: shuffle(qs.map(function (b) { return b.a; }).concat(extra)), questions: qs };
+      }
+    }]
+  };
+  STAGES.all = STAGES.s1.concat(STAGES.s2, STAGES.s3);
+  var MODES = {
+    all: "처음부터 끝까지", s1: "1단계 · 주류", s2: "2단계 · 강목", s3: "3단계 · 실제 책"
+  };
+
+  /* ------------------------------------------------------------------ 상태 */
+  var BEST_KEY = "kdc-breakout-best-v1";
+  var cv = $("cv"), ctx = cv.getContext("2d"), field = $("field"), screen = $("screen"), panel = $("panel");
+  var W = 600, H = 400, dpr = 1, colors = {};
+  var state = "menu";            // menu | play | pause | between | over
+  var mode = "all", stageList = [], stageIdx = 0, stage = null;
+  var bricks = [], questions = [], qi = 0, wrongs = 0, log = [];
+  var score = 0, streak = 0, lives = 3, speed = 300, speedUp = 1;
+  var paddle = { x: 300, w: 100, h: 12, y: 0 }, ball = { x: 0, y: 0, vx: 0, vy: 0, r: 7, stuck: true };
+  var keys = { left: false, right: false }, parts = [], last = 0, clearAt = 0, soundOn = false, audio = null;
+  var best = readBest();
+
+  function readBest() { try { return JSON.parse(localStorage.getItem(BEST_KEY) || "{}") || {}; } catch (e) { return {}; } }
+  function writeBest() { try { localStorage.setItem(BEST_KEY, JSON.stringify(best)); } catch (e) { /* 저장할 수 없으면 이번만 기억 */ } }
+  function mult() { return Math.min(4, 1 + Math.floor(streak / 3)); }
+
+  function hue(code) { return [210, 265, 300, 25, 140, 190, 330, 45, 5, 100][+code.charAt(0)]; }
+  function readColors() {
+    var s = getComputedStyle(document.documentElement);
+    ["--field", "--field-line", "--paddle", "--ball", "--good", "--bad"].forEach(function (k) { colors[k] = s.getPropertyValue(k).trim(); });
+  }
+
+  /* ------------------------------------------------------------------ 크기·배치 */
+  function resize() {
+    var oldW = W, oldH = H;
+    W = Math.round(field.clientWidth);
+    H = Math.round(W >= 600 ? Math.min(Math.max(W * 0.6, 380), 560) : Math.max(380, Math.min(W * 1.35, window.innerHeight * 0.6)));
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    cv.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    paddle.w = Math.max(72, Math.round(W * (W >= 600 ? 0.16 : 0.24)));
+    paddle.y = H - 30;
+    paddle.x = paddle.x * W / oldW;
+    ball.x = ball.x * W / oldW; ball.y = ball.y * H / oldH;
+    layoutBricks();
+    readColors();
+    if (state !== "play") draw();
+  }
+
+  function layoutBricks() {
+    var cols = W >= 600 ? 5 : 3, gap = 6, top = 14, side = 10;
+    var bw = (W - side * 2 - gap * (cols - 1)) / cols, bh = W >= 600 ? 46 : 42;
+    var alive = bricks;
+    var rows = Math.ceil(alive.length / cols);
+    alive.forEach(function (b, i) {
+      var r = Math.floor(i / cols), c = i % cols;
+      var inRow = r === rows - 1 ? alive.length - r * cols : cols;
+      var offset = (cols - inRow) * (bw + gap) / 2;
+      b.x = side + offset + c * (bw + gap); b.y = top + r * (bh + gap); b.w = bw; b.h = bh;
+    });
+  }
+
+  /* ------------------------------------------------------------------ 진행 */
+  function startMode(m) {
+    mode = m; stageList = STAGES[m]; stageIdx = 0;
+    score = 0; streak = 0; lives = 3; speedUp = 1;
+    startStage();
+  }
+
+  function startStage() {
+    clearAt = 0; parts = [];
+    stage = stageList[stageIdx];
+    var built = stage.build();
+    stage.mainMode = !!built.main;
+    bricks = built.bricks.map(function (code) { return { code: code, alive: true, fade: 0, flash: 0, glow: false }; });
+    questions = built.questions; qi = 0; wrongs = 0; log = [];
+    layoutBricks();
+    speed = Math.max(250, Math.min(380, H * 0.62)) * speedUp;
+    resetBall();
+    readColors();
+    $("stage-name").textContent = stage.name + "  (" + (stageIdx + 1) + "/" + stageList.length + ")";
+    showQuestion();
+    say('<span class="tip">받침대 위의 공을 클릭·터치·스페이스로 쏘세요.</span>');
+    state = "play"; screen.hidden = true; $("btn-pause").disabled = false;
+    hud();
+  }
+
+  function answerOf(q) { return stage.mainMode ? mainOf(q.a) : q.a; }
+
+  function showQuestion() {
+    var q = questions[qi];
+    $("question").innerHTML = "<b>" + esc(q.t) + "</b> — " + esc(stage.ask) + "<small>" + esc(q.d) + "</small>";
+  }
+  function say(html) { $("say").innerHTML = html; }
+
+  function resetBall() {
+    ball.stuck = true; ball.vx = 0; ball.vy = 0;
+    ball.x = paddle.x; ball.y = paddle.y - ball.r - 1;
+  }
+  function launch() {
+    if (state !== "play" || !ball.stuck || clearAt) return;
+    var a = (Math.random() * 0.6 - 0.3);
+    ball.vx = speed * Math.sin(a); ball.vy = -speed * Math.cos(a); ball.stuck = false;
+  }
+
+  function hitBrick(b) {
+    var q = questions[qi], ans = answerOf(q);
+    if (b.code === ans) {
+      streak++;
+      var gain = 100 * mult();
+      score += gain;
+      b.alive = false; b.fade = 1; b.glow = false;
+      burst(b);
+      beep(true);
+      log.push({ q: q, wrongs: wrongs });
+      var where = stage.mainMode
+        ? fullName(ans) + (q.a !== ans ? " (자세히는 " + fullName(q.a) + ")" : "")
+        : fullName(q.a) + " (" + fullName(mainOf(q.a)) + ")";
+      say('<span class="ok">정답! +' + gain + "</span> " + esc(q.t) + " → " + esc(where) + (q.n ? ' <span class="tip">' + esc(q.n) + "</span>" : ""));
+      qi++; wrongs = 0;
+      if (qi >= questions.length) { clearAt = performance.now() + 700; ball.vx = 0; ball.vy = 0; ball.stuck = true; }
+      else { showQuestion(); speed *= 1.03; rescaleBall(); }
+    } else {
+      streak = 0; wrongs++;
+      b.flash = 1;
+      beep(false);
+      var info = stage.mainMode || !DIV[b.code] ? MAIN[mainOf(b.code)][1] : "여기엔 ‘" + DIV[b.code][1] + "’ 책이 모여요.";
+      var msg = '<span class="no">' + esc(fullName(b.code)) + "</span> — " + esc(info);
+      if (wrongs === 2) {
+        var ans2 = answerOf(q);
+        msg += ' <span class="tip">힌트: 정답 칸은 ' + esc(stage.mainMode ? "이런 곳이에요. " + MAIN[ans2][1] : "‘" + DIV[ans2][1] + "’ 책이 모이는 곳이에요.") + "</span>";
+      }
+      if (wrongs >= 3) {
+        bricks.forEach(function (x) { if (x.alive && x.code === answerOf(q)) x.glow = true; });
+        msg += ' <span class="tip">빛나는 벽돌을 맞혀 보세요.</span>';
+      }
+      say(msg);
+    }
+    hud();
+  }
+
+  function rescaleBall() {
+    if (ball.stuck) return;
+    var s = Math.hypot(ball.vx, ball.vy) || 1;
+    ball.vx = ball.vx / s * speed; ball.vy = ball.vy / s * speed;
+  }
+
+  function loseBall() {
+    lives--; streak = 0; beep(false);
+    hud();
+    if (lives <= 0) { gameOver(); return; }
+    say('<span class="no">공을 놓쳤어요.</span> <span class="tip">생명이 ' + lives + "개 남았어요. 다시 공을 쏘세요.</span>");
+    resetBall();
+  }
+
+  function stageClear() {
+    state = "between"; $("btn-pause").disabled = true;
+    speedUp = Math.min(1.35, speedUp + 0.05);
+    var lastStage = stageIdx >= stageList.length - 1;
+    var learned = log.map(function (l) {
+      return "<li><b>" + esc(l.q.t) + "</b> → " + esc(stage.mainMode ? fullName(mainOf(l.q.a)) : fullName(l.q.a)) +
+        (l.wrongs ? ' <span class="miss">(' + l.wrongs + "번 헷갈림)</span>" : "") + "</li>";
+    }).join("");
+    if (lastStage) { finish(true, learned); return; }
+    panel.innerHTML = "<h2>" + esc(stage.name) + " 통과!</h2>" +
+      '<div class="results"><div><span>점수</span><b>' + score + '</b></div><div><span>생명</span><b>' + lives + "</b></div></div>" +
+      '<p class="small">이번 단계에서 익힌 분류</p><ul class="learned">' + learned + "</ul>" +
+      '<p class="small">다음: ' + esc(stageList[stageIdx + 1].name) + "</p>" +
+      '<div class="row"><button type="button" class="primary" data-act="next">다음 단계</button>' +
+      '<button type="button" class="ghost" data-act="menu">처음 화면</button></div>';
+    screen.hidden = false; focusPanel();
+  }
+
+  function gameOver() {
+    var learned = log.map(function (l) {
+      return "<li><b>" + esc(l.q.t) + "</b> → " + esc(stage.mainMode ? fullName(mainOf(l.q.a)) : fullName(l.q.a)) + "</li>";
+    }).join("");
+    var q = questions[qi];
+    var missed = q ? "<li><b>" + esc(q.t) + "</b> → " + esc(stage.mainMode ? fullName(mainOf(q.a)) : fullName(q.a)) + (q.n ? " — " + esc(q.n) : "") + "</li>" : "";
+    finish(false, learned, missed);
+  }
+
+  function finish(won, learned, missed) {
+    state = "over"; $("btn-pause").disabled = true;
+    var record = score > (best[mode] || 0);
+    if (record) { best[mode] = score; writeBest(); }
+    panel.innerHTML = "<h2>" + (won ? "모든 벽돌을 깼어요!" : "공을 모두 놓쳤어요") + "</h2>" +
+      '<div class="results"><div><span>점수</span><b>' + score + "</b></div><div><span>최고 점수</span><b>" + (best[mode] || 0) +
+      "</b></div><div><span>도전</span><b style=\"font-size:1rem\">" + esc(MODES[mode]) + "</b></div></div>" +
+      (record && score > 0 ? '<p class="record">새 최고 기록입니다.</p>' : "") +
+      (missed ? '<p class="small">마지막 문제의 정답</p><ul class="learned">' + missed + "</ul>" : "") +
+      (learned ? '<p class="small">' + (won ? "마지막 단계에서 익힌 분류" : "이번 단계에서 맞힌 분류") + '</p><ul class="learned">' + learned + "</ul>" : "") +
+      '<div class="row"><button type="button" class="primary" data-act="again">다시 하기</button>' +
+      '<button type="button" class="ghost" data-act="menu">다른 단계 고르기</button></div>';
+    screen.hidden = false; focusPanel();
+    say(won ? '<span class="ok">축하해요! 한국십진분류표를 끝까지 정리했어요.</span>' : "");
+    hud();
+  }
+
+  function menu() {
+    state = "menu"; clearAt = 0; parts = []; $("btn-pause").disabled = true;
+    bricks = Object.keys(MAIN).map(function (code) { return { code: code, alive: true, fade: 0, flash: 0, glow: false }; });
+    stage = { mainMode: true }; layoutBricks(); resetBall();
+    $("stage-name").textContent = "한국십진분류(KDC)";
+    $("question").innerHTML = "문제에 나온 책의 <b>분류번호 벽돌</b>을 공으로 맞혀 깨세요.<small>맞는 벽돌만 깨지고, 틀린 벽돌을 맞히면 그 칸에 어떤 책이 모이는지 알려 줘요.</small>";
+    say("");
+    function bestOf(m) { return best[m] ? " · 최고 " + best[m] + "점" : ""; }
+    panel.innerHTML = "<h2>단계를 고르세요</h2>" +
+      '<p class="small">공을 놓치면 생명이 하나 줄고, 세 번 놓치면 끝나요. 정답을 잇달아 맞히면 점수가 2배, 3배로 올라가요.</p>' +
+      '<div class="choices">' +
+      '<button type="button" class="choice main" data-mode="all"><b>처음부터 끝까지</b><span>1단계 주류 → 2단계 강목(네 묶음) → 3단계 실제 책을 차례로' + bestOf("all") + "</span></button>" +
+      '<button type="button" class="choice" data-mode="s1"><b>1단계 · 주류 10개</b><span>000 총류부터 900 역사까지' + bestOf("s1") + "</span></button>" +
+      '<button type="button" class="choice" data-mode="s2"><b>2단계 · 강목</b><span>300 사회과학 · 400 자연과학 · 800 문학 · 900 역사를 세 자리로' + bestOf("s2") + "</span></button>" +
+      '<button type="button" class="choice" data-mode="s3"><b>3단계 · 실제 책 분류</b><span>여러 주류가 섞인 벽돌에서 세 자리 번호 찾기' + bestOf("s3") + "</span></button>" +
+      "</div>";
+    screen.hidden = false; focusPanel();
+    score = 0; streak = 0; lives = 3; hud();
+    draw();
+  }
+
+  function focusPanel() { var b = panel.querySelector("button"); if (b) b.focus({ preventScroll: true }); }
+
+  function pause(on) {
+    if (on && state === "play") {
+      state = "pause";
+      panel.innerHTML = '<h2>잠시 멈춤</h2><p class="small">' + esc(stage.name) + '</p><div class="row"><button type="button" class="primary" data-act="resume">계속하기</button><button type="button" class="ghost" data-act="menu">처음 화면</button></div>';
+      screen.hidden = false; focusPanel();
+      $("btn-pause").textContent = "계속";
+    } else if (!on && state === "pause") {
+      state = "play"; screen.hidden = true; last = performance.now();
+      $("btn-pause").textContent = "멈춤";
+    }
+  }
+
+  function hud() {
+    $("score").textContent = score;
+    $("streak").textContent = streak;
+    $("mult").textContent = mult() > 1 ? "×" + mult() : "";
+    var l = $("lives");
+    l.textContent = "♥♥♥".slice(0, Math.max(0, lives)) + "♡♡♡".slice(0, 3 - Math.max(0, lives));
+    l.setAttribute("aria-label", "생명 " + Math.max(0, lives) + "개");
+  }
+
+  /* ------------------------------------------------------------------ 물리 */
+  function fx(dt) {
+    bricks.forEach(function (b) { if (b.flash > 0) b.flash = Math.max(0, b.flash - dt * 2.4); if (!b.alive && b.fade > 0) b.fade = Math.max(0, b.fade - dt * 3); });
+    parts = parts.filter(function (p) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 600 * dt; p.life -= dt; return p.life > 0; });
+  }
+
+  function update(dt) {
+    var move = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+    if (move) paddle.x += move * W * 1.2 * dt;
+    paddle.x = Math.max(paddle.w / 2, Math.min(W - paddle.w / 2, paddle.x));
+
+    if (clearAt && performance.now() >= clearAt) { clearAt = 0; stageClear(); return; }
+    if (ball.stuck) { ball.x = paddle.x; ball.y = paddle.y - ball.r - 1; return; }
+
+    var steps = Math.max(1, Math.ceil(speed * dt / (ball.r * 0.7)));
+    var h = dt / steps;
+    for (var s = 0; s < steps; s++) {
+      ball.x += ball.vx * h; ball.y += ball.vy * h;
+      if (ball.x < ball.r) { ball.x = ball.r; ball.vx = Math.abs(ball.vx); }
+      if (ball.x > W - ball.r) { ball.x = W - ball.r; ball.vx = -Math.abs(ball.vx); }
+      if (ball.y < ball.r) { ball.y = ball.r; ball.vy = Math.abs(ball.vy); }
+      // 받침대: 맞은 자리에 따라 튀는 각도가 달라진다(가운데는 위로, 끝은 비스듬히)
+      if (ball.vy > 0 && ball.y + ball.r >= paddle.y && ball.y - ball.r <= paddle.y + paddle.h &&
+          Math.abs(ball.x - paddle.x) <= paddle.w / 2 + ball.r) {
+        var rel = Math.max(-1, Math.min(1, (ball.x - paddle.x) / (paddle.w / 2)));
+        var ang = rel * 1.05;
+        ball.vx = speed * Math.sin(ang); ball.vy = -speed * Math.cos(ang);
+        ball.y = paddle.y - ball.r;
+        beep(null);
+      }
+      // 벽돌: 한 걸음에 하나만
+      for (var i = 0; i < bricks.length; i++) {
+        var b = bricks[i];
+        if (!b.alive) continue;
+        var nx = Math.max(b.x, Math.min(ball.x, b.x + b.w)), ny = Math.max(b.y, Math.min(ball.y, b.y + b.h));
+        var dx = ball.x - nx, dy = ball.y - ny;
+        if (dx * dx + dy * dy <= ball.r * ball.r) {
+          var ox = Math.min(ball.x + ball.r - b.x, b.x + b.w - (ball.x - ball.r));
+          var oy = Math.min(ball.y + ball.r - b.y, b.y + b.h - (ball.y - ball.r));
+          if (ox < oy) { ball.vx = ball.x < b.x + b.w / 2 ? -Math.abs(ball.vx) : Math.abs(ball.vx); }
+          else { ball.vy = ball.y < b.y + b.h / 2 ? -Math.abs(ball.vy) : Math.abs(ball.vy); }
+          hitBrick(b);
+          break;
+        }
+      }
+      if (ball.stuck) return;
+      // 거의 수평으로 도는 공은 위아래로 조금 세운다
+      if (Math.abs(ball.vy) < speed * 0.3) { ball.vy = (ball.vy < 0 ? -1 : 1) * speed * 0.3; ball.vx = Math.sign(ball.vx || 1) * Math.sqrt(speed * speed - ball.vy * ball.vy); }
+      if (ball.y - ball.r > H) { loseBall(); return; }
+    }
+  }
+
+  function burst(b) {
+    var cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+    for (var i = 0; i < 16; i++) {
+      var a = Math.random() * Math.PI * 2, v = 80 + Math.random() * 180;
+      parts.push({ x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 80, life: 0.5 + Math.random() * 0.3, h: hue(b.code) });
+    }
+  }
+
+  /* ------------------------------------------------------------------ 그리기 */
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function fitText(text, maxW, size, weight, family) {
+    var s = size;
+    do { ctx.font = weight + " " + s + "px " + family; if (ctx.measureText(text).width <= maxW) return text; s -= 0.5; } while (s >= 9);
+    var t = text;
+    while (t.length > 1 && ctx.measureText(t + "…").width > maxW) t = t.slice(0, -1);
+    return t + "…";
+  }
+
+  function draw() {
+    ctx.fillStyle = colors["--field"] || "#1b2433";
+    ctx.fillRect(0, 0, W, H);
+    var mono = '"IBM Plex Mono", ui-monospace, monospace', sans = '"IBM Plex Sans KR", "Malgun Gothic", sans-serif';
+    var mainMode = stage && stage.mainMode;
+    var shake = 0;
+    bricks.forEach(function (b) {
+      if (!b.alive && b.fade <= 0) return;
+      ctx.save();
+      ctx.globalAlpha = b.alive ? 1 : b.fade;
+      shake = b.flash > 0 ? Math.sin(b.flash * 30) * 4 * b.flash : 0;
+      var x = b.x + shake, y = b.y;
+      if (!b.alive) { var sc = 1 + (1 - b.fade) * 0.25; ctx.translate(b.x + b.w / 2, b.y + b.h / 2); ctx.scale(sc, sc); ctx.translate(-b.x - b.w / 2, -b.y - b.h / 2); }
+      var h = hue(b.code);
+      roundRect(x, y, b.w, b.h, 7);
+      ctx.fillStyle = "hsl(" + h + ", 52%, 40%)";
+      ctx.fill();
+      ctx.fillStyle = "hsla(" + h + ", 70%, 85%, 0.16)";
+      ctx.fillRect(x + 4, y + 3, b.w - 8, 3);
+      if (b.flash > 0) { ctx.lineWidth = 3; ctx.strokeStyle = colors["--bad"] || "#ff6b5f"; roundRect(x, y, b.w, b.h, 7); ctx.stroke(); }
+      if (b.glow) { ctx.lineWidth = 3; ctx.strokeStyle = colors["--ball"] || "#f2c230"; ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 14; roundRect(x, y, b.w, b.h, 7); ctx.stroke(); ctx.shadowBlur = 0; }
+      ctx.fillStyle = "#fff";
+      ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+      var big = b.h >= 46 ? 17 : 15;
+      ctx.font = "600 " + big + "px " + mono;
+      ctx.fillText(b.code, x + b.w / 2, y + b.h * 0.47);
+      var name = fitText(mainMode ? MAIN[b.code][0] : label(b.code), b.w - 10, 12.5, "500", sans);
+      ctx.fillStyle = "rgba(255,255,255,0.88)";
+      ctx.fillText(name, x + b.w / 2, y + b.h * 0.84);
+      ctx.restore();
+    });
+    parts.forEach(function (p) {
+      ctx.globalAlpha = Math.max(0, Math.min(1, p.life * 2));
+      ctx.fillStyle = "hsl(" + p.h + ", 70%, 62%)";
+      ctx.fillRect(p.x - 3, p.y - 3, 6, 6);
+    });
+    ctx.globalAlpha = 1;
+    // 받침대와 공
+    roundRect(paddle.x - paddle.w / 2, paddle.y, paddle.w, paddle.h, 6);
+    ctx.fillStyle = colors["--paddle"] || "#f3efe6"; ctx.fill();
+    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+    ctx.fillStyle = colors["--ball"] || "#f2c230"; ctx.fill();
+    if (state === "play" && ball.stuck && !clearAt) {
+      ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.font = "500 13px " + sans; ctx.textAlign = "center";
+      ctx.fillText("클릭 · 터치 · 스페이스로 공 쏘기", W / 2, paddle.y - 26);
+    }
+  }
+
+  function frame(now) {
+    var dt = Math.min(0.033, (now - (last || now)) / 1000);
+    last = now;
+    if (state !== "pause") fx(dt);
+    if (state === "play") update(dt);
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  /* ------------------------------------------------------------------ 소리 */
+  function beep(ok) {
+    if (!soundOn) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      var o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime;
+      o.type = ok === false ? "square" : "sine";
+      o.frequency.value = ok === true ? 880 : ok === false ? 196 : 440;
+      var vol = ok === null ? 0.03 : ok ? 0.08 : 0.04, len = ok === null ? 0.06 : ok ? 0.15 : 0.25;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+      o.connect(g); g.connect(audio.destination);
+      o.start(t); o.stop(t + len + 0.05);
+    } catch (e) { /* 소리를 낼 수 없는 환경이면 조용히 넘어간다 */ }
+  }
+
+  /* ------------------------------------------------------------------ 입력 */
+  function pointerX(e) { var r = cv.getBoundingClientRect(); return (e.clientX - r.left) * (W / r.width); }
+  field.addEventListener("pointermove", function (e) { if (state === "play") paddle.x = pointerX(e); });
+  field.addEventListener("pointerdown", function (e) {
+    if (state !== "play" || !screen.hidden) return;
+    paddle.x = pointerX(e);
+    launch();
+  });
+  panel.addEventListener("click", function (e) {
+    var m = e.target.closest("[data-mode]");
+    if (m) { startMode(m.dataset.mode); return; }
+    var a = e.target.closest("[data-act]");
+    if (!a) return;
+    var act = a.dataset.act;
+    if (act === "next") { stageIdx++; startStage(); }
+    else if (act === "again") startMode(mode);
+    else if (act === "menu") menu();
+    else if (act === "resume") pause(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === "ArrowLeft") { keys.left = true; if (state === "play") e.preventDefault(); }
+    else if (e.key === "ArrowRight") { keys.right = true; if (state === "play") e.preventDefault(); }
+    else if (e.key === " " && state === "play") { e.preventDefault(); launch(); }
+    else if (e.key === "p" || e.key === "P" || e.key === "Escape") { if (state === "play") pause(true); else if (state === "pause") pause(false); }
+  });
+  document.addEventListener("keyup", function (e) {
+    if (e.key === "ArrowLeft") keys.left = false;
+    if (e.key === "ArrowRight") keys.right = false;
+  });
+  $("btn-pause").addEventListener("click", function () { pause(state === "play"); });
+  $("btn-sound").addEventListener("click", function () {
+    soundOn = !soundOn;
+    this.setAttribute("aria-pressed", String(soundOn));
+    this.textContent = soundOn ? "소리 끄기" : "소리 켜기";
+    if (soundOn) beep(true);
+  });
+  document.addEventListener("visibilitychange", function () { if (document.hidden) pause(true); });
+  window.addEventListener("resize", resize);
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readColors);
+
+  /* ------------------------------------------------------------------ 분류표(접는 상자) */
+  (function () {
+    var html = '<div><h3>주류 10개</h3><ul class="main-list">' + Object.keys(MAIN).map(function (c) {
+      return "<li><b>" + c + "</b>" + esc(MAIN[c][0]) + "</li>";
+    }).join("") + "</ul></div>";
+    ["000", "100", "200", "300", "400", "500", "600", "700", "800", "900"].forEach(function (m) {
+      var divs = Object.keys(DIV).filter(function (c) { return mainOf(c) === m; });
+      if (!divs.length) return;
+      html += "<div><h3>" + m + " " + esc(MAIN[m][0]) + "</h3><ul>" + divs.map(function (c) {
+        return "<li><b>" + c + "</b>" + esc(DIV[c][0]) + "</li>";
+      }).join("") + "</ul></div>";
+    });
+    $("kdc").innerHTML = html;
+  })();
+
+  /* ------------------------------------------------------------------ 시작 */
+  resize();
+  menu();
+  requestAnimationFrame(frame);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { draw(); });
+})();
+</script>
+</body>
+</html>
