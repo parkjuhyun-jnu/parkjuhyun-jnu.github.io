@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>문헌정보학과 소개 영상 분석 | 박주현</title>
+<meta name="description" content="유튜브의 문헌정보학과 소개 영상 10편을 영상별 카드와 주제 비교표로 정리한 학과 홍보 기획 참고 자료입니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+/* 이 페이지만 쓰는 부품. 색은 모두 사이트 공통 변수(assets/css/style.css :root)에서 가져옵니다. */
+.lv-method { font-size: .88rem; color: var(--ink-soft); border-left: 3px solid var(--line); padding-left: .9rem; max-width: 70ch; margin-top: 1rem; }
+.lv-back { font-size: .9rem; }
+.lv-filters { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: 1.6rem; }
+.lv-filters > span { font-size: .87rem; color: var(--ink-faint); margin-right: .2rem; }
+.lv-chip { font: inherit; font-size: .9rem; padding: .38rem .95rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.lv-chip[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: var(--paper); }
+.lv-chip:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+.lv-legend { display: flex; flex-wrap: wrap; gap: 1rem; font-size: .85rem; color: var(--ink-soft); margin-top: .6rem; }
+.lv-legend b { color: var(--ink); }
+
+.lv-table-box { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.lv-table { border-collapse: collapse; width: 100%; min-width: 940px; font-size: .84rem; }
+.lv-table th, .lv-table td { border-bottom: 1px solid var(--line-soft); padding: .5rem .35rem; text-align: center; vertical-align: middle; }
+.lv-table thead th { font-weight: 600; color: var(--ink-soft); font-size: .76rem; line-height: 1.35; vertical-align: bottom; width: 66px; }
+.lv-table .name { text-align: left; position: sticky; left: 0; background: var(--surface); padding-left: .9rem; min-width: 150px; z-index: 1; }
+.lv-table td.name a { color: var(--ink); font-weight: 600; }
+.lv-table td.name a:hover { color: var(--navy); }
+.lv-table td.name small { display: block; color: var(--ink-faint); font-weight: 400; font-size: .76rem; }
+.lv-table tbody tr:hover td { background: var(--navy-wash); }
+.lv-table tfoot td { font-size: .78rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; border-bottom: 0; }
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: middle; }
+.dot.full { background: var(--navy); }
+.dot.half { border: 2px solid var(--navy); }
+.dot.none { width: 10px; height: 2px; border-radius: 0; background: var(--line); }
+
+.lv-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem; }
+@media (max-width: 760px) { .lv-cards { grid-template-columns: minmax(0, 1fr); } }
+.vcard { display: grid; gap: .85rem; align-content: start; scroll-margin-top: 90px; }
+.vcard:target { border-color: var(--navy); box-shadow: 0 0 0 3px var(--navy-wash); }
+.vcard h3 { font-family: var(--font-serif); font-size: 1.2rem; margin: 0; }
+.vcard p { margin: 0; }
+.vcard .callno { display: flex; justify-content: space-between; gap: .5rem; flex-wrap: wrap; font-size: .8rem; color: var(--ink-faint); border-bottom: 1px dashed var(--line); padding-bottom: .5rem; font-variant-numeric: tabular-nums; }
+.vcard .callno .type { color: var(--gold); font-weight: 700; letter-spacing: .04em; }
+.vcard .chan { font-size: .86rem; color: var(--ink-soft); }
+.vcard .core { font-weight: 500; background: var(--navy-wash); border-radius: var(--radius-sm); padding: .7rem .85rem; }
+.vcard .fmt { font-size: .86rem; color: var(--ink-soft); }
+.vcard .fmt b { color: var(--ink); }
+.vcard ul.points { margin: 0; padding-left: 1.1rem; display: grid; gap: .25rem; font-size: .93rem; }
+.vcard .tags { display: grid; gap: .4rem; }
+.vcard .tagrow { display: flex; flex-wrap: wrap; gap: .35rem; align-items: baseline; }
+.vcard .tagrow > em { font-style: normal; font-size: .76rem; color: var(--ink-faint); width: 44px; flex: none; }
+.vcard .tag { white-space: normal; }
+.vcard .note { font-size: .86rem; color: var(--warn); background: var(--gold-wash); border-radius: var(--radius-sm); padding: .55rem .8rem; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="resources.html" aria-current="page">자료실</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="wrap">
+      <p class="lv-back"><a href="resources.html">← 자료실</a></p>
+      <p class="eyebrow">자료실 / 학과 홍보</p>
+      <h1 style="font-family:var(--font-serif)">문헌정보학과 소개 영상은 무엇을 말하고 있나</h1>
+      <p style="max-width:62ch; font-size:1.05rem; color:var(--ink-soft)">
+        대학 공식 홍보 영상 6편과 입시, 교양 채널 영상 4편을 핵심 메시지와 내용 중심으로 정리했습니다.
+        비교표에서 주제별로 훑고, 대학 이름을 누르면 아래 영상 카드로 갑니다.
+      </p>
+      <p class="lv-method">2026. 11. 19. 유튜브에서 '문헌정보학과'로 검색한 결과 가운데 학점은행제 광고를 뺀 학과 소개 영상 10편입니다.
+        내용은 유튜브 자동 생성 자막을 읽고 요약한 것이라 원문 그대로의 인용이 아니며, 고유 명사는 영상에서 다시 확인하는 것이 좋습니다. 조회수도 같은 날 기준입니다.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="lv-filters" role="group" aria-label="영상 종류 거르기">
+        <span>보기</span>
+        <button class="lv-chip" id="f-all" data-f="all" aria-pressed="true">전체 10편</button>
+        <button class="lv-chip" id="f-official" data-f="official" aria-pressed="false">대학 공식 6편</button>
+        <button class="lv-chip" id="f-external" data-f="external" aria-pressed="false">외부 채널 4편</button>
+      </div>
+
+      <div class="section-head">
+        <h2>메시지 비교표</h2>
+        <p>영상마다 12가지 주제를 얼마나 다뤘는지 표시했습니다. 맨 아래 줄은 그 주제를 다룬 영상 수(중심으로 다룬 수 / 언급 포함 수)입니다.</p>
+        <div class="lv-legend">
+          <span><span class="dot full"></span> <b>중심</b> 시간을 들여 설명함</span>
+          <span><span class="dot half"></span> <b>언급</b> 짧게 지나감</span>
+          <span><span class="dot none"></span> <b>없음</b></span>
+        </div>
+      </div>
+      <div class="lv-table-box">
+        <table class="lv-table">
+          <thead><tr id="thead-row"><th class="name" scope="col">영상</th></tr></thead>
+          <tbody id="tbody"></tbody>
+          <tfoot><tr id="tfoot-row"><td class="name">다룬 영상 수</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>영상별 분석</h2>
+        <p>대학 공식 영상은 게시일이 최근인 순서, 외부 채널 영상은 그 뒤에 같은 순서로 놓았습니다. 영상 제목을 누르면 유튜브가 새 창으로 열립니다.</p>
+      </div>
+      <div class="lv-cards" id="cards"></div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+(function () {
+const THEMES = ["학문 정의", "데이터와 코딩", "사서 고정관념 반박", "교과목 소개", "현장 경험 (실습, 견학)", "정사서 2급", "사서교사", "기업과 IT 진로", "졸업생 등장", "학과 분위기", "연계와 복수전공", "입시 안내"];
+
+const V = [
+ { id:"mju", org:"명지대학교", type:"official", ch:"MYONGJI UNIVERSITY명지대학교", yt:"EiAmk7CPCG4",
+   title:"[2027학년도 명지대학교 입시정보] 문헌정보학전공 홍보 및 신편입학전형 안내영상",
+   len:"11:22", views:"234", date:"2026. 9. 9.", m:"221120120222",
+   fmt:"교수와 재학생 인터뷰 약 3분, 이어서 입학처의 대학 전체 전형 안내 약 8분",
+   core:"문헌정보학을 AI 시대에 필요한 데이터 수집과 분석 역량을 기르는 실용 학문으로 내세웁니다.",
+   pts:["정보를 수집, 생산, 조직, 관리, 제공하는 사서와 데이터 분석가를 기르는 전공이라고 정의합니다.",
+        "인문학 소양 위에 ICT 활용 능력을 쌓는 구조이고, 인문콘텐츠와 응용데이터사이언스 연계전공을 권합니다.",
+        "3학년 방학에 도서관과 정보센터에서 3주 동안 현장 실습을 합니다.",
+        "진로를 전문 사서(사서교사, 대학과 전문 도서관, 국가와 공공도서관)와 정보 전문가(데이터 분석가, 프로그래머)로 나눠 보여 줍니다.",
+        "수업에서 배우는 이론이 졸업 뒤 현장 업무와 바로 이어진다는 점을 강조합니다."],
+   courses:["분류","목록","정보검색","현장 실무 실습"],
+   careers:["사서교사","대학, 전문 도서관 사서","국가, 공공도서관 사서","데이터 분석가","프로그래머","광고, 리서치 회사"],
+   note:"영상의 3분의 2 이상이 명지대 전체 수시, 정시, 편입 전형 안내라 학과 소개 분량은 짧습니다." },
+
+ { id:"inu", org:"인천대학교", type:"official", ch:"인천대학교 Incheon National University", yt:"jkLLmlyush4",
+   title:"인천대 문헌정보학과 홍보영상 | INU Department of Library and Information Science",
+   len:"4:13", views:"2,212", date:"2025. 12. 30.", m:"211220000220",
+   fmt:"내레이션, 교수 인터뷰, 재학생 여러 명의 짧은 발언을 엮은 영상미 중심 구성",
+   core:"기록된 정보와 지식을 모아 정리하고 필요한 사람에게 전하는 학문이며, 매체가 책에서 디지털로 넓어지며 연구 범위도 커진다고 소개합니다.",
+   pts:["자료 분류 실습, 정보시스템 구축 실습, 공공과 민간 기록관리 수업처럼 실습형 교과를 앞세웁니다.",
+        "소셜데이터사이언스 연계전공으로 데이터 리터러시를 키운다고 말합니다.",
+        "도서관 프로그램 기획 동아리가 지역 공공도서관과 함께 이용자 프로그램을 운영합니다.",
+        "학과 행사, 마스코트 굿즈, 담임교수 상담, 소모임 같은 학과 생활을 비중 있게 보여 줍니다.",
+        "재학생이 공공도서관 사서 공무원 준비와 기록물관리 대학원 진학 계획을 직접 말합니다."],
+   courses:["자료 분류 실습","정보시스템","기록관리","정보검색 시스템 설계"],
+   careers:["공공도서관 사서","기록물 관리 전문가","대학원 진학"],
+   note:"졸업생은 나오지 않고, 재학생의 진로 계획으로 진로를 보여 줍니다." },
+
+ { id:"jbnu", org:"전북대학교", type:"official", ch:"전북대학교국립대학육성사업단", yt:"Hlj6e6EyTcc",
+   title:"2025 전북대학교 전공 홍보영상 (문헌정보학과)",
+   len:"9:47", views:"686", date:"2025. 10. 2.", m:"212202212100",
+   fmt:"학과 홍보대사가 진행하는 캠퍼스 투어, 교수 카메오, 재학생 인터뷰, 졸업생 다섯 명의 릴레이 인터뷰",
+   core:"도서관을 대학의 심장에 빗대고, 졸업생들이 실제로 일하는 자리를 차례로 보여 주며 진로의 폭을 증명합니다.",
+   pts:["강의실을 돌며 전공필수(문헌정보학 입문, 정보자료조직, 정보검색), 전공선택, 컴퓨터 관련 과목을 소개합니다.",
+        "재학생은 도서관 운영과 서비스 수업에 더해 정보기술과 데이터 사이언스 수업이 있다고 설명하고, 책과 사람을 좋아하는 사람에게 맞는 학과라고 말합니다.",
+        "졸업생: 한국전자통신연구원 지식정보서비스실, 군립도서관 사서직 공무원, 대학 중앙도서관 사서, 사서교사, 미국 대학원 정보학 석사과정.",
+        "연구기관 졸업생이 정보 전문가에게 IT 역량이 점점 중요해진다고 조언합니다."],
+   courses:["문헌정보학 입문","정보자료조직","정보검색","컴퓨터 정보처리"],
+   careers:["연구기관 정보서비스","사서직 공무원","대학 도서관 사서","사서교사","해외 대학원","데이터 분석","웹 콘텐츠 기획","DB 관리자"],
+   note:"10편 가운데 졸업생 진로를 가장 다양하게, 실제 인물로 보여 줍니다." },
+
+ { id:"kgu", org:"경기대학교", type:"official", ch:"경기대학교Official", yt:"pUNVr-e-qFI",
+   title:"경기대학교 문헌정보학과 소개",
+   len:"3:59", views:"1,585", date:"2024. 11. 15.", m:"220122211000",
+   fmt:"질문 자막에 답하는 짧은 문답형 내레이션",
+   core:"도서관학, 정보학, 기록학, 데이터 사이언스를 아우르는 융합 학과로 소개하고, 자격증과 진로 준비 정보를 촘촘히 담았습니다.",
+   pts:["졸업생은 주로 사서가 되며 정보센터, 기록관리, 데이터 관리와 분석, 정보시스템 분야로도 나간다고 말합니다.",
+        "정보조직 과목을 학과의 핵심 과목으로 꼽습니다.",
+        "해마다 2박 3일 도서관 견학을 가고, 선배를 초청하는 취업 세미나를 엽니다.",
+        "전공 강의실 좌석마다 컴퓨터가 있고 KDC와 DDC를 갖춰 두었습니다. 학과 연구실이 자연어 처리와 인공지능을 연구하며 학생을 인턴과 연구생으로 받습니다.",
+        "정사서 2급, 정보처리기사, 교직이수(성적 상위 10%), 교육대학원 경로와 함께 추천 자격증과 사서 커뮤니티까지 안내합니다."],
+   courses:["정보조직","정보검색 시스템","디지털 자료 관리","정보윤리"],
+   careers:["사서","사서교사","기록관리","데이터 관리와 분석","정보시스템","인공지능 개발"],
+   note:"정보는 많지만 학과 생활이나 사람의 모습은 거의 나오지 않습니다." },
+
+ { id:"skku", org:"성균관대학교", type:"official", ch:"성균관대학교SKKU", yt:"vQ3WzchQILk",
+   title:"[성균웹진] 유생들의 학교에 문정의 등장이란...📖｜성균과사람들 Ep.8 문헌정보학과",
+   len:"5:53", views:"4,433", date:"2024. 5. 17.", m:"112202010221",
+   fmt:"재학생 두 명이 13개 질문에 답하는 웹진 인터뷰",
+   core:"도서관만 떠올리는 사람에게 도서관학, 정보학, 서지학까지 뻗은 학과라고 가볍고 유쾌하게 소개합니다.",
+   pts:["학문을 세 갈래로 설명합니다. 사서가 되기 위한 도서관학, 코딩과 MARC를 다루는 정보학, 옛 문헌을 다루는 서지학입니다.",
+        "서지학 교수와 과목이 살아 있는 것을 학과만의 특색으로 꼽습니다.",
+        "메타데이터 전문가로 해외에 진출하는 길, 정부기관, 사기업, 개발자 진로를 언급합니다.",
+        "경영학, 심리학, 미디어커뮤니케이션 복수전공이 많다고 말합니다.",
+        "계열로 들어와 전공을 고르는 과정, 검색 결과를 늘 의심하게 되는 학과병 같은 솔직한 이야기가 많습니다."],
+   courses:["서지학","MARC","코딩과 프로그래밍"],
+   careers:["메타데이터 전문가","정부기관","사기업","개발자","사서"],
+   note:"계열 모집 뒤 전공을 고르는 구조라 학과를 고른 계기와 전공 진입 성적 이야기가 들어 있습니다." },
+
+ { id:"dongduk", org:"동덕여자대학교", type:"official", ch:"동덕여자대학교 - Dongduk Women's University", yt:"a-62j6Il8Eg",
+   title:"[동덕TV] 동덕여자대학교 학과 소개 - 문헌정보학과 | 사회과학대학 | 정다희교수님",
+   len:"9:52", views:"1,945", date:"2022. 9. 1.", m:"221112021210",
+   fmt:"교수 한 명이 그림과 비유로 설명하는 강의형",
+   core:"데이터가 정보를 거쳐 지식이 되기까지, 정보의 생애 전체를 다루는 학과라고 DIKW 피라미드와 요리 비유로 설명합니다.",
+   pts:["데이터는 신선한 재료이고 정보 전문가는 그 재료로 요리하는 사람이며, 같은 요리를 먹어도 흡수가 다르듯 지식은 사람마다 다르게 쌓인다고 비유합니다.",
+        "흩어진 블록을 나누고 쌓고 보기 좋게 보여 주는 과정으로 분류, 목록, 시각화 교과를 설명합니다.",
+        "강점 세 가지로 1980년 개설 뒤 쌓인 동문, 젊은 교수진 6명의 가족 같은 분위기, 졸업 때 받는 사서 자격증을 듭니다.",
+        "야외 관찰 수업, 교수와 함께하는 도서관 견학, 가상공간(VR) 체험 수업 사례를 보여 줍니다.",
+        "진로로 포털, 게임, 유통, 어린이 콘텐츠 기업과 빅데이터, 인공지능 대학원 진학을 꼽습니다."],
+   courses:["분류","목록","정보 시각화"],
+   careers:["사서","포털, 게임 회사","유통 기업","콘텐츠 미디어 기업","빅데이터, 인공지능 대학원"],
+   note:"자동 자막 품질이 낮아 회사 이름 같은 세부 내용은 영상에서 다시 확인해야 합니다." },
+
+ { id:"cau", org:"중앙대학교 (유진의 대백과)", type:"external", ch:"유진의 대백과", yt:"52ZNfy92utY",
+   title:"문헌정보학과의 오해와 진실 | 중앙대학교 문헌정보학과 [유진의 대학과 EP.13]",
+   len:"10:19", views:"13,065", date:"2024. 8. 11.", m:"122202010120",
+   fmt:"외부 유튜버가 재학생 한 명을 인터뷰하는 토크(챕터 12개, 퀴즈와 삼행시 같은 예능 요소)",
+   core:"'문헌정보학과 오지 마세요'라는 말이 나오는 까닭과 실제 공부를 재학생이 솔직하게 풀며, 데이터 과목이 많은 인문사회계열의 공대라고 말합니다.",
+   pts:["1학년 데이터론, 2학년 데이터베이스 설계, 데이터 사이언스 개론, 데이터 시각화, 메타데이터 구조론과 파이썬, 자바스크립트를 배운다고 구체적으로 말합니다.",
+        "사서가 편하다는 인식과 다른 현실, 진로가 좁아 보인다는 걱정을 감추지 않고 꺼냅니다.",
+        "도서관 한 곳을 골라 비전 보고서를 쓰는 도서관 경영론, 파피루스 실물을 돌려 보는 서지학 수업 경험을 소개합니다.",
+        "정보 서비스의 주체로서 사명감과 자부심을 가지라는 교수의 말을 전합니다.",
+        "졸업 때 정사서 2급, 통계 복수전공과 주제전문사서, IT 기업 진출을 말하고, 짧은 과정의 민간 사서 자격 확대를 학과의 걱정거리로 듭니다."],
+   courses:["문헌정보학 원론","도서관 경영론","서지학","정보학개론","정보서비스론","데이터론","데이터베이스 설계","데이터 시각화","메타데이터 구조론"],
+   careers:["사서","주제전문사서","통계, 데이터 분야","IT 기업"],
+   note:"외부 채널이지만 조회 1.3만으로 대학 공식 영상 6편보다 많이 보았습니다." },
+
+ { id:"tting", org:"띵입시", type:"external", ch:"띵입시", yt:"OmdfDWAKql4",
+   title:"문헌정보학과 가고싶다면 이거 알아야해!!(학종꿀팁, 대학순위, 개설대학, 진로, 선택과목)",
+   len:"4:23", views:"3,872", date:"2023. 4. 7.", m:"210200010002",
+   fmt:"화면 자료를 내레이션으로 읽어 주는 입시 정보 영상",
+   core:"학생부종합전형 준비에 초점을 맞춰 인재상, 핵심 역량, 고교 선택과목, 대학별 입시 결과를 정리합니다.",
+   pts:["지식의 생산, 처리, 활용을 다루며 빅데이터 분석에 기반한 학문이라고 정의합니다.",
+        "인재상으로 외국어에 대한 관심, 책과 신간 자료에 대한 관심, 분석적 사고와 컴퓨터, 통계 소질을 듭니다.",
+        "관련 고교 과목으로 국어, 수학, 영어와 정보, 교육학, 철학, 심리학, 논리학을 권합니다.",
+        "진로를 출판물 기획 전문가, 기록물 관리사, 데이터베이스 관리자, 사서, 정보보호 전문가로 나열합니다.",
+        "대학별 학생부교과전형 70% 컷을 표로 보여 줍니다."],
+   courses:["기록관리","디지털 콘텐츠 제작론","빅데이터 설계와 관리","학교도서관 운영"],
+   careers:["출판물 기획","기록물 관리사","DB 관리자","도서관장, 사서","정보보호 전문가"],
+   note:"교육청 자료와 대입정보포털을 옮겨 정리한 영상이라 현장 취재나 인물은 없습니다." },
+
+ { id:"ilgyosi", org:"일교시", type:"external", ch:"일교시", yt:"P4TfYNnOn_8",
+   title:"사서하는 문헌정보학과의 반전? (feat. 알고 보면 전혀 다른 학과 #1)",
+   len:"5:15", views:"18,481", date:"2023. 1. 20.", m:"122101020001",
+   fmt:"입시 상담가 한 명이 카메라를 보고 말하는 강의형",
+   core:"사서만 떠오르는 학과가 사실은 자연어 분석과 빅데이터를 다루는 인문사회계열의 공대라는 반전을 내세웁니다.",
+   pts:["첫째 오해는 도서관 운영만 배운다는 것이라며, 글과 그림을 컴퓨터로 분석하는 자연어 처리, 통계, 코딩을 배운다고 반박합니다.",
+        "둘째 오해는 진로가 사서뿐이라는 것이라며, 국회와 법원 도서관, 국립중앙도서관에 더해 기업 연구소, 정보센터, 데이터베이스 직종, 포털, 홍보와 마케팅을 꼽습니다.",
+        "수학과 코딩을 싫어하는 순수 문과 성향 학생은 들어와서 후회할 수 있다고 경고합니다.",
+        "고교에서 인공지능 기초나 프로그래밍을 재미있게 들은 문과 학생에게 권합니다."],
+   courses:["자연어 분석","통계","코딩 (과목 이름은 말하지 않음)"],
+   careers:["국회도서관","법원도서관","국립중앙도서관","기업 연구소","정보센터","포털","홍보, 마케팅"],
+   note:"10편 가운데 조회수가 가장 많습니다(1.8만). 데이터 쪽을 과장했다는 인상을 줄 수 있습니다." },
+
+ { id:"ebsi", org:"EBSi 입시 핫 라인", type:"external", ch:"EBSi", yt:"N30St3uW0XY",
+   title:"EBS 입시 핫 라인(학과선택) - 문헌정보학과",
+   len:"29:40", views:"10,676", date:"2016. 9. 12.", m:"212222212112",
+   fmt:"방송 스튜디오 대담(진행자, 진로진학 강사, 경기대 3학년)과 수업, 봉사 현장, 졸업생 취재",
+   core:"도서관학과에서 출발해 정보를 분석하고 모으고 가공해 전하는 학과로 넓어졌다고 설명하고, 사서의 덕목으로 사람을 이해하는 마음을 앞세웁니다.",
+   pts:["학년별 교과를 차례로 소개합니다. 1학년 문헌정보학의 이해와 도서관 문화사, 2학년 자료조직론과 참고정보서비스론, 3학년 데이터베이스론과 독서지도, 4학년 자료조직 실습과 사서 실습입니다.",
+        "전국 40여 개 대학에 개설되어 있고, 비슷한 학과로 기록관리학, 점자문헌정보학, 지식정보학부를 소개합니다.",
+        "교직이수(정원의 10%)나 교육대학원으로 사서교사가 되는 경로를 자세히 설명합니다.",
+        "도서관 마케팅 수업에서 홍보 UCC를 만들고 공공도서관에서 독서문화 프로그램을 시연한 경험, 방학 봉사 현장을 보여 줍니다.",
+        "의학 도서관에서 13년째 일하는 졸업생이 데이터베이스 검색 역량과 이용자와의 신뢰를 강조합니다."],
+   courses:["문헌정보학의 이해","도서관 문화사","자료조직론","참고정보서비스론","데이터베이스론","독서지도","디지털 도서관","도서관 마케팅과 평가","사서 실습"],
+   careers:["사서","사서교사","의학 전문도서관 사서","박물관","기록물 기관","기업 정보센터","출판 기획","DB 관리자"],
+   note:"2016년 방송이라 교과와 입시 정보가 지금과 다를 수 있습니다. 가장 길고 가장 종합적입니다." }
+];
+
+const TYPE_LABEL = { official:"대학 공식", external:"외부 채널" };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dot = v => v === "2" ? '<span class="dot full" aria-label="중심"></span>' : v === "1" ? '<span class="dot half" aria-label="언급"></span>' : '<span class="dot none" aria-label="없음"></span>';
+
+document.getElementById("thead-row").insertAdjacentHTML("beforeend", THEMES.map(t => `<th scope="col">${esc(t)}</th>`).join(""));
+
+function render(filter) {
+  const list = V.filter(v => filter === "all" || v.type === filter);
+  document.getElementById("tbody").innerHTML = list.map(v =>
+    `<tr><td class="name"><a href="#v-${v.id}">${esc(v.org)}</a><small>${TYPE_LABEL[v.type]}, ${v.len}</small></td>${[...v.m].map(x => `<td>${dot(x)}</td>`).join("")}</tr>`).join("");
+  const foot = THEMES.map((_, i) => {
+    const full = list.filter(v => v.m[i] === "2").length;
+    const any = list.filter(v => v.m[i] !== "0").length;
+    return `<td>${full} / ${any}</td>`;
+  }).join("");
+  document.getElementById("tfoot-row").innerHTML = `<td class="name">다룬 영상 수</td>${foot}`;
+  document.getElementById("cards").innerHTML = list.map(v => `
+    <article class="card vcard" id="v-${v.id}">
+      <div class="callno"><span class="type">${TYPE_LABEL[v.type]}</span><span>${v.date} / ${v.len} / 조회 ${v.views}</span></div>
+      <div style="display:grid;gap:4px">
+        <h3>${esc(v.org)}</h3>
+        <p class="chan"><a href="https://www.youtube.com/watch?v=${v.yt}" target="_blank" rel="noopener">${esc(v.title)}</a><br>채널: ${esc(v.ch)}</p>
+      </div>
+      <p class="fmt"><b>형식</b> ${esc(v.fmt)}</p>
+      <p class="core">${esc(v.core)}</p>
+      <ul class="points">${v.pts.map(p => `<li>${esc(p)}</li>`).join("")}</ul>
+      <div class="tags">
+        <div class="tagrow"><em>교과목</em>${v.courses.map(c => `<span class="tag">${esc(c)}</span>`).join("")}</div>
+        <div class="tagrow"><em>진로</em>${v.careers.map(c => `<span class="tag">${esc(c)}</span>`).join("")}</div>
+      </div>
+      <p class="note">${esc(v.note)}</p>
+    </article>`).join("");
+}
+
+document.querySelectorAll(".lv-chip").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".lv-chip").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  render(b.dataset.f);
+  try { localStorage.setItem("lis-video-filter", b.dataset.f); } catch (e) {}
+}));
+
+let start = "all";
+try { start = localStorage.getItem("lis-video-filter") || "all"; } catch (e) {}
+if (!["all","official","external"].includes(start)) start = "all";
+document.querySelectorAll(".lv-chip").forEach(x => x.setAttribute("aria-pressed", x.dataset.f === start ? "true" : "false"));
+render(start);
+if (location.hash) { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }
+})();
+</script>
+</body>
+</html>

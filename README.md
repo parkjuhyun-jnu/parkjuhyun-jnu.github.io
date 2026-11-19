@@ -57,6 +57,7 @@ python -m http.server 5173
 | `data/courses.json` | 과목 상세 안내(소개글·학습목표·주차 계획·결과물 제출) |
 | `data/projects.json` | 연구 페이지의 연구 과제 (사업비 표시 여부도 여기서) |
 | `data/surveys.json` | 설문 페이지의 구글 폼 목록 |
+| `data/resources.json` | 자료실 페이지(`resources.html`) 목록. 새 자료 페이지는 루트에 `resources-이름.html`로 두고(머리 메뉴, 꼬리말, 공통 CSS는 `resources-lis-videos.html` 참고) 이 파일에 한 줄 더합니다 |
 | `about.html` | 소개 글, 약력, 학회 활동 |
 | `research.html` | 학술발표 목록 |
 | `data/media.json` | 미디어·강연 페이지(방송·보도·기고·강연·토론회). 포스터·사진은 `assets/img/media/` 에 |
