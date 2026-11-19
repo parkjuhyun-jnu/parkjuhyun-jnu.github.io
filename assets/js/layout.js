@@ -34,6 +34,7 @@
           <li><a href="gallery.html">결과물 갤러리</a></li>
           <li><a href="surveys.html">설문</a></li>
           <li><a href="resources.html">자료실</a></li>
+          <li><a href="bk21.html">BK21 자료실</a></li>
         </ul>
       </div>
       <div>

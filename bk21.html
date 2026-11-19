@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BK21 자료실 | 박주현</title>
+<meta name="description" content="BK21 사업 준비에 참고할 공식 자료와 사업단 공개 자료를 모아 둔 곳입니다. 입장 코드가 있어야 볼 수 있습니다.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+/* 이 페이지만 쓰는 부품. 색은 모두 사이트 공통 변수(assets/css/style.css :root)에서 가져옵니다. */
+.bk-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .8rem; margin: 1.4rem 0 0; }
+.bk-stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .9rem 1rem; }
+.bk-stat b { display: block; font-size: 1.45rem; font-family: var(--font-serif); color: var(--navy); font-variant-numeric: tabular-nums; }
+.bk-stat span { font-size: .84rem; color: var(--ink-soft); }
+.bk-h2 { font-family: var(--font-serif); font-size: 1.35rem; margin: 0 0 .9rem; }
+.bk-points { margin: 0; padding-left: 1.2rem; display: grid; gap: .55rem; color: var(--ink); }
+.bk-links { list-style: none; margin: 0; padding: 0; display: grid; gap: .65rem; }
+.bk-links li { line-height: 1.5; }
+.bk-links .small { display: block; }
+.bk-toolbar { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: .7rem; }
+.bk-toolbar input[type="text"] { flex: 1 1 240px; max-width: 360px; }
+.bk-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
+.bk-count { font-size: .88rem; color: var(--ink-soft); margin: .4rem 0 .8rem; }
+.bk-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.bk-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.bk-table th, .bk-table td { padding: .55rem .75rem; border-bottom: 1px solid var(--line-soft, var(--line)); text-align: left; vertical-align: top; }
+.bk-table th { font-size: .8rem; color: var(--ink-soft); background: var(--surface-2); white-space: nowrap; }
+.bk-table tr:last-child td { border-bottom: 0; }
+.bk-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bk-docs { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+.bk-doc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .8rem 1rem; display: grid; gap: .3rem; }
+.bk-doc__top { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; }
+.bk-doc__title { font-weight: 650; color: var(--ink); overflow-wrap: anywhere; }
+.bk-doc__meta { font-size: .84rem; color: var(--ink-soft); overflow-wrap: anywhere; }
+.bk-doc__links { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .2rem; }
+.bk-tag-plan { color: var(--gold); border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent); background: var(--gold-wash); }
+.bk-hidden { display: none !important; }
+.bk-lockbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+@media (max-width: 640px) {
+  .bk-table th:nth-child(4), .bk-table td:nth-child(4) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="resources.html">자료실</a>
+      <a href="bk21.html" aria-current="page">BK21</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- 입장 -->
+  <section class="section" id="bk-lock">
+    <div class="wrap">
+      <div class="lock">
+        <div class="lock__icon">🔒</div>
+        <h1 style="font-size:1.3rem; font-family:var(--font-serif)">BK21 자료실</h1>
+        <p class="small muted">BK21 사업 준비 자료는 입장 코드가 있어야 볼 수 있습니다.</p>
+        <form id="bk-form" style="margin-top:1.2rem; text-align:left" autocomplete="off">
+          <div class="field">
+            <label for="bk-code">입장 코드</label>
+            <input type="password" id="bk-code" inputmode="numeric" autocomplete="off" required>
+          </div>
+          <button class="btn" type="submit" style="width:100%" id="bk-go">입장</button>
+          <p class="small" id="bk-msg" style="margin:.8rem 0 0; min-height:1.2em" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 내용(코드로 푼 뒤 채움) -->
+  <div id="bk-body" class="bk-hidden">
+    <section class="section">
+      <div class="wrap">
+        <div class="bk-lockbar">
+          <div>
+            <p class="eyebrow">BK21</p>
+            <h1 style="font-family:var(--font-serif); margin-bottom:.4rem">BK21 사업 자료실</h1>
+          </div>
+          <button class="btn btn--ghost btn--sm" type="button" id="bk-out">잠그기</button>
+        </div>
+        <p style="max-width:62ch; font-size:1.02rem; color:var(--ink-soft); margin:0">
+          5단계 BK21 신청을 준비하며 교육부, 한국연구재단의 공식 자료와 여러 사업단이 공개한 사업계획서, 자체평가 보고서, 규정을 모았습니다.
+          원래 사이트가 내려받기를 막을 수 있어 모든 파일의 사본을 구글 드라이브에 따로 보관합니다.
+        </p>
+        <div class="bk-stats" id="bk-stats"></div>
+        <p class="notice notice--info" style="margin-top:1.1rem" id="bk-drive-note"></p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="wrap grid grid-2">
+        <div class="card">
+          <h2 class="bk-h2">5단계 준비 핵심</h2>
+          <ul class="bk-points" id="bk-findings"></ul>
+        </div>
+        <div class="card">
+          <h2 class="bk-h2">공식 사이트</h2>
+          <ul class="bk-links" id="bk-official"></ul>
+          <h2 class="bk-h2" style="margin-top:1.4rem">관련 보도</h2>
+          <ul class="bk-links" id="bk-news"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0" id="sites">
+      <div class="wrap">
+        <h2 class="bk-h2">사업단 사이트</h2>
+        <div class="bk-chips" id="bk-site-groups" role="group" aria-label="사이트 묶음 고르기"></div>
+        <div class="bk-table-wrap">
+          <table class="bk-table">
+            <thead><tr><th>사업단</th><th>대학</th><th class="num">받은 자료</th><th>메모</th><th>링크</th></tr></thead>
+            <tbody id="bk-sites"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0" id="docs">
+      <div class="wrap">
+        <h2 class="bk-h2">자료 목록</h2>
+        <div class="bk-toolbar">
+          <input type="text" id="bk-q" placeholder="파일 이름, 사업단, 게시글 제목으로 찾기" aria-label="자료 찾기">
+        </div>
+        <div class="bk-chips" id="bk-doc-groups" role="group" aria-label="묶음 고르기"></div>
+        <div class="bk-chips" id="bk-doc-kinds" role="group" aria-label="종류 고르기"></div>
+        <p class="bk-count" id="bk-count"></p>
+        <ul class="bk-docs" id="bk-docs"></ul>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+(function () {
+  const KEY = 'bk21-code';
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const folder = (id) => 'https://drive.google.com/drive/folders/' + encodeURIComponent(id);
+  const isWeb = (u) => /^https?:\/\//.test(u || '');
+  const size = (b) => b >= 1e6 ? (b / 1e6).toFixed(b >= 1e8 ? 0 : 1) + 'MB' : Math.max(1, Math.round(b / 1e3)) + 'KB';
+  const ss = {
+    get() { try { return sessionStorage.getItem(KEY); } catch (e) { return null; } },
+    set(v) { try { sessionStorage.setItem(KEY, v); } catch (e) { /* 저장 못 해도 동작 */ } },
+    del() { try { sessionStorage.removeItem(KEY); } catch (e) { /* 무시 */ } },
+  };
+  const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+
+  let packed = null;
+  async function load() {
+    if (packed) return packed;
+    const r = await fetch('data/bk21.enc.json', { cache: 'no-cache' });
+    if (!r.ok) throw new Error('자료 파일을 불러오지 못했습니다.');
+    packed = await r.json();
+    return packed;
+  }
+
+  async function unlock(code) {
+    if (!window.crypto || !crypto.subtle) throw new Error('이 브라우저는 암호 풀기를 지원하지 않습니다. 최신 브라우저로 열어 주세요.');
+    const p = await load();
+    const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(code), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', hash: 'SHA-256', salt: b64(p.salt), iterations: p.iter },
+      base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    let plain;
+    try {
+      plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(p.iv) }, key, b64(p.ct));
+    } catch (e) {
+      const err = new Error('입장 코드가 맞지 않습니다.'); err.wrong = true; throw err;
+    }
+    const stream = new Blob([plain]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return JSON.parse(await new Response(stream).text());
+  }
+
+  // ---------- 화면 그리기 ----------
+  const state = { siteGroup: '', group: '', site: '', kind: '', q: '' };
+  let D = null;
+
+  function chips(el, items, cur, onPick) {
+    el.innerHTML = items.map(([v, label]) =>
+      `<button type="button" class="chip" data-v="${esc(v)}" aria-pressed="${v === cur}">${esc(label)}</button>`).join('');
+    el.onclick = (e) => {
+      const b = e.target.closest('.chip'); if (!b) return;
+      onPick(b.dataset.v);
+    };
+  }
+
+  function render(d) {
+    D = d;
+    const total = d.docs.reduce((a, x) => a + (x.bytes || 0), 0);
+    const plans = d.docs.filter((x) => x.kind === '사업계획서').length;
+    $('#bk-stats').innerHTML = [
+      [d.docs.length.toLocaleString() + '개', '모은 파일'],
+      [(total / 1e9).toFixed(1) + 'GB', '전체 크기'],
+      [plans + '개', '사업계획서(신청서)'],
+      [d.sites.length + '곳', '사업단 사이트'],
+      [String(d.checked).replace(/-/g, '. ') + '.', '마지막 확인'],
+    ].map(([b, s]) => `<div class="bk-stat"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join('');
+    $('#bk-drive-note').innerHTML =
+      `사본 전체는 <a href="${folder(d.drive_root)}" target="_blank" rel="noopener">구글 드라이브 ‘자료’ 폴더</a>에 있습니다. ` +
+      `각 자료의 ‘드라이브 사본’은 그 파일이 든 폴더를 엽니다. 원래 사이트 링크가 막히면 사본을 쓰세요.`;
+
+    $('#bk-findings').innerHTML = d.findings.map((f) => `<li>${esc(f)}</li>`).join('');
+    $('#bk-official').innerHTML = d.official.map((o) =>
+      `<li><a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.name)}</a><span class="small muted">${esc(o.desc || '')}</span></li>`).join('');
+    $('#bk-news').innerHTML = d.news.map((n) =>
+      `<li><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a><span class="small muted">${esc(n.src)}, ${esc(String(n.date).replace(/-/g, '. '))}.</span></li>`).join('');
+
+    renderSites();
+    renderDocs();
+  }
+
+  function groupItems(allLabel) {
+    return [['', allLabel]].concat(Object.entries(D.groups).map(([k, v]) => [k, v]));
+  }
+
+  function renderSites() {
+    chips($('#bk-site-groups'), groupItems('모든 묶음'), state.siteGroup, (v) => { state.siteGroup = v; renderSites(); });
+    const rows = D.sites.filter((s) => !state.siteGroup || s.group === state.siteGroup);
+    $('#bk-sites').innerHTML = rows.map((s) => {
+      const links = [
+        s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">사이트</a>` : '',
+        s.drive ? `<a href="${folder(s.drive)}" target="_blank" rel="noopener">드라이브 사본</a>` : '',
+      ].filter(Boolean).join(' · ');
+      const docsCell = s.docs ? `<a href="#docs" data-site="${esc(s.id)}">${s.docs}개</a>` : '0개';
+      return `<tr>
+        <td><b>${esc(s.name)}</b>${s.field ? `<div class="small muted">${esc(s.field)}${s.sub ? ', ' + esc(s.sub) : ''}</div>` : ''}</td>
+        <td>${esc(s.univ || '')}</td>
+        <td class="num">${docsCell}</td>
+        <td class="small">${esc(s.note || '')}</td>
+        <td class="small" style="white-space:nowrap">${links}</td></tr>`;
+    }).join('');
+    $('#bk-sites').onclick = (e) => {
+      const a = e.target.closest('a[data-site]'); if (!a) return;
+      const site = D.sites.find((s) => s.id === a.dataset.site);
+      state.group = site ? site.group : ''; state.kind = ''; state.q = '';
+      state.site = a.dataset.site === '전남대_본부' ? '00_본부' : a.dataset.site;
+      $('#bk-q').value = '';
+      renderDocs();
+      document.getElementById('docs').scrollIntoView({ behavior: 'smooth' });
+      e.preventDefault();
+    };
+  }
+
+  function renderDocs() {
+    const groupChips = groupItems('모든 묶음');
+    if (state.site) groupChips.push(['@site', `사업단: ${state.site} ✕`]);
+    chips($('#bk-doc-groups'), groupChips, state.site ? '@site' : state.group, (v) => {
+      if (v !== '@site') state.group = v;
+      state.site = ''; renderDocs();
+    });
+    const kinds = {};
+    D.docs.forEach((x) => { if (!state.group || x.group === state.group) kinds[x.kind] = (kinds[x.kind] || 0) + 1; });
+    const order = ['사업계획서', '중간·성과평가', '자체평가', '기본계획·공고', '규정·지침', '운영 안내', '소개·사례집', '기타'];
+    const kindItems = [['', '모든 종류']].concat(order.filter((k) => kinds[k]).map((k) => [k, `${k} ${kinds[k]}`]));
+    if (state.kind && !kinds[state.kind]) state.kind = '';
+    chips($('#bk-doc-kinds'), kindItems, state.kind, (v) => { state.kind = v; renderDocs(); });
+
+    const words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+    const list = D.docs.filter((x) => {
+      if (state.group && x.group !== state.group) return false;
+      if (state.site && x.site !== state.site) return false;
+      if (state.kind && x.kind !== state.kind) return false;
+      if (!words.length) return true;
+      const hay = [x.site, x.file, x.title, x.post, x.kind, x.path].join(' ').toLowerCase();
+      return words.every((w) => hay.includes(w));
+    }).sort((a, b) =>
+      (a.kind === '사업계획서' ? 0 : 1) - (b.kind === '사업계획서' ? 0 : 1) ||
+      a.group.localeCompare(b.group) || a.site.localeCompare(b.site, 'ko') || String(b.date || '').localeCompare(String(a.date || '')));
+
+    $('#bk-count').textContent = `${list.length}개 자료` + (list.length !== D.docs.length ? ` (전체 ${D.docs.length}개 가운데)` : '');
+    $('#bk-docs').innerHTML = list.map((x) => {
+      const where = D.groups[x.group] ? D.groups[x.group].replace(/\(.*\)/, '').trim() : x.group;
+      const links = [
+        isWeb(x.url) ? `<a class="btn btn--ghost btn--sm" href="${esc(x.url)}" target="_blank" rel="noopener">원래 사이트</a>` : '',
+        x.drive ? `<a class="btn btn--sm" href="${folder(x.drive)}" target="_blank" rel="noopener">드라이브 사본</a>` : '',
+      ].join('');
+      const folderPath = (x.path || '').split('/').slice(1, -1).join(' › ');
+      return `<li class="bk-doc">
+        <div class="bk-doc__top"><span class="tag${x.kind === '사업계획서' ? ' bk-tag-plan' : ''}">${esc(x.kind)}</span><span class="tag">${esc(where)}</span><span class="tag">${esc(x.site)}</span></div>
+        <div class="bk-doc__title">${esc(x.file)}</div>
+        <div class="bk-doc__meta">${x.post ? esc(x.post) + '<br>' : ''}${x.date ? esc(String(x.date).replace(/-/g, '. ')) + '. · ' : ''}${esc((x.ext || '').toUpperCase())} ${size(x.bytes || 0)}${folderPath ? ' · 드라이브 위치: ' + esc(folderPath) : ''}</div>
+        <div class="bk-doc__links">${links}</div></li>`;
+    }).join('') || '<li class="muted">맞는 자료가 없습니다.</li>';
+  }
+
+  let timer;
+  $('#bk-q').addEventListener('input', (e) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { state.q = e.target.value.trim(); if (D) renderDocs(); }, 150);
+  });
+
+  // ---------- 입장과 잠그기 ----------
+  async function enter(code, quiet) {
+    const msg = $('#bk-msg'), go = $('#bk-go');
+    go.disabled = true; if (!quiet) msg.textContent = '여는 중…';
+    try {
+      const d = await unlock(code);
+      ss.set(code);
+      msg.textContent = '';
+      render(d);
+      $('#bk-lock').classList.add('bk-hidden');
+      $('#bk-body').classList.remove('bk-hidden');
+    } catch (e) {
+      ss.del();
+      if (!quiet) msg.textContent = e.message;
+    } finally { go.disabled = false; }
+  }
+
+  $('#bk-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const code = $('#bk-code').value.trim();
+    if (code) enter(code, false);
+  });
+  $('#bk-out').addEventListener('click', () => {
+    ss.del(); D = null;
+    $('#bk-body').classList.add('bk-hidden');
+    $('#bk-lock').classList.remove('bk-hidden');
+    $('#bk-code').value = ''; $('#bk-code').focus();
+  });
+
+  const saved = ss.get();
+  if (saved) enter(saved, true);
+})();
+</script>
+</body>
+</html>
