@@ -255,7 +255,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   [data-design="catalog"] .portrait img.portrait__avatar { bottom: calc(1rem + 4%); right: calc(.35rem + 4%); }
 }
 
-/* ---------- 6. 두 갈래 진입 카드 ---------- */
+/* ---------- 6. 첫 화면 진입 카드(연구, 수업, 자료실) ---------- */
 .gateway { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
 .gateway__card {
   position: relative; display: flex; flex-direction: column;
@@ -282,6 +282,10 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .gateway__card h3 { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .4rem; }
 .gateway__card p { color: var(--ink-soft); font-size: .94rem; margin: 0 0 .9rem; }
 .gateway__meta { font-size: .82rem; color: var(--ink-faint); margin-top: auto; }
+/* 카드 3장이 2열로 놓이는 너비(약 640~945px)에서는 셋째 카드를 한 줄 전체로 펼쳐 혼자 남지 않게 합니다. */
+@media (min-width: 638px) and (max-width: 945px) {
+  .gateway__card:nth-child(3):last-child { grid-column: 1 / -1; }
+}
 
 /* ---------- 7. 카드·공통 부품 ---------- */
 .card {
