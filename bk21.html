@@ -275,7 +275,7 @@
     });
     const kinds = {};
     D.docs.forEach((x) => { if (!state.group || x.group === state.group) kinds[x.kind] = (kinds[x.kind] || 0) + 1; });
-    const order = ['사업계획서', '중간·성과평가', '자체평가', '기본계획·공고', '규정·지침', '운영 안내', '소개·사례집', '기타'];
+    const order = ['사업계획서', '신청서 서식·작성 안내', '중간·성과평가', '자체평가', '기본계획·공고', '규정·지침', '운영 안내', '소개·사례집', '기타'];
     const kindItems = [['', '모든 종류']].concat(order.filter((k) => kinds[k]).map((k) => [k, `${k} ${kinds[k]}`]));
     if (state.kind && !kinds[state.kind]) state.kind = '';
     chips($('#bk-doc-kinds'), kindItems, state.kind, (v) => { state.kind = v; renderDocs(); });
