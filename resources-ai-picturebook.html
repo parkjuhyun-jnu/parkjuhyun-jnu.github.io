@@ -58,6 +58,14 @@
 .pb-note { font-size: .92rem; background: var(--gold-wash); border-radius: var(--radius-sm); padding: .8rem 1rem; margin-top: 1rem; max-width: 860px; }
 .pb-list { margin: 0; padding-left: 1.15rem; display: grid; gap: .55rem; max-width: 860px; }
 .pb-list li { font-size: .96rem; }
+
+.pb-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1rem; margin: 0; }
+.pb-gallery figure { margin: 0; display: grid; gap: .45rem; align-content: start; }
+.pb-gallery img { width: 100%; height: auto; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); }
+.pb-gallery figcaption { font-size: .84rem; color: var(--ink-soft); line-height: 1.5; }
+.pb-gallery figcaption b { color: var(--ink); }
+.pb-gallery .wide { grid-column: span 2; }
+@media (max-width: 460px) { .pb-gallery .wide { grid-column: auto; } }
 </style>
 </head>
 <body>
@@ -241,9 +249,53 @@
             <tr><th scope="row">제목</th><td>『책과 삶을 나누는 공공도서관과 함께』 (AI가 처음 붙인 제목을 바꿔 달라고 해서 정함)</td></tr>
             <tr><th scope="row">분량</th><td>8장면, 표지와 글자 페이지 배경 따로</td></tr>
             <tr><th scope="row">그림체</th><td>처음에는 수채화 그림책풍을 추천받았지만, 주인공의 밝은 성격이 잘 드러나도록 감성 웹툰풍으로 바꿈</td></tr>
-            <tr><th scope="row">도구</th><td>ChatGPT 무료 계정(조사, 이야기, 주인공 묘사, 주인공 그림, 턴어라운드, 표지, 장면 프롬프트, 글자 배경), Google Flow(장면 그림 15장)</td></tr>
+            <tr><th scope="row">도구</th><td>ChatGPT 무료 계정(조사, 이야기, 주인공 묘사, 주인공 그림, 턴어라운드, 표지, 장면 프롬프트, 글자 배경), Google Flow(장면 그림 19장)</td></tr>
           </tbody>
         </table>
+      </div>
+
+      <h3 style="font-family:var(--font-serif); font-size:1.1rem; margin:1.6rem 0 .7rem">만든 그림</h3>
+      <div class="pb-gallery">
+        <figure>
+          <img src="assets/img/resources/picturebook/cover.jpg" width="675" height="900" loading="lazy" alt="공공도서관에서 책을 든 청년 사서와 여러 세대 이용자가 있는 그림책 표지. 제목은 책과 삶을 나누는 공공도서관과 함께">
+          <figcaption><b>표지</b> (ChatGPT). 처음 붙은 제목을 바꿔 달라고 해서 다시 그렸습니다.</figcaption>
+        </figure>
+        <figure class="wide">
+          <img src="assets/img/resources/picturebook/turnaround.jpg" width="900" height="720" loading="lazy" alt="같은 청년을 앞, 비스듬한 앞, 옆, 비스듬한 뒤, 뒤에서 본 다섯 모습">
+          <figcaption><b>주인공 턴어라운드</b> (ChatGPT). 글자 없이 앞, 옆, 뒤를 그리게 했습니다. 이 그림과 주인공 기준 그림을 Flow에 참고 이미지로 올렸습니다.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/resources/picturebook/scene1-highschool.jpg" width="672" height="900" loading="lazy" alt="교복을 입은 고등학생이 도서관 창가에서 책을 가슴에 안고 창밖을 바라보는 장면">
+          <figcaption><b>1장면</b> (Flow). 고등학교 도서관 창가에서 생긴 작은 궁금증.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/resources/picturebook/scene2-publiclibrary.jpg" width="672" height="900" loading="lazy" alt="공공도서관 열람실에서 주인공이 서서, 어린이와 청년과 어르신이 책을 펴고 이야기 나누는 모습을 바라보는 장면">
+          <figcaption><b>2장면</b> (Flow). 공공도서관에서 여러 세대가 책으로 이야기 나누는 모습을 보며 도서관이 사람을 잇는 곳임을 깨닫습니다.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/resources/picturebook/scene3-university.jpg" width="672" height="900" loading="lazy" alt="대학생이 대학 도서관 책상에서 문헌정보학 책을 펴고 메모하는 장면">
+          <figcaption><b>3장면</b> (Flow). 대학 도서관에서 문헌정보학을 공부하는 모습. 교복이 평상복으로 바뀌어도 얼굴은 같게 유지되었습니다.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/resources/picturebook/scene4-friends.jpg" width="672" height="900" loading="lazy" alt="둥근 탁자에 친구들이 모여 책과 공책을 펴 놓고 서로의 생각을 이야기하는 장면">
+          <figcaption><b>4장면</b> (Flow). 친구들과 꾸린 독서 모임에서 서로 다른 생각을 듣는 법을 배웁니다.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/resources/picturebook/scene5-practicum.jpg" width="672" height="900" loading="lazy" alt="실습생 이름표를 단 주인공이 노트북으로 온라인 정보를 확인하며 메모하고, 뒤쪽에서는 어린이 독서 활동과 어르신 디지털 기기 안내가 이어지는 도서관 장면">
+          <figcaption><b>5장면</b> (Flow). 도서관 실습. 어린이 독서 활동과 어르신 디지털 안내를 준비하고 온라인 정보의 출처를 따져 봅니다. 한 장면에 할 일이 많아 그림도 붐빕니다.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/resources/picturebook/scene6-librarian.jpg" width="672" height="900" loading="lazy" alt="사원증을 건 사서가 대출대에서 어르신과 어린이에게 책을 건네는 장면">
+          <figcaption><b>6장면</b> (Flow). 공공도서관 사서가 되어 이용자를 맞이하는 모습.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/resources/picturebook/scene7-bookclub.jpg" width="672" height="900" loading="lazy" alt="어린이부터 어르신까지 여러 세대가 둥근 탁자에 모여 책을 읽고 이야기하는 도서관 독서 모임 장면">
+          <figcaption><b>7장면</b> (Flow). 여러 세대가 함께하는 독서 모임. 사서는 앞에서 가르치기보다 이야기를 잇습니다.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/img/resources/picturebook/text-inside-example.jpg" width="672" height="900" loading="lazy" alt="1장면을 다시 그린 그림. 위쪽에 페이지 번호와 한글, 영어 제목이 그림 안에 들어가 있음">
+          <figcaption><b>고쳐야 했던 예</b> (Flow). 같은 1장면인데 그림 안에 페이지 번호와 제목 글자가 들어갔습니다. 프롬프트 끝에 "텍스트 없음"을 붙여야 하는 까닭입니다.</figcaption>
+        </figure>
       </div>
 
       <h3 style="font-family:var(--font-serif); font-size:1.1rem; margin:1.6rem 0 .7rem">AI가 짜 준 장면 구성</h3>

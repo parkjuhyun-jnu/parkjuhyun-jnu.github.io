@@ -11,8 +11,8 @@ const API = (() => {
   const CFG = window.SITE_CONFIG;
   const MODE = window.isSupabaseConfigured() ? 'supabase' : 'demo';
 
-  let client = null;          // supabase client
-  let clientReady = null;     // 준비 중인 Promise
+  let bareReady = null;       // 라이브러리와 client 만 준비하는 Promise
+  let clientReady = null;     // 익명 로그인까지 마친 client 를 주는 Promise
 
   /* ---------- Supabase 준비 ---------- */
 
@@ -26,17 +26,31 @@ const API = (() => {
     });
   }
 
-  async function getClient() {
+  /**
+   * 익명 로그인 없이 client 만 만듭니다. 전에 로그인한 기록이 브라우저에 있으면 그대로 씁니다.
+   * 자료실처럼 방문자가 많은 페이지에서 목록만 볼 때 쓰면, 들르는 사람마다 익명 계정이 생기지 않습니다.
+   */
+  async function getBareClient() {
     if (MODE !== 'supabase') return null;
-    if (client) return client;
-    if (!clientReady) {
-      clientReady = (async () => {
+    if (!bareReady) {
+      bareReady = (async () => {
         if (!window.supabase?.createClient) {
           await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js');
         }
-        client = window.supabase.createClient(CFG.supabase.url, CFG.supabase.anonKey, {
+        return window.supabase.createClient(CFG.supabase.url, CFG.supabase.anonKey, {
           auth: { persistSession: true, autoRefreshToken: true },
         });
+      })();
+      bareReady.catch(() => { bareReady = null; });   // 실패하면 다음에 다시 시도
+    }
+    return bareReady;
+  }
+
+  async function getClient() {
+    if (MODE !== 'supabase') return null;
+    if (!clientReady) {
+      clientReady = (async () => {
+        const client = await getBareClient();
         // 수업 코드 해제 기록을 브라우저별로 묶기 위해 익명 로그인을 해 둡니다.
         const { data } = await client.auth.getSession();
         if (!data.session) await client.auth.signInAnonymously();
@@ -476,6 +490,156 @@ const API = (() => {
     if (error) throw error;
   }
 
+  /* ---------- 자료실 수강생 전용 자료 ---------- */
+  // 묶음은 courses 표의 한 줄이고, 그 묶음의 코드(수업 코드)를 푼 사람만 파일과 링크를 엽니다.
+  // 권한은 모두 서버가 판단합니다(supabase/4-class-materials.sql).
+
+  const notSetUp = (err) =>
+    /PGRST202|PGRST205|42P01|could not find the (function|table)|does not exist/i
+      .test(`${err?.code || ''} ${err?.message || ''}`);
+
+  /**
+   * 자료실 목록(누구나): 제목, 소개, 묶음 이름, 이 브라우저가 열 수 있는지(unlocked).
+   * 데모 모드이거나 서버 설정 전이면 빈 목록을 돌려줍니다.
+   */
+  async function listMaterials() {
+    if (MODE === 'demo') return [];
+    const supa = await getBareClient();
+    const { data, error } = await supa.rpc('list_class_materials');
+    if (error) {
+      if (notSetUp(error)) return [];
+      throw error;
+    }
+    return data || [];
+  }
+
+  /**
+   * 자료 하나를 열 주소를 받습니다. 파일이면 5분짜리 임시 내려받기 주소, 링크면 그 링크.
+   * 코드를 풀지 않았거나 풀린 기록이 없어졌으면 needsCode 오류를 냅니다.
+   */
+  async function openMaterial(id, courseId) {
+    const supa = await getClient();
+    const { data: row, error } = await supa
+      .from('class_materials')
+      .select('file_path, file_name, link_url')
+      .eq('id', id)
+      .maybeSingle();
+    if (error) throw error;
+    if (!row) {
+      lock(courseId);
+      const e = new Error('코드 확인이 풀렸습니다. 코드를 다시 넣어 주세요.');
+      e.needsCode = true;
+      throw e;
+    }
+    if (row.link_url && !row.file_path) return row.link_url;
+    const { data, error: urlErr } = await supa.storage
+      .from(CFG.materialsBucket)
+      .createSignedUrl(row.file_path, 60 * 5, { download: row.file_name || true });
+    if (urlErr) throw urlErr;
+    return data.signedUrl;
+  }
+
+  /** (관리자) 묶음 목록. courses 표는 관리자만 읽습니다. */
+  async function listMaterialGroups() {
+    if (MODE === 'demo') return [];
+    const supa = await getClient();
+    const { data, error } = await supa
+      .from('courses')
+      .select('id, title, term, is_open, created_at')
+      .order('created_at', { ascending: true });
+    if (error) throw error;
+    return data || [];
+  }
+
+  /** (관리자) 새 묶음 만들기. 연수처럼 수업 과목이 아닌 것에 씁니다. */
+  async function createMaterialGroup({ id, title, term, code }) {
+    const supa = await getClient();
+    const { error } = await supa.from('courses').insert({
+      id, title, term: term || null, code_hash: 'x',   // 'x' 는 어떤 코드와도 맞지 않습니다
+    });
+    if (error) {
+      if (/duplicate key/i.test(error.message || '')) throw new Error(`이미 있는 묶음 id 입니다: ${id}`);
+      throw error;
+    }
+    await setGroupCode(id, code);
+  }
+
+  /** (관리자) 묶음 코드 바꾸기. 수업 과목이면 결과물 갤러리 제출 코드도 같이 바뀝니다. */
+  async function setGroupCode(id, code) {
+    const supa = await getClient();
+    const { error } = await supa.rpc('set_course_code', { p_course_id: id, p_code: code });
+    if (error) throw error;
+  }
+
+  /** (관리자) 묶음 열고 닫기. 닫으면 새로 코드를 풀 수 없고, 목록에서도 숨습니다. */
+  async function setGroupOpen(id, isOpen) {
+    const supa = await getClient();
+    const { error } = await supa.from('courses').update({ is_open: isOpen }).eq('id', id);
+    if (error) throw error;
+  }
+
+  /** (관리자) 올린 전용 자료 전부 */
+  async function listMaterialsAdmin() {
+    const supa = await getClient();
+    const { data, error } = await supa
+      .from('class_materials')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) {
+      if (notSetUp(error)) {
+        const e = new Error('서버 설정 전입니다.');
+        e.notSetUp = true;
+        throw e;
+      }
+      throw error;
+    }
+    return data || [];
+  }
+
+  /** (관리자) 전용 자료 올리기: 파일 또는 링크 */
+  async function createMaterial({ courseId, title, summary, file, linkUrl }) {
+    const supa = await getClient();
+    let filePath = null;
+    if (file) {
+      const ext = (file.name.split('.').pop() || '').toLowerCase();
+      const rand = crypto.randomUUID ? crypto.randomUUID() : String(Date.now());
+      filePath = `${courseId}/${rand}${ext ? '.' + ext : ''}`;
+      const { error: upErr } = await supa.storage
+        .from(CFG.materialsBucket)
+        .upload(filePath, file, { cacheControl: '3600', upsert: false });
+      if (upErr) {
+        if (/exceeded the maximum allowed size|payload too large|413/i.test(upErr.message || '')) {
+          throw new Error(`파일이 너무 큽니다. 최대 ${CFG.materialsMaxMB}MB까지 올릴 수 있습니다. 큰 파일은 구글 드라이브에 두고 링크로 올려 주세요.`);
+        }
+        throw upErr;
+      }
+    }
+    const { error } = await supa.from('class_materials').insert({
+      course_id: courseId,
+      title: title.trim(),
+      summary: (summary || '').trim() || null,
+      file_path: filePath,
+      file_name: file ? file.name : null,
+      file_size: file ? file.size : null,
+      link_url: file ? null : ((linkUrl || '').trim() || null),
+    });
+    if (error) {
+      if (filePath) await supa.storage.from(CFG.materialsBucket).remove([filePath]).catch(() => {});
+      throw error;
+    }
+  }
+
+  /** (관리자) 전용 자료 지우기. 올린 파일도 함께 지웁니다. */
+  async function removeMaterial(row) {
+    const supa = await getClient();
+    if (row.file_path) {
+      const { error: rmErr } = await supa.storage.from(CFG.materialsBucket).remove([row.file_path]);
+      if (rmErr) throw rmErr;
+    }
+    const { error } = await supa.from('class_materials').delete().eq('id', row.id);
+    if (error) throw error;
+  }
+
   /* ---------- 사이트 설정 (관리자가 켜고 끄는 값) ---------- */
 
   /** 읽기는 settings.js 의 readSetting() 이 맡습니다. 여기서는 저장만 합니다. */
@@ -502,6 +666,9 @@ const API = (() => {
     signIn, signOut, currentAdmin, changePassword, listAll, setVisibility, setOwnVisibility,
     removeSubmission, restoreSubmission,
     setSetting,
+    listMaterials, openMaterial,
+    listMaterialGroups, createMaterialGroup, setGroupCode, setGroupOpen,
+    listMaterialsAdmin, createMaterial, removeMaterial,
     clearDemo,
   };
 })();

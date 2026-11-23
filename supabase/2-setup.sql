@@ -34,9 +34,11 @@ on conflict (id) do update set title = excluded.title, term = excluded.term;
 
 -- ── 3. 수업 코드 정하기 ─────────────────────────────────────────────────────
 -- 코드는 해시로만 저장되므로 나중에 다시 꺼내 볼 수 없습니다.
--- 바꾸고 싶으면 아래 줄의 '2662' 를 새 코드로 고쳐 다시 실행하면 됩니다.
-select public.set_course_code('ai-reading-2026-2', '2662');
-select public.set_course_code('metadata-2026-2',   '2662');
+-- 이 저장소는 공개이므로 실제 코드를 이 파일에 적어 커밋하지 마세요.
+-- 아래 '여기에새코드' 를 SQL Editor 에서만 바꿔 실행하거나, 관리 화면의
+-- '자료실 수강생 전용 자료 → 묶음과 코드' 에서 바꾸세요(2026. 11. 23.부터).
+select public.set_course_code('ai-reading-2026-2', '여기에새코드');
+select public.set_course_code('metadata-2026-2',   '여기에새코드');
 
 
 -- ── 4. 확인 ─────────────────────────────────────────────────────────────────
@@ -49,8 +51,8 @@ select
   (select count(*) from public.courses)                         as 과목수,
   coalesce((select string_agg(
               id || ' → ' ||
-              case when code_hash = crypt('2662', code_hash)
-                   then '2662 맞음' else '2662 아님' end,
+              case when code_hash = crypt('여기에새코드', code_hash)
+                   then '맞음' else '아님' end,
               '  |  ' order by id)
             from public.courses), '(없음)')                      as 수업코드확인;
 
