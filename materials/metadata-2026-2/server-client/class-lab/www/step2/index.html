@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2단계 · 내 폰에서 찾기</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+  <p><a href="../">← 처음으로</a></p>
+  <span class="step">2단계 · 목록을 통째로 받아 내 폰에서 찾기</span>
+  <h1>어린이 권장도서 찾기 <small class="muted">(브라우저 검색)</small></h1>
+
+  <div id="status" class="notice warn">목록 파일 <code>books.csv</code>를 서버에서 받는 중입니다…</div>
+
+  <div class="stats" id="stats" hidden>
+    <div><b id="s-size">-</b><small>서버에서 받은 양</small></div>
+    <div><b id="s-count">-</b><small>내 폰에 들어온 책</small></div>
+    <div><b id="s-time">-</b><small>방금 찾는 데 걸린 시간 (내 폰)</small></div>
+  </div>
+
+  <form class="search" id="f" hidden>
+    <div class="row">
+      <input type="search" id="q" placeholder="책이름, 지은이, 출판사로 찾기 (예: 권정생)" aria-label="찾을 말">
+      <button type="submit">찾기</button>
+    </div>
+    <div class="row">
+      <select id="field" aria-label="찾을 칸">
+        <option value="all">모든 칸</option>
+        <option value="1">책이름</option>
+        <option value="2">지은이</option>
+        <option value="3">출판사</option>
+      </select>
+      <select id="age" aria-label="연령"><option value="">모든 연령</option></select>
+      <select id="genre" aria-label="갈래"><option value="">모든 갈래</option></select>
+    </div>
+  </form>
+
+  <p class="muted" id="summary"></p>
+  <ol class="books" id="list"></ol>
+
+  <div class="card">
+    <b>여기서 누가 일했나요?</b>
+    <div class="who">
+      <div class="server"><b>서버</b><code>index.html</code>, <code>search.js</code>, <code>books.csv</code> 세 파일을 건네주기만 했습니다. 찾기 단추를 눌러도 서버는 모릅니다.</div>
+      <div class="client"><b>내 폰</b>목록 전체를 받아 기억해 두고, 글자를 넣을 때마다 <b>직접</b> 한 권씩 비교해서 찾습니다. 인터넷을 끊어도 찾기는 됩니다.</div>
+    </div>
+  </div>
+</main>
+<script src="search.js"></script>
+</body>
+</html>

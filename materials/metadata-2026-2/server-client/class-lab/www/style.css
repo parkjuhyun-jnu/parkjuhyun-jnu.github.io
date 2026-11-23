@@ -1,0 +1,67 @@
+/* 서버·클라이언트 실습 공통 모양 (폰에서 먼저 보기 좋게) */
+:root {
+  --bg: #fbfaf6; --card: #ffffff; --ink: #1d232b; --soft: #4a5563; --faint: #6b7480;
+  --line: #e5e1d8; --navy: #1f3a5f; --wash: #eaeff7; --gold: #a8742f; --gold-wash: #f7efe2;
+  --ok: #2f6b3f; --ok-wash: #e6f2e8; --warn: #8a5a00; --warn-wash: #fff4dc;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15181d; --card: #1c1f25; --ink: #e8e6e1; --soft: #c2c6cc; --faint: #9aa1aa;
+    --line: #2e333b; --navy: #9dbbe6; --wash: #1e2836; --gold: #e0b26b; --gold-wash: #2a2418;
+    --ok: #8fd19e; --ok-wash: #1b2a1f; --warn: #f0c35a; --warn-wash: #2b2412;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 17px/1.65 "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+}
+main { max-width: 46rem; margin: 0 auto; padding: 1.2rem 1rem 3rem; }
+a { color: var(--navy); }
+h1 { font-size: 1.6rem; line-height: 1.3; margin: .4rem 0 .6rem; }
+h2 { font-size: 1.15rem; margin: 1.8rem 0 .5rem; }
+p { margin: .5rem 0; }
+.step { display: inline-block; font-size: .8rem; font-weight: 700; letter-spacing: .02em;
+  color: var(--gold); background: var(--gold-wash); border-radius: 999px; padding: .1rem .7rem; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.1rem; margin: .9rem 0; }
+.big { font-size: 1.35rem; font-weight: 700; color: var(--navy); }
+.muted { color: var(--faint); font-size: .9rem; }
+.who { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: .8rem 0; }
+.who div { border-radius: 12px; padding: .7rem .8rem; font-size: .92rem; }
+.who .server { background: var(--wash); }
+.who .client { background: var(--gold-wash); }
+.who b:first-child { display: block; font-size: 1rem; margin-bottom: .15rem; }
+.url { display: flex; flex-wrap: wrap; gap: .3rem; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .92rem; }
+.url span { background: var(--wash); border-radius: 8px; padding: .25rem .5rem; word-break: break-all; }
+.url small { display: block; font-family: inherit; font-size: .72rem; color: var(--faint); }
+nav.steps { display: grid; gap: .7rem; }
+nav.steps a { display: block; text-decoration: none; color: inherit; background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px; padding: .9rem 1rem; }
+nav.steps a:hover { border-color: var(--navy); }
+nav.steps b { color: var(--navy); font-size: 1.05rem; }
+form.search { display: grid; gap: .55rem; }
+form.search .row { display: flex; gap: .5rem; flex-wrap: wrap; }
+input[type=search], select {
+  font: inherit; font-size: 16px; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--card); color: var(--ink); min-width: 0;
+}
+input[type=search] { flex: 1 1 12rem; }
+button { font: inherit; font-weight: 700; padding: .55rem 1.1rem; border: 0; border-radius: 10px; background: var(--navy); color: #fff; cursor: pointer; }
+@media (prefers-color-scheme: dark) { button { color: #15181d; } }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; margin: .8rem 0; }
+.stats div { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: .5rem .6rem; min-width: 0; }
+.stats b { display: block; font-size: 1.15rem; color: var(--navy); }
+.stats small { display: block; color: var(--faint); font-size: .74rem; line-height: 1.4; }
+ol.books { list-style: none; padding: 0; margin: .6rem 0; }
+ol.books li { border-bottom: 1px solid var(--line); padding: .6rem 0; }
+ol.books .t { font-weight: 700; }
+ol.books .m { color: var(--soft); font-size: .88rem; }
+ol.books .tag { display: inline-block; font-size: .75rem; background: var(--wash); color: var(--navy); border-radius: 6px; padding: 0 .4rem; margin-right: .25rem; }
+mark { background: var(--gold-wash); color: inherit; padding: 0 .1rem; border-radius: 3px; }
+.notice { border-radius: 12px; padding: .75rem .9rem; margin: .8rem 0; font-size: .95rem; }
+.notice.ok { background: var(--ok-wash); color: var(--ok); }
+.notice.warn { background: var(--warn-wash); color: var(--warn); }
+pre, code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .86rem; }
+pre { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .8rem; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
+footer { margin-top: 2.4rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--faint); font-size: .82rem; }

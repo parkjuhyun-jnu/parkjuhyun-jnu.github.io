@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1단계 · HTML 한 장</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+  <p><a href="../">← 처음으로</a></p>
+  <span class="step">1단계 · HTML 한 장 받아 보기</span>
+  <h1>안녕하세요, 저는 서버에 있는 파일입니다.</h1>
+
+  <!-- ▼ 수업 시연: 아래 문장을 바꿔 저장한 뒤 서버에 다시 올리면, 학생 폰에서 새로고침했을 때 바뀝니다. -->
+  <div class="card">
+    <p class="muted">오늘의 한 문장</p>
+    <p class="big">책은 서가에, 파일은 서버에.</p>
+  </div>
+  <!-- ▲ 여기까지 -->
+
+  <h2>방금 무슨 일이 있었나요?</h2>
+  <div class="who">
+    <div class="client"><b>클라이언트 (내 폰)</b>주소를 보고 서버에 “<code>/step1/</code> 파일 주세요” 하고 <b>요청</b>했습니다. 받은 HTML을 읽어 이 화면을 <b>그렸습니다</b>.</div>
+    <div class="server"><b>서버 (가비아)</b>요청을 받고, 자기 폴더에서 <code>step1/index.html</code> 파일을 찾아 그대로 <b>응답</b>으로 보냈습니다. 내용은 하나도 바꾸지 않았습니다.</div>
+  </div>
+
+  <h2>지금 주소 뜯어 보기</h2>
+  <p>폰 주소창의 주소를 부분별로 나눈 것입니다. 이 부분은 내 폰의 브라우저가 계산해서 보여 줍니다.</p>
+  <div class="url" id="url"><span>주소를 읽는 중…</span></div>
+  <p class="muted" id="root"></p>
+
+  <h2>생각해 볼 것</h2>
+  <ol>
+    <li>교수님이 위 ‘오늘의 한 문장’을 바꿔 다시 올린 뒤 <b>새로고침</b>하면 무엇이 달라질까요? 새로고침하지 않으면요?</li>
+    <li>옆 사람 폰과 내 폰은 같은 파일을 받았을까요? 화면 모양은 왜 조금 다를 수 있을까요?</li>
+  </ol>
+</main>
+<script>
+  // 이 부분은 서버가 아니라 내 폰의 브라우저가 실행합니다.
+  var u = new URL(location.href);
+  var parts = [
+    [u.protocol + '//', '스킴: 어떤 방법으로'],
+    [u.hostname, '서버: 어느 컴퓨터에'],
+    [u.port ? ':' + u.port : '(기본 문)', '포트: 그 컴퓨터의 몇 번 문'],
+    [u.pathname, '경로: 웹 루트 안의 어느 파일']
+  ];
+  document.getElementById('url').innerHTML = parts.map(function (p) {
+    return '<span>' + p[0].replace(/</g, '&lt;') + '<small>' + p[1] + '</small></span>';
+  }).join('');
+  var path = u.pathname.endsWith('/') ? u.pathname + 'index.html' : u.pathname;
+  document.getElementById('root').textContent =
+    '서버 안에서는 웹 루트 폴더(/srv/class-lab/www) 아래 ' + path.replace(/^\//, '') + ' 파일입니다.';
+</script>
+</body>
+</html>

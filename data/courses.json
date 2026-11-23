@@ -142,6 +142,12 @@
           "note": "두 주(3강 ①·②) 도서관 DB 구조 보기(ERD) · 브라우저 SQL 실습실(설치 없음, 26문제) · 슬라이드 PDF"
         },
         {
+          "no": "서버",
+          "title": "서버와 클라이언트: 어린이 권장도서 찾기",
+          "url": "materials/metadata-2026-2/server-client/",
+          "note": "가비아 서버에 올리고 폰으로 접속하는 실습 3단계: HTML 한 장 · 브라우저 검색 · 서버(DB) 검색 · (사)어린이도서연구회 초등 권장도서 2,175권 엑셀 · 실습 파일(zip)"
+        },
+        {
           "no": "참고",
           "title": "유로피아나, DPLA, 메타데이터 레지스트리",
           "url": "materials/metadata-2026-2/aggregators-registry/",

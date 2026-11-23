@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴·꼬리말·CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>서버와 클라이언트 실습 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 실습: 가비아 서버에 파일을 올리고 폰으로 접속해 보며 서버와 클라이언트, 요청과 응답, URL, 웹 루트, 데이터베이스를 익힙니다. 어린이도서연구회 권장도서 목록 검색을 세 단계로 만듭니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="materials/metadata-2026-2/server-client/sc.css?v=20261123">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="materials/metadata-2026-2/">← 수업 자료 한눈에</a></p>
+      <span class="course-card__term">2026학년도 2학기 · 메타데이터와아카이빙연구 · 실습</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">서버와 클라이언트: 어린이 권장도서 찾기</h1>
+      <p style="max-width:64ch; font-size:1.05rem; color:var(--ink-soft)">
+        인터넷에 있는 ‘서버’에 파일을 올리고, 내 폰으로 들어가 봅니다. 같은 일, 곧 (사)어린이도서연구회가 고른 초등학생용 책 2,175권에서 원하는 책 찾기를 세 가지 방법으로 만들어 보면서 <b>누가 일하는지</b>를 비교합니다. 서버가 무엇인지 몰라도 괜찮습니다. 처음부터 차례로 설명합니다.
+      </p>
+      <div class="row" style="margin-top:1.3rem">
+        <a class="btn" href="materials/metadata-2026-2/server-client/#lab1">실습 순서로 바로 가기</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/server-client/class-lab.zip" download>실습 파일 받기 (zip)</a>
+        <a class="btn btn--ghost" href="materials/metadata-2026-2/server-client/checklist.html">교수용 준비 체크리스트</a>
+      </div>
+      <nav class="toc" aria-label="이 페이지의 차례">
+        <a href="materials/metadata-2026-2/server-client/#words">먼저 알아 둘 말</a>
+        <a href="materials/metadata-2026-2/server-client/#flow">요청과 응답</a>
+        <a href="materials/metadata-2026-2/server-client/#url">URL과 웹 루트</a>
+        <a href="materials/metadata-2026-2/server-client/#db">데이터베이스</a>
+        <a href="materials/metadata-2026-2/server-client/#lab1">실습 1 HTML 한 장</a>
+        <a href="materials/metadata-2026-2/server-client/#lab2">실습 2 브라우저 검색</a>
+        <a href="materials/metadata-2026-2/server-client/#lab3">실습 3 서버 검색</a>
+        <a href="materials/metadata-2026-2/server-client/#compare">누가 일했나</a>
+        <a href="materials/metadata-2026-2/server-client/#quiz">확인 문제</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="notice notice--info" style="max-width:64ch">
+        <strong>실습 전에</strong>
+        폰이나 노트북 하나만 있으면 됩니다. 설치할 것도, 가입할 것도 없습니다. 학교 와이파이든 휴대폰 데이터든 상관없습니다. 서버 주소(예: <code>http://서버주소:8080/</code>)는 수업 시간에 교수님이 화면에 띄웁니다. 서버에 파일을 올리는 일은 교수님이 화면으로 보여 주고, 여러분은 폰으로 들어가 <b>무엇이 바뀌었는지</b> 확인합니다.
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="part" id="words" style="margin-top:0">먼저 알아 둘 말</h2>
+      <div class="answer"><b>서버</b>는 부탁을 받으면 무언가를 내어 주는 컴퓨터(또는 프로그램)이고, <b>클라이언트</b>는 부탁하는 쪽입니다. 웹에서는 여러분 폰의 <b>브라우저</b>(크롬, 사파리)가 클라이언트이고, 이번 실습에서는 <b>가비아</b>에서 빌린 컴퓨터가 서버입니다.</div>
+      <p class="prose">서버라고 해서 특별하게 생긴 기계는 아닙니다. 세 가지만 갖추면 어떤 컴퓨터든 서버가 될 수 있습니다. ① <b>늘 켜져 있고</b>, ② 인터넷 어디서든 <b>찾아올 수 있는 주소</b>(공인 IP)가 있고, ③ 부탁을 <b>기다리는 프로그램</b>(웹 서버)이 돌고 있으면 됩니다. 교수님 노트북은 수업이 끝나면 꺼지고 학교 안쪽 망에 있어 밖에서 찾아오기 어렵습니다. 그래서 가비아의 클라우드 서버(인터넷 회사의 건물에서 24시간 켜져 있는 리눅스 컴퓨터)를 빌려 씁니다.</p>
+
+      <h3 class="sub">도서관으로 생각해 보기</h3>
+      <div class="cards">
+        <div class="card2"><h4>클라이언트 = 이용자</h4><p>원하는 것을 말하고 받아 갑니다. 받은 책을 어떻게 읽을지(화면을 어떻게 그릴지)는 이용자 몫입니다.</p></div>
+        <div class="card2"><h4>서버 = 대출 데스크와 서고</h4><p>문을 열어 두고 기다리다가, 신청이 오면 서고에서 꺼내 건넵니다. 이용자가 누구든 같은 규칙으로 일합니다.</p></div>
+        <div class="card2"><h4>요청과 응답 = 신청서와 건네받은 책</h4><p>“이 책 주세요”가 요청, 건네받은 책(또는 “그런 책은 없습니다”라는 쪽지)이 응답입니다.</p></div>
+        <div class="card2"><h4>URL = 도서관 위치 + 청구기호</h4><p>어느 도서관의, 어느 서가의, 어느 책인지를 한 줄로 적은 것입니다.</p></div>
+        <div class="card2"><h4>웹 루트 = 개가식 서가</h4><p>이용자가 직접 찾을 수 있게 열어 둔 서가입니다. 직원만 들어가는 보존 서고(웹 루트 바깥)는 주소로 열 수 없습니다.</p></div>
+        <div class="card2"><h4>데이터베이스 = 목록(카탈로그)</h4><p>책마다 같은 칸(서명, 저자, 출판사…)으로 정리한 기록입니다. 사서가 목록을 뒤져 찾아 주는 것이 3단계의 서버입니다.</p></div>
+      </div>
+
+      <h2 class="part" id="flow">요청과 응답</h2>
+      <p class="prose">폰 주소창에 주소를 넣고 이동을 누르면, 아래 일이 1초도 안 되는 사이에 일어납니다. 이 약속(어떻게 부탁하고 어떻게 답하는지)을 <b>HTTP</b>라고 부릅니다. 주소가 <code>http://</code>로 시작하는 까닭입니다.</p>
+      <div class="flow" role="img" aria-label="내 폰(클라이언트)이 서버에 요청을 보내고, 서버가 파일을 응답으로 돌려보내는 그림">
+        <div class="box client"><b>내 폰</b>클라이언트<br>(브라우저)</div>
+        <div class="arrows">
+          <span>요청: “/step1/ 주세요”</span>
+          <span class="back">응답: 200 OK + HTML 파일</span>
+        </div>
+        <div class="box server"><b>가비아 서버</b>웹 서버 프로그램<br>(8080번 문에서 기다림)</div>
+      </div>
+      <ol class="steps">
+        <li><b>요청</b>: 브라우저가 주소를 읽고 그 서버에 “이 경로의 파일을 주세요”라고 보냅니다.</li>
+        <li><b>처리</b>: 서버가 요청을 받아 해당 파일을 찾습니다. 3단계에서는 여기서 프로그램(PHP)을 돌려 데이터베이스를 찾아봅니다.</li>
+        <li><b>응답</b>: 서버가 결과를 돌려보냅니다. 맨 앞에 상태 번호를 붙입니다. <code>200</code>은 ‘잘 찾았음’, <code>404</code>는 ‘그런 파일 없음’입니다.</li>
+        <li><b>그리기</b>: 브라우저가 받은 HTML을 읽어 화면을 그립니다. HTML 안에 CSS·JavaScript·그림 파일이 적혀 있으면 그것도 하나씩 다시 요청합니다.</li>
+      </ol>
+
+      <h2 class="part" id="url">URL과 웹 루트</h2>
+      <p class="prose">실습 주소를 부분별로 나누면 이렇습니다. <a href="materials/metadata-2026-2/uri-url/">URI, URL, URN 참고 페이지</a>에서 본 모양과 같고, 이번에는 <b>포트</b>가 하나 더 있습니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>부분</th><th>예</th><th>뜻</th></tr></thead>
+          <tbody>
+            <tr><th>스킴</th><td><code>http://</code></td><td>어떤 약속으로 부탁하는지 (HTTP)</td></tr>
+            <tr><th>서버</th><td><code>123.45.67.89</code> (교수님이 알려 줌)</td><td>인터넷에서 그 컴퓨터를 찾는 주소. 숫자 대신 <code>naver.com</code> 같은 이름(도메인)을 쓰기도 합니다.</td></tr>
+            <tr><th>포트</th><td><code>:8080</code></td><td>그 컴퓨터의 몇 번 문으로 들어가는지. 한 컴퓨터에서 여러 프로그램이 서로 다른 문을 지킵니다. 이 서버에서도 실습용 웹 서버는 다른 서비스와 겹치지 않게 8080번 문을 씁니다.</td></tr>
+            <tr><th>경로</th><td><code>/step1/index.html</code></td><td>웹 루트 안의 어느 파일인지</td></tr>
+            <tr><th>질의</th><td><code>?q=권정생</code></td><td>덧붙이는 조건. 3단계에서 찾을 말을 서버에 보낼 때 씁니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose"><b>웹 루트</b>는 서버 안에서 ‘주소로 열어 볼 수 있게 내놓은 폴더’입니다. 이번 실습에서는 <code>/srv/class-lab/www</code>입니다. 주소의 경로는 이 폴더에서부터 따라 내려갑니다. 경로가 <code>/</code>로 끝나면 그 폴더의 <code>index.html</code>(또는 <code>index.php</code>)을 줍니다.</p>
+      <div class="map" aria-label="서버 폴더와 주소의 짝">
+        <div class="h">서버 안의 파일</div><div class="h">폰에서 쓰는 주소</div>
+        <div>/srv/class-lab/www/index.html</div><div>http://서버주소:8080/</div>
+        <div>/srv/class-lab/www/step1/index.html</div><div>http://서버주소:8080/step1/</div>
+        <div>/srv/class-lab/www/step2/books.csv</div><div>http://서버주소:8080/step2/books.csv</div>
+        <div>/srv/class-lab/www/step3/index.php</div><div>http://서버주소:8080/step3/</div>
+        <div>/srv/class-lab/data/books.db</div><div class="no">주소 없음. 웹 루트 바깥이라 열 수 없습니다.</div>
+      </div>
+
+      <h2 class="part" id="db">데이터베이스</h2>
+      <p class="prose"><b>데이터베이스</b>(DB)는 같은 모양의 기록을 많이 모아 두고, 빠르게 찾고 고칠 수 있게 관리하는 저장소입니다. 3강에서 브라우저 실습실로 다룬 작은 도서관 DB가 바로 그것입니다. 이번 실습도 같은 종류(SQLite)를 씁니다. 다른 점은 DB가 <b>내 브라우저가 아니라 서버 안</b>에 있다는 것입니다. 여러분 폰은 DB 파일을 받지 못하고, 서버의 프로그램(PHP)에게 “이런 책 찾아 줘”라고 부탁만 할 수 있습니다.</p>
+      <p class="prose">엑셀 목록이 DB에 들어가는 길은 이렇습니다. 엑셀의 머리글(한글)과 DB의 열 이름(영문)이 짝을 이루는 것도 보세요. 메타데이터 수업에서 말하는 <b>요소 대응</b>(크로스워크)과 같은 일입니다.</p>
+      <div class="wrapt">
+        <table class="cmp xwalk">
+          <thead><tr><th>엑셀 머리글</th><th>번호</th><th>책이름</th><th>지은이</th><th>출판사</th><th>펴낸해</th><th>쪽수</th><th>연령</th><th>갈래</th><th>연구회링크</th></tr></thead>
+          <tbody>
+            <tr><th>DB 열 이름</th><td><code>id</code></td><td><code>title</code></td><td><code>author</code></td><td><code>publisher</code></td><td><code>pub_year</code></td><td><code>pages</code></td><td><code>age</code></td><td><code>genre</code></td><td><code>url</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">엑셀(.xlsx) → ‘CSV UTF-8’로 저장(books.csv, 쉼표로 칸을 나눈 글자 파일) → 서버에 올림 → <code>sqlite3</code> 프로그램이 <code>load.sql</code>을 실행해 <code>book</code> 테이블에 넣음. 이 순서를 실습 3에서 교수님이 보여 줍니다.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="lab1" style="scroll-margin-top:90px">실습 순서</h2>
+        <p>실습은 모두 약 60분. <span class="who t" style="font-size:.78rem;font-weight:700;background:var(--navy-wash);color:var(--navy);border-radius:999px;padding:0 .5rem">교수</span>는 교수님이 화면으로 보여 주는 일, <span style="font-size:.78rem;font-weight:700;background:var(--gold-wash);color:var(--gold);border-radius:999px;padding:0 .5rem">나</span>는 여러분이 폰으로 하는 일입니다.</p>
+      </div>
+
+      <div class="stage"><span class="tag">실습 1 · 15분</span><h3 class="sub" style="margin:0">HTML 한 장 받아 보기: 서버는 파일을 건네준다</h3></div>
+      <ol class="steps">
+        <li><span class="who t">교수</span>서버 접속 창에서 웹 루트 폴더 <code>/srv/class-lab/www</code> 안의 파일 목록을 보여 줍니다. 이 폴더가 곧 사이트입니다.</li>
+        <li><span class="who s">나</span>폰 브라우저 주소창에 교수님이 띄운 주소 <code>http://서버주소:8080/</code>을 그대로 넣습니다. 검색창이 아니라 <b>주소창</b>에 넣어야 합니다. QR 코드가 있으면 카메라로 찍어도 됩니다.</li>
+        <li><span class="who s">나</span>처음 화면에서 <b>1단계</b>를 누릅니다. ‘지금 주소 뜯어 보기’에서 서버·포트·경로가 무엇인지 확인합니다.</li>
+        <li><span class="who t">교수</span>내 컴퓨터에서 <code>step1/index.html</code>을 메모장으로 열어 ‘오늘의 한 문장’을 바꾸고 저장한 뒤, FileZilla로 서버의 같은 자리에 다시 올립니다.</li>
+        <li><span class="who s">나</span>아무것도 누르지 말고 화면을 봅니다. 바뀌었나요? 이제 <b>새로고침</b>을 누릅니다. 이번에는요?</li>
+        <li><span class="who s">나</span>주소 끝을 <code>/step1/없는파일.html</code>로 바꿔 들어가 봅니다. 서버가 무엇이라고 답하나요? (<code>404</code>)</li>
+      </ol>
+      <div class="shots">
+        <figure class="shot"><img src="materials/metadata-2026-2/server-client/img/home.jpg" alt="폰 화면: 처음 화면. 1단계, 2단계, 3단계로 가는 단추가 있다." width="540" height="836" loading="lazy"><figcaption>처음 화면 (<code>/</code>)</figcaption></figure>
+        <figure class="shot"><img src="materials/metadata-2026-2/server-client/img/step1.jpg" alt="폰 화면: 1단계. 오늘의 한 문장 ‘책은 서가에, 파일은 서버에.’와 클라이언트·서버가 한 일 설명." width="540" height="836" loading="lazy"><figcaption>1단계 (<code>/step1/</code>). ‘오늘의 한 문장’이 바뀌는지 봅니다.</figcaption></figure>
+        <figure class="shot"><div class="slot"><span><b>그림 자리: 교수님 화면</b>FileZilla 왼쪽(내 컴퓨터)에서 오른쪽(서버 /srv/class-lab/www/step1)으로 index.html을 끌어다 놓는 모습</span></div><figcaption>교수님이 수업 때 찍은 화면을 넣을 자리입니다.</figcaption></figure>
+      </div>
+      <div class="check"><b>확인할 것</b>서버는 파일 내용을 <b>바꾸지 않고 그대로</b> 건넸습니다. 새로고침해야 바뀐 것은, 폰이 다시 요청해야 서버가 새 파일을 주기 때문입니다. 서버는 먼저 연락하지 않습니다. 언제나 클라이언트가 먼저 부탁합니다.</div>
+
+      <div class="stage" id="lab2" style="margin-top:2.4rem; scroll-margin-top:90px"><span class="tag">실습 2 · 20분</span><h3 class="sub" style="margin:0">목록을 통째로 받아 내 폰에서 찾기: 클라이언트가 일한다</h3></div>
+      <ol class="steps">
+        <li><span class="who s">나</span>처음 화면에서 <b>2단계</b>를 누릅니다. ‘목록 파일이 아직 서버에 없습니다’가 나옵니다.</li>
+        <li><span class="who t">교수</span>엑셀 파일 <code>권장도서_초등.xlsx</code>을 열어 보여 줍니다. 한 줄이 책 한 권, 한 칸이 요소 하나입니다. ‘다른 이름으로 저장 → CSV UTF-8(쉼표로 분리)’로 <code>books.csv</code>를 만들고 메모장으로 열어 쉼표로 나뉜 글자임을 보여 줍니다.</li>
+        <li><span class="who t">교수</span>FileZilla로 <code>books.csv</code>를 서버의 <code>/srv/class-lab/www/step2/</code>에 올립니다.</li>
+        <li><span class="who s">나</span>새로고침합니다. ‘서버에서 받은 양’과 ‘내 폰에 들어온 책’ 수를 적어 둡니다.</li>
+        <li><span class="who s">나</span>지은이에 <code>권정생</code>을 넣어 찾고, 연령을 <code>9세부터</code>로 좁혀 봅니다. 글자를 넣을 때마다 바로 결과가 바뀝니다.</li>
+        <li><span class="who s">나</span>폰을 <b>비행기 모드</b>로 바꾸고(와이파이도 끄고) 다른 말로 다시 찾아봅니다. 찾아지나요? 끝나면 비행기 모드를 끕니다.</li>
+      </ol>
+      <div class="shots">
+        <figure class="shot"><img src="materials/metadata-2026-2/server-client/img/step2-empty.jpg" alt="폰 화면: 2단계, 목록 파일이 아직 서버에 없다는 안내" width="540" height="836" loading="lazy"><figcaption>올리기 전: 목록 파일이 아직 없음</figcaption></figure>
+        <figure class="shot"><img src="materials/metadata-2026-2/server-client/img/step2.jpg" alt="폰 화면: 2단계, 서버에서 받은 양 430KB, 2,175권, 권정생과 9세부터로 찾은 책 9권" width="540" height="836" loading="lazy"><figcaption>올린 뒤: 430KB를 받아 2,175권을 폰에 담고, 폰이 찾음</figcaption></figure>
+        <figure class="shot"><div class="slot"><span><b>그림 자리: 교수님 화면</b>엑셀에서 ‘CSV UTF-8(쉼표로 분리)’를 고르는 저장 창, 그리고 메모장으로 연 books.csv</span></div><figcaption>교수님이 수업 때 찍은 화면을 넣을 자리입니다.</figcaption></figure>
+      </div>
+      <div class="check"><b>확인할 것</b>서버는 세 파일(<code>index.html</code>, <code>search.js</code>, <code>books.csv</code>)을 건넸을 뿐입니다. 찾는 일은 폰 안의 JavaScript가 했습니다. 그래서 인터넷이 끊겨도 찾아집니다. 대신 목록이 1만 권, 100만 권이 되면 어떨까요? 그리고 누구나 <code>/step2/books.csv</code> 주소로 목록 전체를 받아 갈 수 있습니다.</div>
+
+      <div class="stage" id="lab3" style="margin-top:2.4rem; scroll-margin-top:90px"><span class="tag">실습 3 · 25분</span><h3 class="sub" style="margin:0">서버에게 찾아 달라고 하기: 서버가 일한다</h3></div>
+      <ol class="steps">
+        <li><span class="who s">나</span>처음 화면에서 <b>3단계</b>를 누릅니다. ‘데이터베이스가 아직 없습니다’가 나옵니다.</li>
+        <li><span class="who t">교수</span>가비아 콘솔의 서버 접속 창에서 아래 두 줄을 실행합니다. <code>load.sql</code>이 <code>book</code> 테이블을 만들고, <code>books.csv</code>를 읽어 넣고, 몇 권 들어갔는지 표로 보여 줍니다.
+          <pre class="cmd">cd /srv/class-lab/data
+sudo sqlite3 books.db &lt; load.sql</pre></li>
+        <li><span class="who s">나</span>새로고침합니다. 2단계처럼 <code>권정생</code>, <code>9세부터</code>로 찾습니다. 이번에는 <b>찾기 단추</b>를 눌러야 결과가 바뀝니다. 왜일까요?</li>
+        <li><span class="who s">나</span>주소창을 봅니다. <code>?q=권정생&amp;age=9세부터</code>처럼 찾을 말이 주소에 붙어 있습니다. 주소의 <code>권정생</code>을 다른 이름으로 직접 고쳐 들어가 봅니다.</li>
+        <li><span class="who s">나</span>‘서버가 데이터베이스에 보낸 SQL 보기’를 펼칩니다. 3강에서 쓴 <code>SELECT … WHERE … LIKE … ORDER BY … LIMIT</code>와 같은지 봅니다.</li>
+        <li><span class="who s">나</span>‘내 폰이 받은 양’을 2단계와 비교합니다. 그리고 비행기 모드로 바꿔 다시 찾아봅니다. 이번에는요?</li>
+        <li><span class="who s">나</span>(더 해 보기) ‘같은 결과를 JSON으로 받기’를 엽니다. 2강에서 본 API와 같은 모양입니다. 사람이 아니라 다른 프로그램이 받아 쓰는 응답입니다.</li>
+      </ol>
+      <div class="shots">
+        <figure class="shot"><img src="materials/metadata-2026-2/server-client/img/step3-empty.jpg" alt="폰 화면: 3단계, 데이터베이스가 아직 없다는 안내" width="540" height="836" loading="lazy"><figcaption>DB에 넣기 전</figcaption></figure>
+        <figure class="shot"><img src="materials/metadata-2026-2/server-client/img/step3.jpg" alt="폰 화면: 3단계, 서버가 찾은 책 9권, 서버에서 걸린 시간, 내 폰이 받은 양 8KB" width="540" height="836" loading="lazy"><figcaption>DB에 넣은 뒤: 서버가 찾고, 폰은 약 8KB만 받음</figcaption></figure>
+        <figure class="shot"><div class="slot"><span><b>그림 자리: 교수님 화면</b>가비아 서버 접속 창에서 sqlite3 books.db &lt; load.sql을 실행해 ‘들어간_책 2175’ 표가 나온 모습</span></div><figcaption>교수님이 수업 때 찍은 화면을 넣을 자리입니다.</figcaption></figure>
+      </div>
+      <div class="check"><b>확인할 것</b>이번에는 폰이 찾을 말만 보내고, 서버의 PHP 프로그램이 SQL로 DB에 물어 찾은 책만 HTML로 만들어 보냈습니다. 받는 양이 작고, 목록이 커져도 폰은 힘들지 않습니다. 대신 인터넷이 끊기면 찾을 수 없고, 손님이 많아지면 서버가 바빠집니다. DB 파일은 웹 루트 바깥에 있어 아무도 통째로 받아 갈 수 없습니다.</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="part" id="compare" style="margin-top:0">세 단계 비교: 누가 일했나</h2>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th></th><th>실습 1 HTML 한 장</th><th>실습 2 브라우저 검색</th><th>실습 3 서버 검색</th></tr></thead>
+          <tbody>
+            <tr><th>서버가 한 일</th><td>파일을 그대로 건넴</td><td>파일 셋을 그대로 건넴</td><td>요청을 읽고, DB에 SQL로 묻고, 결과 화면을 새로 만듦</td></tr>
+            <tr><th>클라이언트가 한 일</th><td>화면 그리기</td><td>목록 전체 보관, 찾기 계산, 화면 그리기</td><td>찾을 말 보내기, 화면 그리기</td></tr>
+            <tr><th>목록이 있는 곳</th><td>-</td><td>서버의 CSV 파일 → 내 폰 메모리</td><td>서버의 DB (웹 루트 바깥)</td></tr>
+            <tr><th>폰이 받는 양</th><td>몇 KB</td><td>약 430KB (목록 전체)</td><td>약 10KB (찾은 책만)</td></tr>
+            <tr><th>인터넷이 끊기면</th><td>새로고침 불가</td><td>찾기는 됨</td><td>찾기 안 됨</td></tr>
+            <tr><th>목록이 100만 권이면</th><td>-</td><td>폰이 받기도, 찾기도 버거움</td><td>서버만 튼튼하면 그대로</td></tr>
+            <tr><th>이런 말로 부름</th><td>정적 웹 페이지</td><td>클라이언트 쪽 처리</td><td>서버 쪽 처리, 동적 웹 페이지</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">어느 쪽이 늘 옳지는 않습니다. 목록이 작고 자주 바뀌지 않으면 2단계 방식이 싸고 빠릅니다. 이 수업 홈페이지의 SQL 실습실이 그렇게 만들어졌습니다. 도서관 목록처럼 크고, 자주 바뀌고, 모두 내보내면 안 되는 자료는 3단계 방식으로 서버가 맡습니다. 실제 도서관 OPAC 대부분이 이 방식입니다.</p>
+
+      <h2 class="part" id="quiz">확인 문제</h2>
+      <details class="qa"><summary>1. 내 폰으로 네이버에 들어갈 때, 클라이언트와 서버는 각각 무엇인가요?</summary><p>클라이언트는 내 폰의 브라우저(또는 네이버 앱), 서버는 네이버 회사가 운영하는 컴퓨터들입니다. 같은 폰도 다른 폰에게 파일을 내어 주는 프로그램을 돌리면 서버가 될 수 있습니다. 서버와 클라이언트는 기계 종류가 아니라 <b>맡은 역할</b>의 이름입니다.</p></details>
+      <details class="qa"><summary>2. 교수님이 파일을 바꿔 올렸는데 내 화면이 그대로입니다. 왜일까요?</summary><p>서버는 먼저 연락하지 않습니다. 내 폰이 다시 요청(새로고침)해야 새 파일을 받습니다. 새로고침해도 그대로라면 브라우저가 예전에 받은 파일을 저장해 두었다가(캐시) 다시 쓴 것일 수 있습니다.</p></details>
+      <details class="qa"><summary>3. <code>http://서버주소:8080/step2/books.csv</code>를 주소창에 넣으면 어떻게 되나요? <code>/data/books.db</code>는요?</summary><p><code>books.csv</code>는 웹 루트 안에 있으므로 목록 파일 전체가 내려받아집니다. 2단계 방식의 약점입니다. <code>books.db</code>는 웹 루트 바깥(<code>/srv/class-lab/data</code>)에 있으므로 주소가 없고, 404가 나옵니다.</p></details>
+      <details class="qa"><summary>4. 3단계에서 찾을 말 <code>권정생</code>은 어떤 길로 서버에 갔나요?</summary><p>주소의 질의 부분(<code>?q=권정생</code>)에 붙어 요청과 함께 갔습니다. 서버의 PHP가 그 값을 꺼내 SQL의 <code>LIKE</code> 조건에 넣었습니다. 그래서 주소만 고쳐도 다른 검색이 되고, 이 주소를 그대로 친구에게 보내면 같은 검색 결과를 볼 수 있습니다.</p></details>
+      <details class="qa"><summary>5. 1단계와 3단계 화면은 모두 ‘서버에서 받은 HTML’입니다. 무엇이 다른가요?</summary><p>1단계 HTML은 서버 폴더에 <b>미리 만들어 둔 파일</b>이라 누가 언제 요청해도 같습니다(정적). 3단계 HTML은 요청이 올 때마다 PHP가 <b>그 자리에서 만든 것</b>이라 찾을 말과 시각에 따라 달라집니다(동적). 3단계 화면 아래의 ‘이 화면은 서버가 … 에 만들었습니다’ 시각이 새로고침할 때마다 바뀌는 것으로 확인할 수 있습니다.</p></details>
+      <details class="qa"><summary>6. 엑셀 머리글 ‘책이름’을 DB에서는 <code>title</code>이라고 부릅니다. 메타데이터 수업의 어떤 개념과 닮았나요?</summary><p>서로 다른 두 양식의 요소를 짝짓는 <b>요소 대응(크로스워크)</b>입니다. 더 나아가 <code>title</code>을 더블린 코어의 <code>dc:title</code>로, <code>author</code>를 <code>dc:creator</code>로 짝지으면 다른 기관과 이 목록을 주고받을 수 있습니다. 쪽수 칸에 ‘각 136’처럼 숫자가 아닌 값이 섞여 있는 것도 살펴보세요. 값을 어떻게 적을지 정하는 내용 규칙이 왜 필요한지 보여 줍니다.</p></details>
+
+      <h2 class="part">실습 파일</h2>
+      <p class="prose">서버에 올린 파일을 모두 내려받아 열어 볼 수 있습니다. HTML·JavaScript·PHP·SQL 파일 곳곳에 무엇을 하는 부분인지 한국어 설명을 달았습니다.</p>
+      <ul class="prose">
+        <li><a href="materials/metadata-2026-2/server-client/class-lab.zip" download>class-lab.zip</a>: 실습 파일 전체 (웹 루트 <code>www</code>, 목록 <code>data</code>, 서버 설치 스크립트 <code>setup</code>)</li>
+        <li><a href="materials/metadata-2026-2/server-client/class-lab/data/권장도서_초등.xlsx" download>권장도서_초등.xlsx</a>: 엑셀 목록 2,175권 (두 번째 시트에 출처와 설명)</li>
+        <li><a href="materials/metadata-2026-2/server-client/class-lab/data/books.csv" download>books.csv</a>: 엑셀을 ‘CSV UTF-8’로 저장한 것. <b>DB Browser for SQLite</b>에서 ‘파일 → 가져오기 → CSV 파일에서 테이블’로 넣으면 내 컴퓨터에서도 같은 DB를 만들어 볼 수 있습니다.</li>
+        <li><a href="materials/metadata-2026-2/server-client/class-lab/data/load.sql" download>load.sql</a>: 서버에서 books.csv를 DB에 넣을 때 쓴 SQL (서버의 <code>sqlite3</code> 프로그램용)</li>
+      </ul>
+
+      <h2 class="part" style="font-size:1rem; font-family:inherit">출처</h2>
+      <p class="src">책 목록: <a href="https://www.childbook.org/book/recommend_list.html" target="_blank" rel="noopener">(사)어린이도서연구회 ‘추천 목록’</a> 가운데 연령이 7세부터·9세부터·11세부터인 책 2,175권의 서지 사항(책이름·지은이·출판사·펴낸해·쪽수·연령·갈래)을 2026-11-23에 옮겼습니다. 연구회가 쓴 소개글과 표지 그림은 싣지 않았으며, 각 책의 연구회 링크에서 볼 수 있습니다. 지은이 칸의 구분 기호만 하나로 맞췄습니다. 연구회는 ‘목록에서 권하는 연령대에 어린이를 맞추려고 하지 마세요’라고 안내합니다. 서버는 가비아 클라우드의 우분투 리눅스 서버에서 PHP 내장 웹 서버와 SQLite로 돌립니다. 비유로 든 도서관 이야기와 예시 주소 <code>123.45.67.89</code>는 설명을 위해 만든 것입니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>
