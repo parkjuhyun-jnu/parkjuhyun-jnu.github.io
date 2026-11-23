@@ -118,7 +118,7 @@ footer p { margin: 0; }
       <div class="stat"><span>연속 정답</span><b><span id="streak">0</span><span class="mult" id="mult"></span></b></div>
       <div class="stat"><span>생명</span><b class="lives" id="lives" aria-label="생명 3개">♥♥♥</b></div>
       <button type="button" class="ghost" id="btn-pause" disabled>멈춤</button>
-      <button type="button" class="ghost" id="btn-sound" aria-pressed="false">소리 켜기</button>
+      <button type="button" class="ghost" id="btn-sound" aria-pressed="true">소리 끄기</button>
     </div>
   </header>
 
@@ -344,9 +344,11 @@ footer p { margin: 0; }
   var score = 0, streak = 0, lives = 3, speed = 300, speedUp = 1;
   var paddle = { x: 300, w: 100, h: 12, y: 0 }, ball = { x: 0, y: 0, vx: 0, vy: 0, r: 7, stuck: true };
   var sel = null;   // 쏠 벽돌로 고른 것
-  var keys = { left: false, right: false }, parts = [], last = 0, clearAt = 0, soundOn = false, audio = null;
+  var keys = { left: false, right: false }, parts = [], last = 0, clearAt = 0, soundOn = readSound(), audio = null;
   var best = readBest();
 
+  // 소리는 켜진 채로 시작한다. 끄면 이 브라우저가 기억한다.
+  function readSound() { try { return localStorage.getItem("kdc-breakout-sound") !== "off"; } catch (e) { return true; } }
   function readBest() { try { return JSON.parse(localStorage.getItem(BEST_KEY) || "{}") || {}; } catch (e) { return {}; } }
   function writeBest() { try { localStorage.setItem(BEST_KEY, JSON.stringify(best)); } catch (e) { /* 저장할 수 없으면 이번만 기억 */ } }
   function mult() { return Math.min(4, 1 + Math.floor(streak / 3)); }
@@ -779,10 +781,26 @@ footer p { margin: 0; }
     if (e.key === "ArrowRight") keys.right = false;
   });
   $("btn-pause").addEventListener("click", function () { pause(state === "play"); });
+  function soundButton() {
+    var b = $("btn-sound");
+    b.setAttribute("aria-pressed", String(soundOn));
+    b.textContent = soundOn ? "소리 끄기" : "소리 켜기";
+  }
+  soundButton();
+  // 브라우저는 사용자가 누르기 전에는 소리를 막으므로, 처음 누를 때 소리 장치를 깨워 둔다
+  function unlockAudio() {
+    if (!soundOn) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      if (audio.state === "suspended") audio.resume();
+    } catch (e) { /* 소리를 낼 수 없는 환경 */ }
+  }
+  document.addEventListener("pointerdown", unlockAudio, true);
+  document.addEventListener("keydown", unlockAudio, true);
   $("btn-sound").addEventListener("click", function () {
     soundOn = !soundOn;
-    this.setAttribute("aria-pressed", String(soundOn));
-    this.textContent = soundOn ? "소리 끄기" : "소리 켜기";
+    try { localStorage.setItem("kdc-breakout-sound", soundOn ? "on" : "off"); } catch (e) { /* 저장할 수 없으면 이번만 */ }
+    soundButton();
     if (soundOn) beep(true);
   });
   document.addEventListener("visibilitychange", function () { if (document.hidden) pause(true); });
