@@ -133,6 +133,77 @@
         <p class="small" id="pw-msg" style="margin:.6rem 0 0; min-height:1.1em"></p>
       </div>
 
+      <!-- 자료실 수강생 전용 자료 (assets/js/admin-materials.js) -->
+      <div class="card" style="margin-bottom:1.8rem" id="mat-card">
+        <h3 style="font-size:1rem; margin-bottom:.2rem">자료실 수강생 전용 자료</h3>
+        <p class="small muted" style="margin:0 0 .9rem">
+          여기 올린 자료는 <a href="resources.html" target="_blank" rel="noopener">자료실</a> 아래
+          '수강생 전용 자료'에 나타납니다. 제목과 소개는 누구나 보고, 파일과 링크는 그 묶음의 코드를 넣은 사람만 엽니다.
+          수업 과목 묶음의 코드는 결과물 갤러리 제출 코드와 같습니다.</p>
+        <div id="mat-setup"></div>
+
+        <form id="mat-form" style="max-width:640px">
+          <div class="field">
+            <label for="mat-group">묶음</label>
+            <select id="mat-group" required></select>
+          </div>
+          <div class="field">
+            <label for="mat-title">제목</label>
+            <input type="text" id="mat-title" maxlength="200" required>
+          </div>
+          <div class="field">
+            <label for="mat-summary">소개 (누구나 봅니다)</label>
+            <textarea id="mat-summary" maxlength="1000" style="min-height:70px"></textarea>
+          </div>
+          <div class="field">
+            <label for="mat-file">파일</label>
+            <input type="file" id="mat-file">
+            <p class="hint" id="mat-file-hint"></p>
+          </div>
+          <div class="field">
+            <label for="mat-link">또는 링크 (파일을 고르지 않았을 때만)</label>
+            <input type="url" id="mat-link" placeholder="https://drive.google.com/...">
+          </div>
+          <button class="btn btn--sm" type="submit">올리기</button>
+          <p class="small" id="mat-msg" style="margin:.6rem 0 0; min-height:1.1em"></p>
+        </form>
+
+        <div id="mat-list" style="margin-top:1rem"></div>
+
+        <details style="margin-top:1.2rem">
+          <summary style="cursor:pointer; font-weight:600; font-size:.92rem">묶음과 코드 관리</summary>
+          <p class="small muted" style="margin:.6rem 0">
+            코드는 서버에 해시로만 남아 다시 볼 수 없습니다. 바꾼 코드는 따로 적어 두세요.
+            코드는 6자 이상을 권합니다. 닫은 묶음은 새로 코드를 넣을 수 없고 자료실 목록에서도 숨습니다.</p>
+          <div id="grp-list"></div>
+          <form id="grp-form" style="margin-top:1rem; max-width:640px">
+            <p class="small" style="font-weight:600; margin:0 0 .5rem">새 묶음 만들기 (연수, 특강 등)</p>
+            <div class="row" style="gap:.6rem; align-items:flex-end">
+              <div class="field" style="flex:1 1 160px; margin:0">
+                <label for="grp-id">묶음 id (영문, 숫자, 하이픈)</label>
+                <input type="text" id="grp-id" pattern="[a-z0-9][a-z0-9\-]{2,40}" placeholder="librarian-2026-12" required>
+              </div>
+              <div class="field" style="flex:2 1 200px; margin:0">
+                <label for="grp-title">이름</label>
+                <input type="text" id="grp-title" placeholder="2026 사서교사 직무연수" required>
+              </div>
+            </div>
+            <div class="row" style="gap:.6rem; align-items:flex-end; margin-top:.6rem">
+              <div class="field" style="flex:1 1 160px; margin:0">
+                <label for="grp-term">기간 (선택)</label>
+                <input type="text" id="grp-term" placeholder="2026년 12월">
+              </div>
+              <div class="field" style="flex:1 1 160px; margin:0">
+                <label for="grp-code">코드</label>
+                <input type="text" id="grp-code" minlength="4" autocomplete="off" required>
+              </div>
+              <button class="btn btn--sm" type="submit" style="flex:none">만들기</button>
+            </div>
+            <p class="small" id="grp-msg" style="margin:.6rem 0 0; min-height:1.1em"></p>
+          </form>
+        </details>
+      </div>
+
       <!-- 소개 페이지 내용 편집 -->
       <div class="card" style="margin-bottom:1.8rem">
         <div class="row" style="justify-content:space-between; align-items:flex-start">
@@ -205,6 +276,7 @@
 <script src="assets/js/settings.js"></script>
 <script src="assets/js/works.js"></script>
 <script src="assets/js/admin-activities.js"></script>
+<script src="assets/js/admin-materials.js"></script>
 <script src="assets/js/admin.js"></script>
 </body>
 </html>

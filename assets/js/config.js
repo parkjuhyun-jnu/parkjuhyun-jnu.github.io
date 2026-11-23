@@ -23,6 +23,10 @@ window.SITE_CONFIG = {
   /** 파일이 저장될 Supabase Storage 버킷 이름 (schema.sql 과 같아야 합니다) */
   bucket: 'submissions',
 
+  /** 자료실 '수강생 전용 자료' 파일 보관함 (4-class-materials.sql 과 같아야 합니다) */
+  materialsBucket: 'class-materials',
+  materialsMaxMB: 50,
+
   /** 한 번에 올릴 수 있는 파일 최대 크기 (MB) */
   maxFileMB: 20,
 

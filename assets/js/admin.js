@@ -75,6 +75,7 @@
     initSettings();
     initPassword(admin);
     ActivitiesEditor.init();
+    MaterialsAdmin.init();
     load();
   }
 

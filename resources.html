@@ -50,12 +50,27 @@
       <div class="grid grid-2" id="res-list"><p class="muted">불러오는 중…</p></div>
     </div>
   </section>
+
+  <!-- 수강생 전용 자료: 서버에 자료가 있을 때만 나타납니다 (assets/js/materials.js) -->
+  <section class="section" id="members-section" style="padding-top:0" hidden>
+    <div class="wrap">
+      <h2 style="font-family:var(--font-serif); font-size:1.45rem; margin-bottom:.3rem">수강생 전용 자료</h2>
+      <p class="small" style="max-width:62ch; color:var(--ink-soft); margin-bottom:1.2rem">
+        수업이나 연수에서 안내받은 코드를 넣으면 파일을 내려받을 수 있습니다.
+        한 번 넣으면 이 브라우저가 기억합니다. 받은 자료는 수업 밖으로 퍼뜨리지 말아 주세요.
+      </p>
+      <div class="grid grid-2" id="members-list"></div>
+    </div>
+  </section>
 </main>
 
 <div id="site-footer"></div>
 
 <script src="assets/js/common.js"></script>
 <script src="assets/js/layout.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/materials.js"></script>
 <script>
 (function () {
   const fmtDate = (d) => {
