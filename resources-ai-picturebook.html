@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>생성형 AI로 진로 그림책 만들기 | 박주현</title>
+<meta name="description" content="AI 독서리터러시 특강에서 배운 진로 그림책 만들기의 흐름과 방법을 정리하고, ChatGPT와 Google Flow로 직접 해 본 실습 기록을 붙였습니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+/* 이 페이지만 쓰는 부품. 색은 모두 사이트 공통 변수(assets/css/style.css :root)에서 가져옵니다. */
+.pb-back { font-size: .9rem; }
+.pb-method { font-size: .88rem; color: var(--ink-soft); border-left: 3px solid var(--line); padding-left: .9rem; max-width: 70ch; margin-top: 1rem; }
+.pb-toc { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.4rem; }
+.pb-toc a { font-size: .88rem; padding: .32rem .85rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; }
+.pb-toc a:hover { border-color: var(--navy); color: var(--navy); }
+.pb-sec { scroll-margin-top: 90px; }
+
+.pb-ideas { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1rem; counter-reset: p; }
+.pb-ideas .card { display: grid; gap: .5rem; align-content: start; }
+.pb-ideas h3 { font-family: var(--font-serif); font-size: 1.06rem; margin: 0; }
+.pb-ideas h3::before { counter-increment: p; content: counter(p); display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; margin-right: .5rem; border-radius: 50%; background: var(--navy); color: var(--paper); font-family: var(--font-sans); font-size: .82rem; font-weight: 700; vertical-align: 2px; }
+.pb-ideas p { margin: 0; font-size: .94rem; }
+
+.pb-flow { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin: 0 0 1.4rem; padding: 0; list-style: none; }
+.pb-flow li { font-size: .88rem; padding: .35rem .75rem; border-radius: var(--radius-sm); background: var(--navy-wash); color: var(--navy); font-weight: 600; }
+.pb-flow li + li::before { content: "→"; margin-right: .4rem; color: var(--ink-faint); font-weight: 400; }
+
+.pb-phase { margin-top: 1.6rem; }
+.pb-phase h3 { font-family: var(--font-serif); font-size: 1.12rem; margin: 0 0 .7rem; }
+.pb-phase h3 small { font-family: var(--font-sans); font-size: .8rem; font-weight: 500; color: var(--ink-faint); margin-left: .4rem; }
+.pb-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: .7rem; counter-reset: s var(--start, 0); max-width: 860px; }
+.pb-steps li { counter-increment: s; display: grid; grid-template-columns: 2.4rem 1fr; gap: .2rem .8rem; padding: .9rem 1rem; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.pb-steps li::before { content: counter(s); grid-row: span 3; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--gold); line-height: 1.1; }
+.pb-steps b { font-size: 1rem; }
+.pb-steps span { font-size: .92rem; color: var(--ink-soft); }
+.pb-steps em { font-style: normal; font-size: .84rem; color: var(--ink-faint); }
+
+.pb-prompt { font-size: .9rem; background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: .8rem 1rem; margin: .6rem 0 0; white-space: pre-wrap; word-break: keep-all; line-height: 1.7; }
+.pb-prompt mark { background: var(--gold-wash); color: inherit; padding: 0 .15rem; border-radius: 3px; }
+
+.pb-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.1rem; }
+.pb-two .card h3 { font-family: var(--font-serif); font-size: 1.05rem; margin-top: 0; }
+.pb-two .card ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .35rem; font-size: .93rem; }
+
+.pb-table-box { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.pb-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+.pb-table th, .pb-table td { border-bottom: 1px solid var(--line-soft); padding: .65rem .85rem; text-align: left; vertical-align: top; }
+.pb-table thead th { font-size: .8rem; font-weight: 600; color: var(--ink-soft); background: var(--navy-wash); }
+.pb-table tbody th { font-weight: 700; white-space: nowrap; }
+.pb-table tbody tr:last-child th, .pb-table tbody tr:last-child td { border-bottom: 0; }
+.pb-table.wide { min-width: 680px; }
+
+.pb-note { font-size: .92rem; background: var(--gold-wash); border-radius: var(--radius-sm); padding: .8rem 1rem; margin-top: 1rem; max-width: 860px; }
+.pb-list { margin: 0; padding-left: 1.15rem; display: grid; gap: .55rem; max-width: 860px; }
+.pb-list li { font-size: .96rem; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="resources.html" aria-current="page">자료실</a>
+      <a href="bk21.html">BK21</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="wrap">
+      <p class="pb-back"><a href="resources.html">← 자료실</a></p>
+      <p class="eyebrow">자료실 / AI 독서리터러시</p>
+      <h1 style="font-family:var(--font-serif); text-wrap:balance; word-break:keep-all">생성형 AI로 진로 그림책 만들기: 흐름과 방법</h1>
+      <p style="max-width:64ch; font-size:1.05rem; color:var(--ink-soft)">
+        학생이 꿈꾸는 직업을 AI와 함께 조사하고, 자기 이야기를 그림책 한 권으로 엮어 보는 독서 활동입니다.
+        특강에서 배운 흐름을 단계별로 다시 정리하고, 같은 방법으로 ChatGPT와 Google Flow를 써서 직접 만들어 본 기록과 수업에 옮길 때 생각할 점을 붙였습니다.
+      </p>
+      <p class="pb-method">2026. 11. 9. 전남대학교에서 열린 AI 독서리터러시 현장전문가 특강(이동찬 사서교사, 순창제일고등학교)의 내용과 방법을 바탕으로 정리했습니다.
+        강의 자료를 옮긴 것이 아니라, 들은 내용을 실습해 보며 제 말로 다시 쓴 것입니다. 도구 화면과 이용 조건은 2026. 11. 기준이며 자주 바뀝니다.</p>
+      <nav class="pb-toc" aria-label="이 페이지 차례">
+        <a href="#ideas">핵심 생각 다섯 가지</a>
+        <a href="#steps">만드는 순서</a>
+        <a href="#prompts">질문을 짜는 법</a>
+        <a href="#practice">직접 해 본 기록</a>
+        <a href="#class">수업에 옮길 때</a>
+        <a href="#tools">쓴 도구</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="section pb-sec" id="ideas" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>강의의 핵심 생각 다섯 가지</h2>
+        <p>도구 사용법보다 먼저 짚은 것들입니다. 그림책 활동 밖에서도 그대로 통합니다.</p>
+      </div>
+      <div class="pb-ideas">
+        <article class="card">
+          <h3>AI는 독서 활동을 넓히는 도구다</h3>
+          <p>아이디어 찾기, 정보 탐색, 정리와 요약, 이미지 만들기, 발표자료 만들기처럼 독서 활동의 여러 단계에 AI를 붙일 수 있습니다. AI가 활동을 대신하는 것이 아니라 학생이 생각을 더 멀리 끌고 가도록 돕는 자리에 둡니다.</p>
+        </article>
+        <article class="card">
+          <h3>좋은 질문은 목적, 내용, 수준을 밝힌다</h3>
+          <p>"사서교사에 대해 알려 줘"처럼 물으면 누구에게나 같은 일반론이 돌아옵니다. 왜 알고 싶은지, 무엇을 알고 싶은지, 어느 수준으로 설명해 주면 좋을지를 넣어야 내게 맞는 답이 나옵니다.</p>
+        </article>
+        <article class="card">
+          <h3>AI의 답은 한 번 더 확인한다</h3>
+          <p>진로 안내에서 실제 양성 학과를 빠뜨리거나 관련이 적은 학과를 넣는 일이 생깁니다. AI가 대신 써 준 프롬프트에도 같은 내용이 두 번 들어가는 등 허점이 있습니다. 확인하는 습관 자체가 이 활동의 정보리터러시 교육입니다.</p>
+        </article>
+        <article class="card">
+          <h3>사서의 전공 지식이 더 중요해진다</h3>
+          <p>AI로 도서 추천 챗봇을 만들어도 무엇을 근거로 추천할지는 사서가 정해야 합니다. 사서가 고른 도서 목록 안에서만 추천하고, 확인할 수 없는 정보는 지어내지 않게 하는 원칙을 적어 주는 일이 사서의 몫입니다.</p>
+        </article>
+        <article class="card">
+          <h3>그림책의 완성도는 주인공의 일관성이 가른다</h3>
+          <p>장면마다 주인공의 얼굴이 달라지면 이야기가 이어지지 않습니다. 주인공에게 이름을 붙이고, 외모와 옷차림을 한 줄로 정해 두고, 기준 그림과 여러 방향에서 본 그림(턴어라운드)을 만들어 장면마다 함께 넘기는 것이 요령입니다. 글은 그림에 넣지 않고 편집 단계에서 따로 얹습니다.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pb-sec" id="steps">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>만드는 순서</h2>
+        <p>모두 열일곱 걸음을 다섯 묶음으로 나눴습니다. 대화형 AI로 글과 설계를 만들고, 이미지 도구로 그림을 만들고, 편집 도구로 책을 엮습니다.</p>
+      </div>
+      <ul class="pb-flow" aria-label="전체 흐름">
+        <li>진로 정하기</li><li>AI로 조사하고 인터뷰하기</li><li>이야기 쓰기</li><li>주인공과 그림체 정하기</li><li>장면 그림 만들기</li><li>편집해서 책으로 엮기</li>
+      </ul>
+
+      <div class="pb-phase">
+        <h3>1. 진로를 정하고 AI로 알아보기<small>대화형 AI (ChatGPT 등)</small></h3>
+        <ol class="pb-steps">
+          <li><b>나의 진로 정하기</b><span>꼭 직업 이름이 아니어도 됩니다. 관심 분야, 해 보고 싶은 일, 궁금한 일도 출발점이 됩니다.</span></li>
+          <li><b>AI로 진로 조사하기</b><span>목적, 알고 싶은 내용, 원하는 수준을 넣어 묻습니다. 하는 일, 필요한 역량, 관련 학과와 준비 과정, 앞으로의 변화, 지금 할 수 있는 준비를 한 번에 물으면 이야기 재료가 모입니다.</span><em>답에 나온 학과와 자격 경로는 대학 누리집이나 공식 안내로 확인합니다.</em></li>
+          <li><b>AI가 묻고 내가 답하는 진로 인터뷰</b><span>AI에게 "미래의 내 모습을 그려 볼 수 있도록 질문을 다섯 개, 한 번에 하나씩 해 줘"라고 부탁합니다. 이유와 내 경험을 넣어 구체적으로 답할수록 직업에 대한 내 가치관이 드러나고, 이것이 이야기의 뼈대가 됩니다.</span></li>
+        </ol>
+      </div>
+
+      <div class="pb-phase">
+        <h3>2. 이야기 쓰기<small>대화형 AI</small></h3>
+        <ol class="pb-steps" style="--start:3">
+          <li><b>스토리 초안 받기</b><span>조사한 정보와 인터뷰에서 나온 가치관을 넣어, 나를 주인공으로 한 그림책 이야기를 부탁합니다. 장면 수(예: 8장), 장면마다 문장 수(예: 4~5문장), 기승전결 구조를 정해 주고, 직업 설명이 아니라 주인공이 자라는 이야기로 써 달라고 합니다.</span><em>이 단계에서는 그림이 아니라 글로만 받습니다.</em></li>
+          <li><b>어색한 곳만 집어 고치기</b><span>전체를 다시 쓰게 하지 말고, 마음에 들지 않는 장면과 그 까닭을 짚어 그 부분만 고쳐 달라고 합니다. 학생이 자기 이야기의 주인이 되는 단계입니다.</span><em>직업관 대신 학교도서관이나 독서교육이 마주한 문제(독서 흥미 저하, AI 시대의 정보리터러시 등)를 주제로 이야기를 지어도 됩니다.</em></li>
+        </ol>
+      </div>
+
+      <div class="pb-phase">
+        <h3>3. 주인공과 그림체 정하기<small>대화형 AI</small></h3>
+        <ol class="pb-steps" style="--start:5">
+          <li><b>주인공 묘사를 한 줄로 받기</b><span>주인공에게 이름을 붙이고, 그림을 그릴 때 쓸 묘사를 키워드 한 줄로 정리해 달라고 합니다. 성별, 나이, 머리 모양, 눈, 옷차림, 분위기가 들어가고 끝에 "모든 장면에서 같은 얼굴과 옷차림 유지"를 붙입니다. 마음에 들지 않는 항목은 직접 고칩니다.</span><em>무료 계정은 이미지 생성 횟수가 적으므로 이 단계는 글로 받습니다.</em></li>
+          <li><b>그림체 정하기</b><span>이야기에 어울리는 그림체를 몇 가지 추천받아 고르고, 그림체 묘사도 한 줄로 받아 둡니다. 원하는 그림체가 따로 있으면 그것을 쓰되, 주인공 묘사와 부딪히는 표현이 없는지 봅니다.</span></li>
+          <li><b>주인공 기준 그림과 턴어라운드 만들기</b><span>주인공 묘사와 그림체를 합쳐 주인공 그림을 그리게 합니다. 이때 "어린 모습, 어른 모습처럼 여러 시점이 아니라 한 사람만"이라고 못 박습니다. 이어서 같은 인물을 앞, 옆, 뒤에서 본 턴어라운드를 글자 없이 그려 달라고 해서 둘 다 저장합니다.</span></li>
+          <li><b>표지 만들기</b><span>"위 그림책의 표지를 3:4 비율로" 그리게 하고, 제목은 마음에 드는 문구로 바꿔 달라고 합니다.</span></li>
+        </ol>
+      </div>
+
+      <div class="pb-phase">
+        <h3>4. 장면 그림 만들기<small>대화형 AI + Google Flow</small></h3>
+        <ol class="pb-steps" style="--start:9">
+          <li><b>장면별 이미지 프롬프트 받기</b><span>최종 이야기의 제목과 본문을 붙여 넣고, 장면마다 그림 프롬프트를 글로 써 달라고 합니다. 받은 프롬프트에 주인공 묘사와 그림체가 빠짐없이 들어 있는지 봅니다.</span></li>
+          <li><b>Flow에서 새 프로젝트 설정하기</b><span>이미지 모드, 3:4 비율, 이미지 모델(Nano Banana 계열), 한 번에 두 장씩으로 맞춥니다. 프롬프트 칸 옆 에이전트 기능은 끄고, 주인공 기준 그림과 턴어라운드를 참고 이미지로 올립니다.</span></li>
+          <li><b>장면을 한 장씩 만들기</b><span>장면 프롬프트를 하나씩 넣어 그립니다. 마음에 들지 않으면 같은 프롬프트로 다시 그리거나 일부만 고쳐 다시 그리고, 고른 그림은 장면 번호를 붙여 저장합니다. 그림 속에 말풍선이나 글자가 생기면 프롬프트 끝에 "텍스트 없음"을 붙입니다.</span><em>수업 시간이 짧으면 몇 장면만 그림으로 만들어도 흐름은 충분히 경험합니다.</em></li>
+          <li><b>글자 페이지 배경 만들기</b><span>가운데에 글을 놓을 여백이 넓은 배경 그림을 같은 그림체, 3:4 비율로 하나 만듭니다.</span></li>
+        </ol>
+      </div>
+
+      <div class="pb-phase">
+        <h3>5. 편집해서 책으로 엮기<small>Canva + 플립북 서비스</small></h3>
+        <ol class="pb-steps" style="--start:13">
+          <li><b>판형 만들기</b><span>Canva에서 맞춤형 크기를 가로 154mm, 세로 216mm로 엽니다. A5(148×210mm)에 재단 여백을 사방 3mm씩 더한 크기라 나중에 인쇄해도 그림이 잘리지 않습니다.</span></li>
+          <li><b>그림 페이지 앉히기</b><span>표지, 장면 그림, 글자 배경을 올리고, 그림마다 '이미지를 배경으로 설정'을 눌러 페이지를 꽉 채웁니다. 그림 속 요소를 따로 떼어 고치는 기능도 있지만 글꼴이 깨질 수 있습니다.</span></li>
+          <li><b>글자 페이지 채우기</b><span>장면 그림 뒤에 글자 페이지를 하나씩 넣고 그 장면의 문장을 붙여 넣습니다. 글꼴, 크기, 색, 줄 간격을 읽기 쉽게 다듬는 것이 마지막 손질입니다.</span></li>
+          <li><b>전자책으로 공유하기</b><span>PDF로 내려받아 플립북 서비스(예: Heyzine)에 올리면 책장을 넘기는 전자책 링크가 생깁니다. 이 링크를 학급 게시판에 모아 서로 읽습니다.</span><em>로그인하지 않고 만든 플립북은 보관 기간이 짧으니 계정으로 만들거나 PDF를 따로 보관합니다.</em></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pb-sec" id="prompts">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>질문을 짜는 법</h2>
+        <p>대화형 AI에게 묻는 글과 그림 도구에 넣는 글은 짜는 방식이 다릅니다.</p>
+      </div>
+      <div class="pb-two">
+        <article class="card">
+          <h3>대화형 AI에게: 목적, 내용, 수준</h3>
+          <ul>
+            <li><b>목적</b>: 왜 알고 싶은가(나는 ○○이 되고 싶은 고등학생이다)</li>
+            <li><b>내용</b>: 무엇을 알고 싶은가(하는 일, 역량, 학과, 앞으로의 변화)</li>
+            <li><b>수준</b>: 누구 눈높이로 설명할까(고등학생이 이해하기 쉽게)</li>
+            <li><b>마무리 요청</b>: 끝에 무엇을 덧붙일까(지금부터 할 수 있는 준비)</li>
+          </ul>
+          <p class="pb-prompt">나는 <mark>공공도서관 사서</mark>가 되고 싶은 고등학생이야. <mark>공공도서관 사서</mark>가 하는 일, 필요한 역량, 관련 학과와 준비 과정, 앞으로 <mark>지역 독서문화</mark>에서 달라질 점을 고등학생이 이해하기 쉽게 정리해 줘. 마지막에는 지금부터 해 볼 수 있는 활동도 알려 줘.</p>
+          <p style="font-size:.84rem; color:var(--ink-faint); margin:.5rem 0 0">노란 부분만 자기 진로로 바꿔 씁니다. 제가 실습에 맞게 다시 쓴 예시입니다.</p>
+        </article>
+        <article class="card">
+          <h3>그림 도구에게: 누가, 어디서, 무엇을, 어떻게</h3>
+          <ul>
+            <li><b>누가</b>: 주인공 묘사 한 줄(이름, 나이, 머리, 옷차림)</li>
+            <li><b>어디서</b>: 장소와 시간, 주변 모습</li>
+            <li><b>무엇을</b>: 하고 있는 행동과 표정</li>
+            <li><b>구도</b>: 가까이, 멀리, 정면, 세로형</li>
+            <li><b>분위기와 색감, 그림체</b>: 그림체 묘사 한 줄</li>
+          </ul>
+          <p class="pb-prompt">"사서 선생님 그려 줘" → 나이도 옷도 장소도 AI 마음대로 정해집니다.
+"햇살이 드는 공공도서관 독서 모임 탁자에서, 검은 단발머리의 30대 남자 사서가 어르신과 어린이의 이야기를 웃으며 듣고 있는 장면, 인물 중심의 세로 구도, 따뜻한 파스텔 색감의 한국 웹툰풍 그림책 삽화, 글자 없음" → 원하는 장면에 훨씬 가까워집니다.</p>
+          <p style="font-size:.84rem; color:var(--ink-faint); margin:.5rem 0 0">구글의 이미지 모델 안내도 '피사체, 동작, 장소나 상황, 구도, 스타일'을 차례로 서술하라고 권합니다.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pb-sec" id="practice">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>직접 해 본 기록</h2>
+        <p>특강 날 같은 순서로 따라 해 보았습니다. 주인공은 저 자신, 진로는 '공공도서관 사서'로 잡았습니다.</p>
+      </div>
+      <div class="pb-table-box">
+        <table class="pb-table">
+          <tbody>
+            <tr><th scope="row">제목</th><td>『책과 삶을 나누는 공공도서관과 함께』 (AI가 처음 붙인 제목을 바꿔 달라고 해서 정함)</td></tr>
+            <tr><th scope="row">분량</th><td>8장면, 표지와 글자 페이지 배경 따로</td></tr>
+            <tr><th scope="row">그림체</th><td>처음에는 수채화 그림책풍을 추천받았지만, 주인공의 밝은 성격이 잘 드러나도록 감성 웹툰풍으로 바꿈</td></tr>
+            <tr><th scope="row">도구</th><td>ChatGPT 무료 계정(조사, 이야기, 주인공 묘사, 주인공 그림, 턴어라운드, 표지, 장면 프롬프트, 글자 배경), Google Flow(장면 그림 15장)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-family:var(--font-serif); font-size:1.1rem; margin:1.6rem 0 .7rem">AI가 짜 준 장면 구성</h3>
+      <div class="pb-table-box">
+        <table class="pb-table wide">
+          <thead><tr><th scope="col">장면</th><th scope="col">내용</th><th scope="col">담은 감정</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">1</th><td>고등학교 도서관 창가에서 책을 읽다가, 같은 책을 읽은 사람들은 무슨 생각을 했을지 궁금해진다</td><td>호기심</td></tr>
+            <tr><th scope="row">2</th><td>공공도서관에서 어린이, 청년, 어르신이 책으로 이야기 나누는 모습을 보고 도서관이 사람을 잇는 곳임을 깨닫는다</td><td>공감</td></tr>
+            <tr><th scope="row">3</th><td>대학 도서관에서 문헌정보학을 공부하며 꿈꾸는 도서관을 그려 본다</td><td>결심</td></tr>
+            <tr><th scope="row">4</th><td>친구들과 독서 모임을 꾸리며 서로 다른 생각을 듣는 법을 배운다</td><td>성장</td></tr>
+            <tr><th scope="row">5</th><td>도서관 실습에서 어린이 독서 활동과 어르신 디지털 안내를 준비하고, 온라인 정보의 출처를 따져 보는 법도 익힌다</td><td>책임감</td></tr>
+            <tr><th scope="row">6</th><td>공공도서관 사서가 되어 이용자를 맞이한다</td><td>설렘</td></tr>
+            <tr><th scope="row">7</th><td>여러 세대가 함께하는 독서 모임에서 가르치기보다 이야기를 잇는 역할을 한다</td><td>공동체</td></tr>
+            <tr><th scope="row">8</th><td>해 질 녘, 책을 안고 돌아가는 시민과 웃으며 인사한다. 이야기는 계속된다</td><td>보람</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-family:var(--font-serif); font-size:1.1rem; margin:1.6rem 0 .7rem">해 보며 알게 된 것</h3>
+      <ul class="pb-list">
+        <li><b>주인공 묘사는 내 말로 고쳐 넣었습니다.</b> AI가 준 묘사에 제 성격(잘 웃고, 남의 이야기를 잘 들어 주는 편)을 직접 보태 다시 정리하게 했습니다. 묘사를 손수 고쳐야 '내 이야기'의 주인공이 됩니다.</li>
+        <li><b>시간이 흐르는 이야기는 "얼굴은 같게, 옷만 바꾸라"고 적었습니다.</b> 고등학생, 대학생, 사서로 바뀌는 동안 교복, 평상복, 사원증 차림으로만 바꾸도록 장면 프롬프트 공통 조건에 넣었습니다.</li>
+        <li><b>그림에 넣을 글자는 처음부터 빼라고 적었습니다.</b> 장면 프롬프트 공통 조건에 "제목, 말풍선, 글자, 워터마크를 넣지 않는다"를 넣었습니다. 글은 편집 단계에서 얹습니다.</li>
+        <li><b>대화가 길어지면 무료 계정은 한 대화를 끝까지 이어 가지 못합니다.</b> 그림을 여러 장 만들자 "컨텍스트 윈도우가 가득 찼다"는 안내가 떠서 새 대화로 옮겼습니다. 이야기, 주인공 묘사, 그림체 묘사는 단계마다 메모장에 따로 모아 두어야 새 대화에서도 이어 갈 수 있습니다.</li>
+        <li><b>Flow는 받은 프롬프트를 붙여 넣기만 하면 되어 손이 적게 갑니다.</b> 한 번에 두 장씩 나오므로 장면마다 나은 쪽을 고르면 됩니다. 이미지는 따로 비용이 들지 않았고, 동영상은 크레딧이 듭니다(제 계정 기준, 요금제에 따라 다를 수 있음).</li>
+        <li><b>AI 답의 사실 확인은 그대로 필요합니다.</b> 관련 학과나 자격 경로처럼 진로 결정에 쓰일 내용은 대학과 공공기관 안내로 다시 확인해야 합니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section pb-sec" id="class">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>수업과 연수에 옮길 때</h2>
+        <p>강의 내용과 실습 경험을 합쳐, 학교도서관 수업이나 사서 연수에 쓸 때 미리 정해 두면 좋은 것들입니다.</p>
+      </div>
+      <div class="pb-two">
+        <article class="card">
+          <h3>시간과 준비</h3>
+          <ul>
+            <li>한 차시에 끝내기는 어렵습니다. 조사와 인터뷰, 이야기와 주인공, 그림, 편집으로 나누면 네 덩어리가 됩니다.</li>
+            <li>시간이 모자라면 장면 그림은 몇 장만 만들고 나머지는 글자 페이지로 채웁니다.</li>
+            <li>질문 틀(목적, 내용, 수준)은 패들렛 같은 게시판에 미리 올려 두고 학생이 바꿀 부분만 고치게 합니다.</li>
+            <li>무료 계정의 이미지 생성 한도를 생각해, 글로 받을 수 있는 단계는 글로 받게 합니다.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>지켜야 할 것</h3>
+          <ul>
+            <li>학생 얼굴 사진을 AI에 올리지 않게 하고, 주인공은 묘사로만 만듭니다.</li>
+            <li>AI가 준 진로 정보에서 틀린 곳을 찾아보는 시간을 따로 둡니다. 이것이 정보리터러시 활동입니다.</li>
+            <li>실제 책 표지나 유명 캐릭터를 흉내 내게 하지 않습니다.</li>
+            <li>민감한 고민이 이야기에 나오면 AI가 아니라 교사, 상담 선생님과 이야기하도록 안내합니다.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>넓혀 쓸 수 있는 곳</h3>
+          <ul>
+            <li><b>북토크 자료</b>: 소개할 책의 핵심 장면을 같은 방법으로 그림으로 만들면 줄거리를 보여 주는 슬라이드가 됩니다(내용을 드러내지 않는 선에서).</li>
+            <li><b>도서 추천 챗봇</b>: 구글 AI Studio 같은 도구로, 사서가 고른 도서 목록 안에서만 추천하는 학교도서관 챗봇을 만들 수 있습니다. 추천 원칙과 순위, 답하는 말투, 민감한 질문을 받았을 때의 안내를 사서가 직접 정해 줍니다.</li>
+            <li><b>문제 중심 이야기</b>: 학교도서관이 마주한 문제를 주인공이 풀어 가는 이야기로 바꾸면 독서교육 토론 자료가 됩니다.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pb-sec" id="tools">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>쓴 도구</h2>
+      </div>
+      <div class="pb-table-box">
+        <table class="pb-table wide">
+          <thead><tr><th scope="col">도구</th><th scope="col">맡은 일</th><th scope="col">알아 둘 점</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a></th><td>진로 조사, 인터뷰, 이야기, 주인공과 그림체 묘사, 주인공 그림, 턴어라운드, 표지, 장면 프롬프트</td><td>무료 계정은 이미지 생성 횟수와 대화 길이에 한도가 있음. 이미지 만들기는 입력창 + 메뉴에서 고름</td></tr>
+            <tr><th scope="row"><a href="https://flow.google.com/" target="_blank" rel="noopener">Google Flow</a></th><td>장면 그림 만들기</td><td>구글 계정으로 씀. 이미지 모드, 3:4, 두 장씩, 에이전트 끔, 참고 이미지 올리기</td></tr>
+            <tr><th scope="row"><a href="https://www.canva.com/" target="_blank" rel="noopener">Canva</a></th><td>판형 잡기, 그림과 글 앉히기, PDF 저장</td><td>맞춤형 크기 154×216mm(A5와 재단 여백)</td></tr>
+            <tr><th scope="row"><a href="https://heyzine.com/" target="_blank" rel="noopener">Heyzine</a></th><td>PDF를 넘겨 보는 전자책 링크로 바꾸기</td><td>로그인하지 않으면 보관 기간이 짧음</td></tr>
+            <tr><th scope="row"><a href="https://aistudio.google.com/" target="_blank" rel="noopener">Google AI Studio</a></th><td>(넓혀 쓰기) 도서 추천 챗봇 만들기</td><td>원칙과 도서 목록은 사서가 정해서 넣음</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="pb-note">이 페이지는 이동찬 사서교사(순창제일고등학교)의 특강 「생성형 AI를 활용한 진로 그림책 만들기」(2026. 11. 9., 전남대학교)에서 배운 흐름을 바탕으로 박주현이 실습하며 정리했습니다. 강의 자료의 문구와 그림은 옮기지 않았습니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>

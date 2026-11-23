@@ -2,6 +2,13 @@
   "_설명": "자료실(resources.html) 목록. 새 자료는 맨 위에 넣습니다. url 은 사이트 안 파일 이름이나 바깥 주소.",
   "resources": [
     {
+      "title": "생성형 AI로 진로 그림책 만들기: 흐름과 방법",
+      "date": "2026-11-23",
+      "category": "AI 독서리터러시",
+      "summary": "AI 독서리터러시 특강(2026. 11. 9.)에서 배운 진로 그림책 만들기를 핵심 생각, 단계별 방법, 질문 짜는 법으로 정리하고 ChatGPT와 Google Flow로 직접 해 본 기록과 수업에 옮길 때 생각할 점을 붙였습니다.",
+      "url": "resources-ai-picturebook.html"
+    },
+    {
       "title": "AI로 발표자료 만들기: 자료들이 공통으로 권하는 것",
       "date": "2026-11-23",
       "category": "AI 활용",
