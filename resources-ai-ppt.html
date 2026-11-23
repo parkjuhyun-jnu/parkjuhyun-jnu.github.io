@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI로 발표자료 만들기: 자료 정리 | 박주현</title>
+<meta name="description" content="AI 도구 공식 안내, 자동 생성 연구, 발표 디자인 지침, 국내 후기를 읽고 AI로 발표자료를 만들 때 공통으로 권하는 방법과 'AI 티' 점검표를 정리했습니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+/* 이 페이지만 쓰는 부품. 색은 모두 사이트 공통 변수(assets/css/style.css :root)에서 가져옵니다. */
+.ap-back { font-size: .9rem; }
+.ap-method { font-size: .88rem; color: var(--ink-soft); border-left: 3px solid var(--line); padding-left: .9rem; max-width: 70ch; margin-top: 1rem; }
+.ap-toc { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.4rem; }
+.ap-toc a { font-size: .88rem; padding: .32rem .85rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; }
+.ap-toc a:hover { border-color: var(--navy); color: var(--navy); }
+.ap-sec { scroll-margin-top: 90px; }
+
+.ap-principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; counter-reset: p; }
+.ap-principles .card { display: grid; gap: .5rem; align-content: start; }
+.ap-principles h3 { font-family: var(--font-serif); font-size: 1.08rem; margin: 0; }
+.ap-principles h3::before { counter-increment: p; content: counter(p); display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; margin-right: .5rem; border-radius: 50%; background: var(--navy); color: var(--paper); font-family: var(--font-sans); font-size: .82rem; font-weight: 700; vertical-align: 2px; }
+.ap-principles p { margin: 0; font-size: .94rem; }
+.ap-principles .src { font-size: .8rem; color: var(--ink-faint); }
+
+.ap-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: .7rem; counter-reset: s; max-width: 820px; }
+.ap-steps li { counter-increment: s; display: grid; grid-template-columns: 2.4rem 1fr; gap: .2rem .8rem; padding: .9rem 1rem; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.ap-steps li::before { content: counter(s); grid-row: span 2; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--gold); line-height: 1.1; }
+.ap-steps b { font-size: 1rem; }
+.ap-steps span { font-size: .92rem; color: var(--ink-soft); }
+
+.ap-table-box { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.ap-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+.ap-table th, .ap-table td { border-bottom: 1px solid var(--line-soft); padding: .65rem .85rem; text-align: left; vertical-align: top; }
+.ap-table thead th { font-size: .8rem; font-weight: 600; color: var(--ink-soft); background: var(--navy-wash); }
+.ap-table tbody th { font-weight: 700; white-space: nowrap; }
+.ap-table tbody tr:last-child th, .ap-table tbody tr:last-child td { border-bottom: 0; }
+.ap-table.wide { min-width: 760px; }
+
+.ap-note { font-size: .92rem; background: var(--gold-wash); border-radius: var(--radius-sm); padding: .8rem 1rem; margin-top: 1rem; max-width: 820px; }
+.ap-list { margin: 0; padding-left: 1.15rem; display: grid; gap: .55rem; max-width: 820px; }
+.ap-list li { font-size: .96rem; }
+.ap-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.1rem; margin-top: 1.4rem; }
+.ap-two .card h3 { font-family: var(--font-serif); font-size: 1.05rem; }
+.ap-two .card ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .35rem; font-size: .93rem; }
+
+.ap-src details { border-top: 1px solid var(--line); padding: .7rem 0; }
+.ap-src details:last-child { border-bottom: 1px solid var(--line); }
+.ap-src summary { cursor: pointer; font-weight: 600; }
+.ap-src ul { margin: .6rem 0 0; padding-left: 1.1rem; display: grid; gap: .3rem; font-size: .88rem; }
+.ap-src li small { color: var(--ink-faint); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="resources.html" aria-current="page">자료실</a>
+      <a href="bk21.html">BK21</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="wrap">
+      <p class="ap-back"><a href="resources.html">← 자료실</a></p>
+      <p class="eyebrow">자료실 / AI 활용</p>
+      <h1 style="font-family:var(--font-serif); text-wrap:balance; word-break:keep-all">AI로 발표자료를 만들 때 자료들이 공통으로 권하는 것</h1>
+      <p style="max-width:64ch; font-size:1.05rem; color:var(--ink-soft)">
+        AI 도구 회사의 공식 안내, 발표자료 자동 생성 연구, 발표 전문가와 대학 교수학습센터의 지침, 국내 책과 후기를 함께 읽고
+        공통으로 권하는 방법, 'AI가 만든 티'가 나는 까닭과 점검표, 도구별 특징을 정리했습니다. 강의 슬라이드를 AI와 함께 만드는 교사와 학생을 생각하고 썼습니다.
+      </p>
+      <p class="ap-method">2026. 11. 23. 기준으로 정리했습니다. 도구 공식 안내 약 30건, 연구 논문과 공개 코드 약 20건, 발표 디자인 지침과 비평 약 20건, 국내 자료 약 30건을 실제로 열어 읽고 요약했으며, 원문을 그대로 옮긴 것은 아닙니다.
+        AI 도구의 기능은 몇 달 사이에도 바뀌므로 도구별 내용은 각 공식 안내에서 다시 확인하는 것이 좋습니다. 출처는 맨 아래에 모았습니다.</p>
+      <nav class="ap-toc" aria-label="이 페이지 차례">
+        <a href="#principles">공통 원칙 일곱 가지</a>
+        <a href="#steps">권하는 작업 순서</a>
+        <a href="#ai-look">'AI 티' 점검표</a>
+        <a href="#tools">도구별 특징</a>
+        <a href="#research">연구에서 알게 된 것</a>
+        <a href="#korea">국내 자료</a>
+        <a href="#apply">적용한 방식</a>
+        <a href="#sources">출처</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="section ap-sec" id="principles" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>자료들이 공통으로 말하는 일곱 가지</h2>
+        <p>도구 회사, 연구자, 발표 전문가가 서로 다른 자리에서 같은 결론에 이른 것들입니다.</p>
+      </div>
+      <div class="ap-principles">
+        <article class="card">
+          <h3>목적, 청중, 시간을 먼저 정한다</h3>
+          <p>Copilot, Gamma, Genspark, Napkin은 아예 확인 질문 단계를 만들어 두었습니다. 발표 전문가들도 프롬프트를 쓰기 전에 누구에게 무엇을 위해 말하는지부터 정하라고 합니다.</p>
+          <p class="src">Microsoft, Gamma, Genspark, Duarte, Beautiful.ai</p>
+        </article>
+        <article class="card">
+          <h3>원자료를 주고, 원자료 밖의 숫자를 막는다</h3>
+          <p>빈 프롬프트보다 문서를 붙여 주라고 권합니다. 숫자 칸을 늘어놓은 장에서는 AI가 그럴듯한 숫자를 지어내기 쉬우므로 '첨부한 자료만 쓰라'고 못 박습니다.</p>
+          <p class="src">Microsoft, Gamma, Plus AI</p>
+        </article>
+        <article class="card">
+          <h3>아웃라인을 확인한 뒤에 슬라이드를 만든다</h3>
+          <p>거의 모든 도구가 개요 단계를 둡니다. 연구에서도 개요 단계를 뺐을 때 발표자료 전체의 일관성 점수가 가장 크게 떨어졌습니다(5점 척도에서 4.48 → 3.36).</p>
+          <p class="src">Copilot, Gemini, NotebookLM, Gamma, Claude, PPTAgent 연구</p>
+        </article>
+        <article class="card">
+          <h3>내가 만든 기존 자료를 디자인 기준으로 삼는다</h3>
+          <p>Copilot은 템플릿의 표본 슬라이드를, Gemini는 지정한 기존 발표자료를 스타일 기준으로 씁니다. 연구에서도 참고 슬라이드를 고쳐 쓰는 방식이 백지에서 그리는 방식보다 안정적이었습니다.</p>
+          <p class="src">Microsoft, Google, Genspark, PPTAgent 연구, Aalto 대학 연구</p>
+        </article>
+        <article class="card">
+          <h3>내용과 스타일을 나눈다</h3>
+          <p>한 연구에서는 스타일 지시를 함께 주자 내용의 질이 떨어져 스타일을 나중에 따로 입혔습니다. 겉모양만 바꿀 때는 처음부터 다시 만들지 말고 스타일만 바꾸라고 권합니다.</p>
+          <p class="src">Aalto 대학 연구, Gamma</p>
+        </article>
+        <article class="card">
+          <h3>화면을 보고 고치고, 고칠 때는 좁게 고친다</h3>
+          <p>자동 생성 연구 대부분이 결과를 그림으로 뽑아 보고 고치는 단계를 둡니다. 효과는 첫 번째 고침이 가장 큽니다. 도구 회사들은 한 번에 한 가지만, 고칠 슬라이드를 집어서 요청하라고 합니다.</p>
+          <p class="src">DeepPresenter, PreGenie, AutoPresent 연구, Microsoft, Gamma</p>
+        </article>
+        <article class="card">
+          <h3>사람이 판단하는 자리를 남긴다</h3>
+          <p>발표 전문가들은 AI를 생각을 돕는 도구로만 쓰라고 하고, 교수학습센터들은 교수가 검토하지 않은 AI 내용을 수업에 쓰지 말라고 합니다. 매끄러운 겉모습과 실제 학습 효과가 따로 논다는 연구도 있습니다.</p>
+          <p class="src">Duarte, Presentation Zen, University of South Carolina, SLATE 연구</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section ap-sec" id="steps">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>권하는 작업 순서</h2>
+        <p>일곱 가지 원칙을 강의 슬라이드 만드는 순서로 다시 놓으면 이렇습니다.</p>
+      </div>
+      <ol class="ap-steps">
+        <li><b>조건 정하기</b><span>청중, 목적, 발표 시간, 장수를 먼저 적습니다. 강의라면 학습 목표와 수업 활동(질문, 퀴즈, 토론)이 들어갈 자리도 정합니다.</span></li>
+        <li><b>원자료 건네기</b><span>논문, 보고서, 기존 강의안을 직접 붙이고 '이 자료에 없는 숫자와 인용은 쓰지 말라'고 적습니다.</span></li>
+        <li><b>장별 구성안 확인하기</b><span>장마다 제목과 한 문장 메시지, 원문을 그대로 옮길지, 요약할지, 보강할지를 적은 구성안을 받아 사람이 고칩니다. 이 단계에서는 디자인을 정하지 않습니다.</span></li>
+        <li><b>스타일 고정하기</b><span>자기가 만든 발표자료나 템플릿을 기준으로 주고, 먼저 두세 장만 시험으로 만들어 색, 글꼴, 배치를 정한 뒤 나머지를 만듭니다. 한 번에 다 만들기보다 5~10장씩 나눠 만드는 편이 낫다는 후기가 많습니다.</span></li>
+        <li><b>그림으로 뽑아 점검하기</b><span>완성 파일을 슬라이드 그림이나 PDF로 뽑아 잘림, 겹침, 넘침, 깨진 글꼴을 봅니다. 만든 쪽과 다른 눈(다른 사람이나 별도 검토 단계)이 보면 더 잘 잡힙니다. 고치기는 두 번 안쪽으로 끊습니다.</span></li>
+        <li><b>사람이 마무리하기</b><span>자잘한 손질은 AI와 대화로 하기보다 파일을 열어 직접 고치는 편이 빠릅니다. 출처와 수치를 원자료와 대조하고, 발표자 노트를 자기 말로 다듬습니다.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section ap-sec" id="ai-look">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>'AI 티'는 왜 나는가, 무엇을 피할까</h2>
+        <p>AI는 지시가 비어 있는 곳을 학습 자료에서 가장 흔한 선택으로 채웁니다. 그래서 서로 다른 사람이 만든 AI 슬라이드가 비슷해 보입니다. 하나를 금지하면 그다음으로 흔한 선택으로 옮겨 가므로, 금지 목록으로 땜질하기보다 사람이 정한 템플릿과 본보기 안에서 만들게 하는 것이 낫다는 것이 여러 자료의 결론입니다.</p>
+      </div>
+      <div class="ap-table-box">
+        <table class="ap-table">
+          <thead><tr><th scope="col">묶음</th><th scope="col">AI 티로 자주 꼽히는 것</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">배치</th><td>제목과 글머리표만 있는 장의 반복, 같은 배치의 반복, 셋이나 넷씩 대칭으로 놓은 아이콘 카드, 같은 무게로 늘어놓은 큰 숫자 칸, 내용보다 대칭을 앞세운 배치, 본문 가운데 정렬</td></tr>
+            <tr><th scope="row">장식</th><td>제목 밑 강조선, 위아래 색 띠, 카드 옆 색 막대, 제목 위 작은 대문자 꼬리표, 전구와 악수와 톱니바퀴 같은 상투 아이콘, 내용과 무관한 큰 그림, 어두운 막을 씌운 사진, 요란한 전환 효과</td></tr>
+            <tr><th scope="row">색과 글꼴</th><td>보라와 남색 그라데이션, 기본 파랑, 장마다 늘어나는 강조색, 손대지 않은 기본 글꼴, 제목과 본문의 크기 차이가 작아 위계가 없는 화면</td></tr>
+            <tr><th scope="row">내용</th><td>출처 없는 숫자, 중심 주장 없이 주제만 늘어놓은 목차, 모든 것을 다 담은 '너무 완결적인' 장, '혁신적', '다양한' 같은 상투어, 짐작으로 채운 발표자 노트</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="ap-note"><b>자기 관행이 먼저입니다.</b> 해외 지침은 '주제어로 된 제목'이나 '감사합니다로 끝나는 마지막 장'도 AI 티로 꼽지만, 한국 강의 발표자료에서는 절 제목을 여러 장에 걸쳐 유지하고 인사로 마무리하는 것이 흔한 관행입니다. 점검표는 자기 발표자료의 관행과 부딪치지 않는 범위에서 씁니다.</p>
+
+      <div class="ap-two">
+        <article class="card card--flat">
+          <h3>사람이 만든 느낌을 주는 규칙</h3>
+          <ul>
+            <li>한 장에 한 생각(정의 하나, 도식 하나, 주장 하나). 넘치면 나눕니다.</li>
+            <li>근거는 글보다 실제 데이터, 사진, 도식이 맡게 합니다.</li>
+            <li>가장 중요한 요소 하나를 크게, 나머지는 작게 둡니다. 관계를 보여 주는 데 필요하면 대칭을 깹니다.</li>
+            <li>배경 하나, 주조색 하나, 강조색 한두 개. 같은 종류의 장은 제목 위치와 여백을 똑같이 둡니다.</li>
+            <li>장식선 대신 여백으로 나눕니다.</li>
+          </ul>
+        </article>
+        <article class="card card--flat">
+          <h3>청중은 어떻게 보나</h3>
+          <ul>
+            <li>투자자들은 기본 설정 그대로의 AI 발표자료를 '고민하지 않았다'는 신호로 읽는다고 말합니다.</li>
+            <li>반면 대학 수업 실험(51명)에서는 학생들이 AI 슬라이드와 교수 슬라이드를 가려내지 못했습니다.</li>
+            <li>교육용 슬라이드 연구에서는 겉모습의 완성도와 실제 학습 효과 사이에 큰 차이가 있었고, 학습 효과는 내용의 정확성보다 수업 설계와 더 강하게 이어졌습니다.</li>
+            <li>그러니 'AI 티 없애기'와 '배우는 데 도움 되기'는 따로 점검해야 합니다.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section ap-sec" id="tools">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>도구별로 배울 점과 조심할 점</h2>
+        <p>공식 안내에서 확인한 내용만 적었습니다(2026년 11월 기준). 한국어 지원 범위와 내보낸 파일의 편집 가능 여부는 도구마다 다르니 쓰기 전에 확인하세요.</p>
+      </div>
+      <div class="ap-table-box">
+        <table class="ap-table wide">
+          <thead><tr><th scope="col">도구</th><th scope="col">쓸 만한 생각</th><th scope="col">조심할 점</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Copilot in PowerPoint</th><td>템플릿에 유형별(표지, 절 표지, 본문, 비교, 연표, 인용, 마무리)로 글자량이 다른 표본 슬라이드를 넣어 두면 그것을 먼저 참고합니다. Word 문서의 제목 스타일을 구조로 읽습니다.</td><td>한국어 지원이 PowerPoint 기능까지 해당하는지 문서에 분명하지 않습니다.</td></tr>
+            <tr><th scope="row">Gemini in Slides, NotebookLM</th><td>기존 발표자료를 스타일 기준으로 지정할 수 있고, 아웃라인을 확인한 뒤 만듭니다.</td><td>NotebookLM 슬라이드는 그림으로 그려지는 방식이라 글자를 고치기 어렵습니다.</td></tr>
+            <tr><th scope="row">Claude</th><td>PowerPoint 파일을 직접 만들고, PowerPoint 추가 기능은 열린 파일의 마스터와 글꼴을 읽고 지정한 장만 고칩니다. 늘 지킬 지침을 저장해 둘 수 있습니다.</td><td>Claude의 슬라이드 화면에서 PPTX로 내보내면 차트와 도형이 그림이 될 수 있습니다.</td></tr>
+            <tr><th scope="row">ChatGPT</th><td>대화로 슬라이드를 만들고 PowerPoint 추가 기능도 있습니다.</td><td>기능이 자주 바뀌어 안내 문서의 갱신일을 확인해야 합니다.</td></tr>
+            <tr><th scope="row">Gamma</th><td>원문 처리 방식을 '보강, 요약, 그대로' 가운데 고르게 하고, 원고를 <code>---</code>로 나누면 나눈 대로 한 장씩 만듭니다.</td><td>내보낸 PPTX에 슬라이드 마스터가 없고, 받는 PC에 글꼴이 없으면 한글이 바뀝니다.</td></tr>
+            <tr><th scope="row">Genspark</th><td>기존 PPTX를 스타일로 저장해 이어 쓸 수 있고, 열 장이 넘으면 아웃라인부터 보여 줍니다.</td><td>받는 PC에 없는 글꼴은 다른 글꼴로 바뀝니다.</td></tr>
+            <tr><th scope="row">Napkin, Beautiful.ai, Plus AI</th><td>Napkin은 글을 도식으로 바꾸는 데 강하고, Plus AI는 PowerPoint 안에서 편집 가능한 슬라이드와 차트를 만듭니다.</td><td>Plus AI 스스로 숫자 칸 나열이 AI 티의 대표라고 경고합니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section ap-sec" id="research">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>연구에서 알게 된 것</h2>
+        <p>2021~2026년의 발표자료 자동 생성 연구와 공개 코드를 읽었습니다.</p>
+      </div>
+      <ul class="ap-list">
+        <li><b>고쳐 쓰기가 백지에서 그리기보다 안정적입니다.</b> PPTAgent는 참고 발표자료의 슬라이드를 표지, 목차, 장 구분, 마무리 같은 구조 슬라이드와 내용 슬라이드로 나누고, 내용 슬라이드는 배치 모양끼리 묶습니다. 새 슬라이드는 내용과 맞는 참고 슬라이드를 골라 글 바꾸기, 문단 더하고 빼기, 그림 바꾸기 같은 좁은 편집만 합니다.</li>
+        <li><b>자유롭게 디자인하게 하면 다양해지지만 자기 스타일에서 멀어집니다.</b> 자기 발표자료의 모양을 지키고 싶다면 고쳐 쓰기 쪽이 맞습니다(DeepPresenter와 비교).</li>
+        <li><b>점검은 만든 쪽과 다른 역할이 하는 편이 낫습니다.</b> 같은 모델이 만들고 평가하면 너그러워집니다. 고치는 횟수는 첫 한두 번에서 효과가 가장 큽니다(DesignLab, PreGenie, AutoPresent).</li>
+        <li><b>이미지 생성으로 슬라이드를 통째로 그리지 않습니다.</b> 글자가 깨지고 나중에 고칠 수 없습니다.</li>
+        <li><b>평가는 내용, 디자인, 흐름으로 나눠 봅니다(PPTEval).</b> 다만 흐름에 대한 AI의 판정은 사람의 판정과 잘 맞지 않아(상관 0.55), 흐름은 아웃라인 단계에서 사람이 보는 것이 좋습니다.</li>
+        <li><b>논문과 그 논문으로 만든 발표자료 한 쌍을 본보기로 주면</b> 무엇을 얼마나 덜어 내는지까지 따라 하게 할 수 있습니다(SlideTailor).</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section ap-sec" id="korea">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>국내 자료에서</h2>
+        <p>책, 대학 교수학습 자료, 블로그와 기고, 영상을 찾아 읽었습니다.</p>
+      </div>
+      <ul class="ap-list">
+        <li><b>AI 발표자료 제작만 다룬 종이책과 교육청 연수 자료는 찾지 못했습니다.</b> 서점에서 확인한 책은 자가 출판 전자책이거나 AI 입문서의 한 장이었습니다. 대학 자료로는 조선대학교 『생성형 AI 기반 교수설계 가이드북』과 경희대학교 「생성형 AI로 발표자료 만들기」가 있습니다.</li>
+        <li><b>도구 조합이 바뀌었습니다.</b> 2024~2025년 후기에서는 'ChatGPT나 Gemini로 개요, Gamma로 디자인, PowerPoint나 Canva로 마무리'가 흔했고, 2026년 후기에서는 Claude 한 곳에 디자인 규칙을 저장해 두고 PPTX를 바로 만드는 방식이 늘었습니다.</li>
+        <li><b>직접 써 본 후기들이 공통으로 말하는 것</b>: 장별 구성안을 먼저 촘촘히 짠다, 스타일은 몇 장짜리 시험본으로 먼저 고정한다, 나눠서 만든다, 자잘한 손질은 파일에서 사람이 한다, 출처와 수치를 검수한다. 그리고 '생각만큼 시간이 줄지는 않았다'고 말합니다.</li>
+        <li><b>'AI 티'의 원인은 도구가 아니라 기획 부재라는 지적</b>도 있습니다. 일반적인 입력은 일반적인 목차를 낳고, 모든 항목을 같은 비중으로 보여 주면 핵심이 사라진다는 것입니다.</li>
+        <li><b>한글 글꼴 문제</b>: Gamma와 Genspark의 PPTX는 받는 PC에 글꼴이 없으면 깨져, PDF로 나누어 주거나 글꼴을 설치해야 했습니다. 코드로 PPTX를 만들 때는 영문 글꼴과 한글(동아시아) 글꼴을 함께 지정해야 줄바꿈이 어긋나지 않습니다.</li>
+      </ul>
+      <p class="ap-note"><b>교수자에게 특히 쓸모 있는 주의점</b>(조선대학교 가이드북): AI의 간추리기는 핵심 개념 설명까지 지나치게 줄일 수 있고, 자동으로 고른 그림과 배치는 학문 맥락과 어긋날 수 있으며, AI가 만든 슬라이드와 대본은 설명 위주로 흘러가므로 질문, 퀴즈, 토론을 일부러 보태야 합니다.</p>
+      <p class="ap-note"><b>거르는 기준</b>: '1분 만에', '10배' 같은 근거 없는 과장, 제휴 링크와 강의 홍보가 많은 글, 날짜가 없거나 오래된 화면, 내보낸 파일을 고칠 수 있는지(글꼴, 차트, 그림)를 밝히지 않은 글은 걸러 읽습니다.</p>
+    </div>
+  </section>
+
+  <section class="section ap-sec" id="apply">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>이 정리를 발표자료 제작에 적용한 방식</h2>
+        <p>강의와 발표 슬라이드를 AI와 함께 만들 때 실제로 쓰는 규칙입니다.</p>
+      </div>
+      <ul class="ap-list">
+        <li><b>새로 그리지 않고 가져다 씁니다.</b> 그동안 만든 발표자료의 슬라이드에 색인을 달아 두고, 맞는 슬라이드가 있으면 그대로 쓰거나 글만 고쳐 씁니다. 새 슬라이드도 내용 모양(항목 수, 글자 수, 그림이나 표 유무, 비교인지 절차인지)이 맞는 기존 슬라이드를 본보기로 삼아 배치를 물려받습니다.</li>
+        <li><b>구성안을 먼저 확인합니다.</b> 장마다 한 문장 메시지와 원문 처리 방식(그대로, 요약, 보강)을 적고, 논문 문장을 옮길 때는 '그대로'로 둡니다. 근거가 없는 사실과 수치는 넣지 않고 '확인 필요'로 남깁니다.</li>
+        <li><b>만든 뒤에는 기계 점검과 눈 점검을 나눠 합니다.</b> 먼저 PowerPoint가 실제로 그린 배치를 재서 글 넘침, 슬라이드 밖으로 나간 글, 글끼리 겹침, 너무 작은 글자, 줄 끝에서 갈린 숫자를 자동으로 찾습니다. 그다음 만든 쪽과 다른 검토자가 슬라이드 그림을 점검표로 보고, 고치기는 두 번 안쪽으로 끊습니다.</li>
+        <li><b>강의 자료에는 활동 장을 넣습니다.</b> 설명만 이어지지 않게 질문, 퀴즈, 토론 장을 제안하고, 발표자 노트에 예상 질문을 덧붙입니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section ap-sec ap-src" id="sources">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>출처</h2>
+        <p>주요 출처만 골랐습니다. 링크는 새 창으로 열립니다. 날짜는 페이지에 표시된 게시일이나 갱신일입니다.</p>
+      </div>
+
+      <details open>
+        <summary>AI 도구 공식 안내</summary>
+        <ul>
+          <li><a href="https://support.microsoft.com/ko-kr/PowerPoint/copilot/create-a-new-presentation-with-copilot-in-powerpoint" target="_blank" rel="noopener">Microsoft, PowerPoint에서 Copilot을 사용하여 새 프레젠테이션 만들기</a> <small>2026. 10. 갱신</small></li>
+          <li><a href="https://support.microsoft.com/office/use-your-organization-s-branding-with-copilot-in-powerpoint-c8bc6df5-37ed-4398-8b90-f78a8fdcf9bb" target="_blank" rel="noopener">Microsoft, Use your organization's branding with Copilot in PowerPoint</a> <small>2026. 11. 갱신</small></li>
+          <li><a href="https://workspaceupdates.googleblog.com/2026/06/create-fully-native-and-editable-presentations-with-Gemini-in-Google-Slides.html" target="_blank" rel="noopener">Google Workspace Updates, Create fully native and editable presentations with Gemini in Google Slides</a> <small>2026. 6. 30.</small></li>
+          <li><a href="https://blog.google/technology/google-labs/8-ways-to-make-the-most-out-of-slide-decks-in-notebooklm/" target="_blank" rel="noopener">Google, 8 ways to make the most out of slide decks in NotebookLM</a> <small>2025. 12. 16.</small></li>
+          <li><a href="https://claude.com/blog/create-files" target="_blank" rel="noopener">Anthropic, Claude can now create and edit files</a> <small>2025. 9. 9.</small></li>
+          <li><a href="https://github.com/anthropics/skills/blob/main/skills/pptx/SKILL.md" target="_blank" rel="noopener">Anthropic, pptx 스킬(공개 저장소)</a></li>
+          <li><a href="https://help.openai.com/en/articles/20001605-creating-and-collaborating-on-slides-in-chatgpt" target="_blank" rel="noopener">OpenAI, Creating and collaborating on slides in ChatGPT</a></li>
+          <li><a href="https://help.gamma.app/en/articles/15939201-why-doesnt-my-exported-pdf-or-powerpoint-match-what-i-see-in-gamma" target="_blank" rel="noopener">Gamma, Why doesn't my exported PDF or PowerPoint match what I see in Gamma?</a></li>
+          <li><a href="https://www.genspark.ai/helpcenter/ai-slides" target="_blank" rel="noopener">Genspark, AI Slides 도움말</a> <small>2026. 11. 18. 갱신</small></li>
+          <li><a href="https://www.beautiful.ai/blog/the-ultimate-guide-to-ai-presentation-prompts-how-to-get-better-slides-from-an-ai-presentation-maker" target="_blank" rel="noopener">Beautiful.ai, The ultimate guide to AI presentation prompts</a> <small>2026. 4. 17.</small></li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>연구 논문과 공개 코드</summary>
+        <ul>
+          <li><a href="https://arxiv.org/abs/2501.03936" target="_blank" rel="noopener">Zheng 외, PPTAgent: Generating and Evaluating Presentations Beyond Text-to-Slides</a> <small>EMNLP 2025</small></li>
+          <li><a href="https://arxiv.org/html/2602.22839" target="_blank" rel="noopener">DeepPresenter</a> <small>ACL 2026 Findings</small></li>
+          <li><a href="https://arxiv.org/abs/2501.00912" target="_blank" rel="noopener">Ge 외, AutoPresent: Designing Structured Visuals from Scratch</a> <small>CVPR 2025</small></li>
+          <li><a href="https://arxiv.org/html/2505.21660v2" target="_blank" rel="noopener">PreGenie</a></li>
+          <li><a href="https://arxiv.org/abs/2507.17202" target="_blank" rel="noopener">Yun 외, DesignLab</a></li>
+          <li><a href="https://arxiv.org/abs/2512.20292v1" target="_blank" rel="noopener">Zeng 외, SlideTailor</a> <small>AAAI 2026</small></li>
+          <li><a href="https://arxiv.org/abs/2101.11796" target="_blank" rel="noopener">Fu 외, DOC2PPT</a> <small>AAAI 2022</small></li>
+          <li><a href="https://arxiv.org/abs/2505.11604" target="_blank" rel="noopener">Jung 외, Talk to Your Slides</a> <small>ACL 2026 Findings</small></li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>발표 디자인 지침, 교육 연구, 'AI 티' 비평</summary>
+        <ul>
+          <li><a href="https://www.duarte.com/blog/how-generative-ai-is-changing-presentations/" target="_blank" rel="noopener">Nancy Duarte, How Generative AI is Changing Presentations</a> <small>2025. 4. 22.</small></li>
+          <li><a href="https://presentationzen.com/blog/ai-is-a-useful-assistant-but-it-wont-make-your-presentation-for-you" target="_blank" rel="noopener">Garr Reynolds, AI is a useful assistant, but it won't make your presentation for you</a></li>
+          <li><a href="https://www.thecontentwrangler.com/p/what-ai-presentation-tools-dont-automatically" target="_blank" rel="noopener">Scott Abel, What AI Presentation Tools Don't Automatically Understand About Communication</a> <small>2026. 7. 8.</small></li>
+          <li><a href="https://www.assertion-evidence.com/" target="_blank" rel="noopener">Michael Alley, Assertion-Evidence Approach</a></li>
+          <li><a href="https://teachingkb.mcgill.ca/tlk/design-slides-to-support-learning" target="_blank" rel="noopener">McGill University, Design slides to support learning</a></li>
+          <li><a href="https://sheridan.brown.edu/resources/classroom-practices/lecture-presentation-slides" target="_blank" rel="noopener">Brown University Sheridan Center, Lecture &amp; Presentation Slides</a></li>
+          <li><a href="https://sc.edu/about/offices_and_divisions/cte/teaching_resources/generative_ai/genai_teaching_guidelines/applying_genai_teaching_guidelines/index.php" target="_blank" rel="noopener">University of South Carolina CTE, Applying GenAI Teaching Guidelines</a></li>
+          <li><a href="https://arxiv.org/html/2605.13532" target="_blank" rel="noopener">Leinonen, Zhang, Hellas, AI-Generated Slides: Are They Good? Can Students Tell?</a> <small>WCCCE 2026</small></li>
+          <li><a href="https://arxiv.org/abs/2609.06212" target="_blank" rel="noopener">Wu 외, SLATE: Are AI-Generated Slides Educationally Effective?</a> <small>2026. 9.</small></li>
+          <li><a href="https://plusai.com/blog/how-to-make-ai-slides-that-dont-look-like-ai-slop" target="_blank" rel="noopener">Plus AI, How to Make AI-Generated Slides That Don't Look Like AI Slop</a> <small>2026. 7. 15.</small></li>
+          <li><a href="https://claude.com/blog/improving-frontend-design-through-skills" target="_blank" rel="noopener">Anthropic, Improving frontend design through Skills</a> <small>2025. 11. 12.</small></li>
+          <li><a href="https://venngage.com/blog/ai-slop-in-design/" target="_blank" rel="noopener">Venngage, AI slop in design</a> <small>2026. 11. 15. 갱신</small></li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>국내 자료</summary>
+        <ul>
+          <li><a href="https://contents3.chosun.ac.kr/2020/lms/down/guide_book/Guide_Book_03.pdf" target="_blank" rel="noopener">조선대학교 교수학습개발팀, 『생성형 AI 기반 교수설계 가이드북』(PDF)</a></li>
+          <li><a href="https://dx.khu.ac.kr/assets/LectureNote/04.pdf" target="_blank" rel="noopener">경희대학교 DX추진단, 「생성형 AI로 발표자료 만들기」(PDF)</a></li>
+          <li><a href="https://yozm.wishket.com/magazine/detail/3967/" target="_blank" rel="noopener">디논, 「클로드로 PPT 만들기: 템플릿 스킬 제작 4단계」(요즘IT)</a> <small>2026. 9. 29.</small></li>
+          <li><a href="https://www.openads.co.kr/content/contentDetail?contsId=20906" target="_blank" rel="noopener">오픈애즈 기고(소셜라인)</a> <small>2026. 10. 27.</small></li>
+          <li><a href="https://www.gpters.org/research/post/easily-create-class-ppt-1Jr16r0tzojTDak" target="_blank" rel="noopener">글로다움, 「감마AI와 캔바로 수업 PPT 쉽게 만들기」(GPTers)</a> <small>2024. 11. 12. 초등 도서관 이용자 교육 사례</small></li>
+          <li><a href="https://www.gpters.org/research/post/creating-lecture-materials-ai-1aXVX0mbTtNIVEJ" target="_blank" rel="noopener">배가본드, 「AI 융합 프로젝트 강의자료 만들기」(GPTers)</a> <small>2026. 6. 10.</small></li>
+          <li><a href="https://www.oppadu.com/lesson/notebooklm-ppt-tip/" target="_blank" rel="noopener">오빠두엑셀, 노트북LM 슬라이드로 AI PPT 만드는 9가지 방법</a> <small>2026. 4. 26.</small></li>
+          <li><a href="https://www.youtube.com/watch?v=eMms4eiiL1s" target="_blank" rel="noopener">페이퍼로지, 클로드 뚝배기를 깨버린, 미친 AI PPT가 나왔습니다(유튜브)</a> <small>2026. 6. 23.</small></li>
+        </ul>
+      </details>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>
