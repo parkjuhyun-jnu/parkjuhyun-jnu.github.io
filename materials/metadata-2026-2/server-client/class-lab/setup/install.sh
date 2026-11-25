@@ -14,6 +14,8 @@ if ss -tln | awk '{print $4}' | grep -qE ":${PORT}\$" && ! systemctl is-active -
 fi
 
 echo "== 1/4 프로그램 설치"
+# needrestart가 묻거나 다른 서비스(참고문헌 체크 등)를 다시 시작하지 않게 합니다
+export DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=l NEEDRESTART_SUSPEND=1
 apt-get update -q
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends php-cli php-sqlite3 sqlite3 unzip
 

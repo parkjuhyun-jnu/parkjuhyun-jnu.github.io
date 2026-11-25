@@ -68,7 +68,7 @@
           <pre class="cmd">curl -fsSL https://parkjuhyun-jnu.github.io/materials/metadata-2026-2/server-client/class-lab/setup/check.sh | bash</pre></span></li>
         <li><input type="checkbox" aria-label="완료"><span><b>실습 웹 서버 설치(한 번만).</b> 우분투 기본 저장소에서 <code>php-cli</code>, <code>php-sqlite3</code>, <code>sqlite3</code>, <code>unzip</code>을 설치하고, <code>/srv/class-lab</code> 폴더와 <code>class-lab</code> 서비스(8080번 문)를 만듭니다. 점검에서 8080을 이미 쓰고 있었다면 마지막 줄 끝에 <code>8081</code>처럼 다른 번호를 붙입니다.
           <pre class="cmd">sudo apt-get install -y unzip
-cd /tmp &amp;&amp; wget -O class-lab.zip https://parkjuhyun-jnu.github.io/materials/metadata-2026-2/server-client/class-lab.zip
+cd /tmp &amp;&amp; curl -fsSLo class-lab.zip https://parkjuhyun-jnu.github.io/materials/metadata-2026-2/server-client/class-lab.zip
 unzip -o class-lab.zip &amp;&amp; sudo bash class-lab/setup/install.sh</pre>
           맨 끝에 <code>설치 끝. 서버 안에서 열어 본 결과: 200</code>이 나오면 됩니다.</span></li>
         <li><input type="checkbox" aria-label="완료"><span><b>가비아 방화벽에서 TCP 8080 열기.</b> 가비아에서는 방화벽을 <b>보안 그룹</b>이라고 부릅니다. <code>refstd</code>의 [네트워크] 탭 → 네트워크 인터페이스 표의 보안 그룹(<code>Default-SecurityGroup</code>)을 눌러, 인바운드 규칙에 ‘TCP, 8080, 출발지 전체(0.0.0.0/0)’를 더합니다. 요금은 들지 않습니다. 같은 화면에서 22번(SFTP·SSH) 규칙이 어떻게 되어 있는지도 봐 둡니다.</span></li>

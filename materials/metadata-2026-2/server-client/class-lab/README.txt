@@ -26,7 +26,7 @@
 
 [처음 설치]  가비아 콘솔 → 서버 → [서버 접속] 창에서
   sudo apt-get install -y unzip
-  cd /tmp && wget -O class-lab.zip https://parkjuhyun-jnu.github.io/materials/metadata-2026-2/server-client/class-lab.zip
+  cd /tmp && curl -fsSLo class-lab.zip https://parkjuhyun-jnu.github.io/materials/metadata-2026-2/server-client/class-lab.zip
   unzip -o class-lab.zip && sudo bash class-lab/setup/install.sh
   → 가비아 콘솔 방화벽에서 TCP 8080 을 엽니다. 폰에서 http://공인IP:8080/
 
