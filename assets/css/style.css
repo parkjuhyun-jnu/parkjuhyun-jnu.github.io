@@ -1167,3 +1167,12 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
 /* 단추 */
 [data-design="catalog"] .btn { border-radius: 3px; }
 [data-design="catalog"] .btn--ghost { border-color: color-mix(in srgb, var(--ink) 35%, transparent); }
+
+/* ---------- 자료실 하위 메뉴(자료 목록, 권장도서목록) ---------- */
+.res-tabs { display: flex; flex-wrap: wrap; gap: .45rem; margin: .4rem 0 1.1rem; }
+.res-tabs a {
+  padding: .4rem .9rem; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink-soft); font-size: .9rem; font-weight: 600; text-decoration: none;
+}
+.res-tabs a:hover { border-color: var(--navy); color: var(--ink); }
+.res-tabs a[aria-current="page"] { background: var(--navy); border-color: var(--navy); color: var(--paper); }

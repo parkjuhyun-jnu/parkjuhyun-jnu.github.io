@@ -1,0 +1,18 @@
+{
+  "_설명": "자료실 > 권장도서목록(booklists.html) 목록. 새 목록은 맨 위에 넣습니다. file 은 내려받을 엑셀, data 는 페이지 검색 표에 쓰는 JSON(엑셀에서 만듦, NOTES.md 참고).",
+  "lists": [
+    {
+      "id": "age9",
+      "title": "9세 권장도서목록",
+      "age": "9세부터",
+      "count": 699,
+      "date": "2026-11-26",
+      "file": "assets/files/booklists/9세_권장도서목록.xlsx",
+      "download": "9세 권장도서목록.xlsx",
+      "data": "data/booklists/age9.json",
+      "summary": "9세부터 읽을 만한 책 699권. 책이름, 지은이, 출판사, 출판년도, 쪽수, 갈래, 가격, 주제어를 담았습니다.",
+      "source": "(사)어린이도서연구회 추천도서목록 검색 결과(연령: 9세부터)",
+      "sourceUrl": "https://www.childbook.org/"
+    }
+  ]
+}

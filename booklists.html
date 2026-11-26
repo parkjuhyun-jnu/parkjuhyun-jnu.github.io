@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>권장도서목록 | 자료실 | 박주현</title>
+<meta name="description" content="어린이 권장도서목록을 엑셀로 내려받고 책이름, 지은이, 갈래, 주제어로 찾아볼 수 있습니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+.bl-card { display: grid; gap: .5rem; align-content: start; }
+.bl-card h2 { font-family: var(--font-serif); font-size: 1.25rem; margin: 0; }
+.bl-meta { display: flex; flex-wrap: wrap; gap: .3rem .9rem; font-size: .86rem; color: var(--ink-soft); margin: 0; }
+.bl-src { font-size: .84rem; color: var(--ink-faint); margin: 0; }
+.bl-tools { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: 1.6rem 0 .8rem; }
+.bl-tools input[type="text"] { flex: 1 1 220px; max-width: 340px; }
+.bl-tools select { width: auto; flex: 0 1 auto; }
+#bl-count { font-size: .88rem; color: var(--ink-soft); margin: 0 0 .6rem; }
+.bl-table-box { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.bl-table { border-collapse: collapse; width: 100%; font-size: .88rem; min-width: 760px; }
+.bl-table th, .bl-table td { border-bottom: 1px solid var(--line-soft); padding: .55rem .7rem; text-align: left; vertical-align: top; }
+.bl-table thead th { position: sticky; top: 0; font-size: .8rem; font-weight: 600; color: var(--ink-soft); background: var(--navy-wash); white-space: nowrap; }
+.bl-table td.t { font-weight: 600; color: var(--ink); min-width: 11em; }
+.bl-table td.n { white-space: nowrap; }
+.bl-table td.k { color: var(--ink-soft); font-size: .82rem; min-width: 14em; }
+.bl-table tbody tr:last-child td { border-bottom: 0; }
+#bl-more { margin-top: .9rem; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="resources.html" aria-current="page">자료실</a>
+      <a href="bk21.html">BK21</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">RESOURCES</p>
+      <h1 style="font-family:var(--font-serif)">권장도서목록</h1>
+      <nav class="res-tabs" aria-label="자료실 메뉴">
+        <a href="resources.html">자료 목록</a>
+        <a href="booklists.html" aria-current="page">권장도서목록</a>
+      </nav>
+      <p style="max-width:60ch; font-size:1.05rem; color:var(--ink-soft)">
+        독서교육과 도서관 수업에 참고할 권장도서목록을 엑셀 파일로 내려받을 수 있습니다.
+        아래 표에서 책이름, 지은이, 출판사, 주제어로 바로 찾아볼 수도 있습니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="grid grid-2" id="bl-lists"><p class="muted">불러오는 중…</p></div>
+
+      <div id="bl-browse" hidden>
+        <h2 id="bl-title" style="font-family:var(--font-serif); font-size:1.35rem; margin:2.4rem 0 0">목록 찾아보기</h2>
+        <div class="bl-tools" role="search">
+          <label class="sr-only" for="bl-q">찾을 말</label>
+          <input type="text" id="bl-q" placeholder="책이름, 지은이, 출판사, 주제어" autocomplete="off">
+          <label class="sr-only" for="bl-genre">갈래</label>
+          <select id="bl-genre"><option value="">갈래 전체</option></select>
+          <label class="sr-only" for="bl-sort">정렬</label>
+          <select id="bl-sort">
+            <option value="">목록 순서</option>
+            <option value="new">출판년도 최근 순</option>
+            <option value="old">출판년도 오래된 순</option>
+            <option value="title">책이름 가나다순</option>
+          </select>
+        </div>
+        <p id="bl-count" role="status"></p>
+        <div class="bl-table-box">
+          <table class="bl-table">
+            <thead><tr><th scope="col">책이름</th><th scope="col">지은이</th><th scope="col">출판사</th><th scope="col">출판년도</th><th scope="col">쪽수</th><th scope="col">갈래</th><th scope="col">가격</th><th scope="col">주제어</th></tr></thead>
+            <tbody id="bl-rows"></tbody>
+          </table>
+        </div>
+        <button type="button" class="btn btn--ghost btn--sm" id="bl-more" hidden>더 보기</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const PAGE = 60;
+  let rows = [], shown = PAGE, current = null;
+  const fmtDate = (d) => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || '');
+    return m ? `${+m[1]}. ${+m[2]}. ${+m[3]}.` : '';
+  };
+
+  fetch('data/booklists.json')
+    .then((r) => r.json())
+    .then((d) => {
+      const lists = d.lists || [];
+      $('#bl-lists').innerHTML = lists.length ? lists.map(card).join('') : '<p class="muted">아직 올린 목록이 없습니다.</p>';
+      $('#bl-lists').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-browse]'); if (!b) return;
+        open(lists.find((l) => l.id === b.dataset.browse), true);
+      });
+      const want = lists.find((l) => '#' + l.id === location.hash) || lists[0];
+      if (want) open(want, location.hash === '#' + want.id);
+    })
+    .catch(() => { $('#bl-lists').innerHTML = '<p class="muted">목록을 불러오지 못했습니다.</p>'; });
+
+  function card(l) {
+    return `
+    <article class="card bl-card">
+      <span class="course-card__term">${esc(l.age || '권장도서')}</span>
+      <h2>${esc(l.title)}</h2>
+      <p class="bl-meta"><span>${esc(String(l.count || ''))}권</span><span>엑셀(.xlsx)</span><span>${esc(fmtDate(l.date))} 올림</span></p>
+      <p class="small" style="margin:0; color:var(--ink-soft)">${esc(l.summary || '')}</p>
+      <p class="bl-src">출처: ${l.sourceUrl ? `<a href="${esc(l.sourceUrl)}" target="_blank" rel="noopener">${esc(l.source)}</a>` : esc(l.source || '')}</p>
+      <div class="course-card__links">
+        <a class="btn btn--sm" href="${esc(encodeURI(l.file))}" download="${esc(l.download || '')}">엑셀 내려받기</a>
+        ${l.data ? `<button type="button" class="btn btn--ghost btn--sm" data-browse="${esc(l.id)}">표로 찾아보기</button>` : ''}
+      </div>
+    </article>`;
+  }
+
+  function open(l, scroll) {
+    if (!l || !l.data) return;
+    current = l;
+    fetch(l.data).then((r) => r.json()).then((d) => {
+      rows = d.rows || [];
+      const genres = [...new Set(rows.map((r) => r[5]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ko'));
+      $('#bl-genre').innerHTML = '<option value="">갈래 전체</option>' + genres.map((g) => `<option>${esc(g)}</option>`).join('');
+      $('#bl-title').textContent = l.title + ' 찾아보기';
+      $('#bl-browse').hidden = false;
+      shown = PAGE; render();
+      if (scroll) $('#bl-browse').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }).catch(() => { $('#bl-count').textContent = '목록을 불러오지 못했습니다.'; $('#bl-browse').hidden = false; });
+  }
+
+  function filtered() {
+    const q = $('#bl-q').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const g = $('#bl-genre').value, s = $('#bl-sort').value;
+    let out = rows.filter((r) => (!g || r[5] === g) &&
+      q.every((w) => [r[0], r[1], r[2], r[7]].join(' ').toLowerCase().includes(w)));
+    if (s === 'new') out = out.slice().sort((a, b) => (+b[3] || 0) - (+a[3] || 0));
+    else if (s === 'old') out = out.slice().sort((a, b) => (+a[3] || 0) - (+b[3] || 0));
+    else if (s === 'title') out = out.slice().sort((a, b) => a[0].localeCompare(b[0], 'ko'));
+    return out;
+  }
+
+  function render() {
+    const list = filtered();
+    $('#bl-count').textContent = `${rows.length}권 가운데 ${list.length}권` + (list.length > shown ? `, 앞의 ${shown}권을 보여 줍니다.` : '');
+    $('#bl-rows').innerHTML = list.slice(0, shown).map((r) => `<tr>
+      <td class="t">${esc(r[0])}</td><td>${esc(r[1])}</td><td class="n">${esc(r[2])}</td><td class="n">${esc(String(r[3]))}</td>
+      <td class="n">${esc(r[4])}</td><td class="n">${esc(r[5])}</td><td class="n">${esc(r[6])}</td><td class="k">${esc(r[7])}</td></tr>`).join('')
+      || '<tr><td colspan="8" class="muted">찾는 책이 없습니다.</td></tr>';
+    $('#bl-more').hidden = list.length <= shown;
+  }
+
+  let timer;
+  $('#bl-q').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => { shown = PAGE; render(); }, 150); });
+  $('#bl-genre').addEventListener('change', () => { shown = PAGE; render(); });
+  $('#bl-sort').addEventListener('change', () => { shown = PAGE; render(); });
+  $('#bl-more').addEventListener('click', () => { shown += PAGE * 2; render(); });
+})();
+</script>
+</body>
+</html>
