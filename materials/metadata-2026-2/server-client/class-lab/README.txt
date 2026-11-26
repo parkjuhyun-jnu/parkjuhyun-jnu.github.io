@@ -29,6 +29,7 @@
   cd /tmp && curl -fsSLo class-lab.zip https://parkjuhyun-jnu.github.io/materials/metadata-2026-2/server-client/class-lab.zip
   unzip -o class-lab.zip && sudo bash class-lab/setup/install.sh
   → 가비아 콘솔 방화벽에서 TCP 8080 을 엽니다. 폰에서 http://공인IP:8080/
+  → 우리 수업 서버(refstd): http://1.201.120.29:8080/
 
 [3단계 시연: 목록을 데이터베이스에 넣기]
   cd /srv/class-lab/data
