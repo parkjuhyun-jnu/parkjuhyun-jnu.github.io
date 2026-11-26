@@ -12,7 +12,8 @@
       "data": "data/booklists/age9.json",
       "summary": "9세부터 읽을 만한 책 699권. 책이름, 지은이, 출판사, 출판년도, 쪽수, 갈래, 가격, 주제어를 담았습니다.",
       "source": "(사)어린이도서연구회 추천도서목록 검색 결과(연령: 9세부터)",
-      "sourceUrl": "https://www.childbook.org/"
+      "sourceUrl": "https://www.childbook.org/",
+      "coverSource": "카카오 책 검색(Daum 책)에서 찾아 보여 줌, 찾지 못한 책은 비워 둠"
     }
   ]
 }
