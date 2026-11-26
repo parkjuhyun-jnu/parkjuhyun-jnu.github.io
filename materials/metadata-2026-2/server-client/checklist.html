@@ -81,11 +81,11 @@ unzip -o class-lab.zip &amp;&amp; sudo bash class-lab/setup/install.sh</pre>
 
       <h2 class="part" id="day">2. 수업 당일, 시작 10분 전</h2>
       <ul class="todo" data-key="day">
-        <li><input type="checkbox" aria-label="완료"><span><b>2·3단계 비우기.</b> 서버 접속 창에서 아래를 실행합니다. 2단계 목록 파일과 3단계 DB를 지워 ‘아직 없습니다’ 상태로 만듭니다.
+        <li><input type="checkbox" aria-label="완료"><span><b>2·3단계 비우기.</b> 서버 접속 창이나 WinSCP 콘솔(<a href="materials/metadata-2026-2/server-client/checklist.html#winscp-console">아래 설명</a>)에서 아래를 실행합니다. 2단계 목록 파일과 3단계 DB를 지워 ‘아직 없습니다’ 상태로 만듭니다.
           <pre class="cmd">sudo bash /srv/class-lab/setup/demo-reset.sh</pre></span></li>
         <li><input type="checkbox" aria-label="완료"><span><b>1단계 문장 되돌리기.</b> 지난 시연에서 ‘오늘의 한 문장’을 바꿨다면 원래 파일을 다시 올려 둡니다.</span></li>
         <li><input type="checkbox" aria-label="완료"><span><b>주소 띄우기.</b> 아래 <a href="materials/metadata-2026-2/server-client/checklist.html#qrmake">QR 만들기</a>에 공인 IP를 넣어 화면에 띄웁니다.</span></li>
-        <li><input type="checkbox" aria-label="완료"><span><b>창 셋 열어 두기.</b> ① 가비아 서버 접속 창, ② WinSCP 또는 FileZilla(접속한 상태), ③ 내 폰 화면(가능하면 화면 미러링). 비밀번호가 보이는 창은 화면 공유에서 빼 둡니다.</span></li>
+        <li><input type="checkbox" aria-label="완료"><span><b>창 셋 열어 두기.</b> ① 가비아 서버 접속 창, ② WinSCP 또는 FileZilla(접속한 상태), ③ 내 폰 화면(가능하면 화면 미러링). WinSCP를 쓰면 ①은 WinSCP 콘솔로 대신할 수 있습니다. 비밀번호가 보이는 창은 화면 공유에서 빼 둡니다.</span></li>
         <li><input type="checkbox" aria-label="완료"><span><b>상태 확인.</b> 폰으로 <code>/step2/</code>, <code>/step3/</code>에 들어가 ‘아직 없습니다’가 나오는지 봅니다.</span></li>
       </ul>
 
@@ -100,12 +100,25 @@ unzip -o class-lab.zip &amp;&amp; sudo bash class-lab/setup/install.sh</pre>
             <tr><th>실습 3<br>25분</th><td>서버 접속 창에서
               <pre class="cmd">cd /srv/class-lab/data
 sudo sqlite3 books.db &lt; load.sql</pre>
-              ‘들어간_책 2175’ 표를 보여 줌. 원하면 <code>sudo sqlite3 books.db</code>로 들어가 <code>SELECT title FROM book WHERE author LIKE '%권정생%';</code>를 직접 쳐 보고 <code>.quit</code></td><td>찾기 단추를 눌러야 바뀜, 주소의 <code>?q=</code>, SQL 보기, 받은 양(약 10KB), 비행기 모드에서는 안 됨, JSON API</td></tr>
+              ‘들어간_책 2175’ 표를 보여 줌. 원하면 <code>sudo sqlite3 books.db</code>로 들어가 <code>SELECT title FROM book WHERE author LIKE '%권정생%';</code>를 직접 쳐 보고 <code>.quit</code><br><span class="small muted">WinSCP 콘솔에서 해도 됩니다(<a href="materials/metadata-2026-2/server-client/checklist.html#winscp-console">아래 설명</a>).</span></td><td>찾기 단추를 눌러야 바뀜, 주소의 <code>?q=</code>, SQL 보기, 받은 양(약 10KB), 비행기 모드에서는 안 됨, JSON API</td></tr>
             <tr><th>정리 5분</th><td>안내 페이지의 ‘세 단계 비교’ 표</td><td>확인 문제</td></tr>
           </tbody>
         </table>
       </div>
       <p class="prose">2단계 CSV를 엑셀에서 직접 저장하면, 엑셀이 쪽수·번호 칸의 모양을 바꾸지 않았는지 메모장으로 한 번 보세요. 걱정되면 묶음에 든 <code>data/books.csv</code>를 그대로 올리면 됩니다. 시연이 막히면 <code>sudo bash /srv/class-lab/setup/demo-ready.sh</code> 한 줄로 2·3단계를 한꺼번에 준비할 수 있습니다.</p>
+
+      <h3 id="winscp-console">서버 명령을 WinSCP 안에서 실행하기</h3>
+      <p class="prose">가비아 서버 접속 창을 따로 열지 않고, 파일을 올리던 WinSCP에서 3단계 명령을 실행할 수 있습니다. 비밀번호를 다시 묻지 않습니다.</p>
+      <ol class="prose">
+        <li>WinSCP 메뉴 <b>[명령(C)] → [터미널 열기(T)]</b>(<kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>T</kbd>)를 누릅니다. ‘별도의 쉘 세션을 여시겠습니까?’가 나오면 [확인]을 누릅니다.</li>
+        <li>‘명령어 입력’ 칸에 아래를 넣고 [실행]을 누릅니다. 콘솔에 ‘들어간_책 2175’ 표와 연령별 표가 나오면 3단계 준비가 끝난 것입니다.
+          <pre class="cmd">cd /srv/class-lab/data &amp;&amp; sqlite3 books.db &lt; load.sql</pre></li>
+        <li>SQL을 직접 보여 주려면 아래처럼 한 줄로 실행합니다. 이 콘솔은 한 번에 한 명령만 받으므로, <code>sqlite3 books.db</code>만 쳐서 안으로 들어가는 방식은 쓰지 않습니다.
+          <pre class="cmd">sqlite3 /srv/class-lab/data/books.db "SELECT title FROM book WHERE author LIKE '%권정생%';"</pre></li>
+        <li>연습한 뒤나 수업 직전에 되돌릴 때도 같은 칸에서 실행합니다.
+          <pre class="cmd">bash /srv/class-lab/setup/demo-reset.sh</pre></li>
+      </ol>
+      <p class="prose small muted">root로 접속했다면 <code>sudo</code>는 빼도 됩니다. 콘솔에서 <code>cd</code>를 하면 WinSCP 오른쪽 창도 그 폴더로 옮겨 가니, 1단계 시연 전에는 오른쪽 창을 <code>/srv/class-lab/www</code>로 되돌려 둡니다.</p>
       <p class="prose">안내 페이지의 ‘그림 자리’ 세 곳(FileZilla 올리기, 엑셀 CSV 저장, <code>load.sql</code> 실행 결과)은 수업 중 화면을 캡처해 Claude에게 주시면 넣겠습니다. 비밀번호와 공인 IP가 보이지 않게 잘라 주세요.</p>
 
       <h2 class="part" id="after">4. 수업 뒤</h2>
