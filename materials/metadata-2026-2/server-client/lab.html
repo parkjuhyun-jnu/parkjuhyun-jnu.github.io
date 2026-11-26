@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 페이지는 하위 폴더에 있지만 메뉴, 꼬리말, CSS가 사이트 맨 위 기준 주소를 쓰므로 base를 맨 위로 둔다 -->
+<base href="../../../">
+<title>학생 실습실 안내: 홈페이지, 서버 DB, 아카이브 | 박주현</title>
+<meta name="description" content="메타데이터와아카이빙연구 학생 실습실 안내: 수업 서버에 내 홈페이지를 올리고, 서버 데이터베이스에 SQL로 묻고, 사진과 소리와 영상을 아카이브에 넣으며 체크섬, 기술 메타데이터, 더블린 코어, 보존 기록을 익힙니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="materials/metadata-2026-2/server-client/sc.css?v=20261126">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html" aria-current="page">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <p class="small"><a href="materials/metadata-2026-2/server-client/">← 서버와 클라이언트 실습</a></p>
+      <span class="course-card__term">2026학년도 2학기, 메타데이터와아카이빙연구, 직접 해 보는 실습</span>
+      <h1 style="font-family:var(--font-serif); margin-top:.3rem">학생 실습실: 내 홈페이지, 서버 DB, 우리 반 아카이브</h1>
+      <p style="max-width:64ch; font-size:1.05rem; color:var(--ink-soft)">
+        시연에서는 교수님이 서버에 파일을 올렸습니다. 이번에는 여러분이 직접 합니다. 서버 계정이나 프로그램 없이, 브라우저로 수업 서버의 <b>학생 실습실</b>에 들어가 세 가지를 해 봅니다. <b>A</b> 내 홈페이지를 서버에 올리고, <b>B</b> 서버 데이터베이스에 SQL로 묻고, <b>C</b> 사진과 소리와 영상을 아카이브에 넣어 보존합니다. 자료는 모두 (사)어린이도서연구회 권장도서 목록과 이어집니다.
+      </p>
+      <nav class="toc" aria-label="이 페이지의 차례">
+        <a href="materials/metadata-2026-2/server-client/lab.html#enter">들어가기</a>
+        <a href="materials/metadata-2026-2/server-client/lab.html#where">서버 안 내 자리</a>
+        <a href="materials/metadata-2026-2/server-client/lab.html#a">A 내 홈페이지</a>
+        <a href="materials/metadata-2026-2/server-client/lab.html#b">B SQL 실습실</a>
+        <a href="materials/metadata-2026-2/server-client/lab.html#c">C 우리 반 아카이브</a>
+        <a href="materials/metadata-2026-2/server-client/lab.html#samples">보기 파일</a>
+        <a href="materials/metadata-2026-2/server-client/lab.html#done">다 했는지 보기</a>
+        <a href="materials/metadata-2026-2/server-client/lab.html#quiz">확인 문제</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="part" id="enter" style="margin-top:0">들어가기</h2>
+      <div class="notice notice--info" style="max-width:64ch">
+        <strong>준비물</strong>
+        노트북을 권합니다(B의 SQL은 자판으로 쓰는 것이 편합니다). 폰도 됩니다. 크롬, 엣지, 사파리 가운데 아무것이나 씁니다. 설치할 것은 없습니다.
+      </div>
+      <div class="addrbox" style="max-width:64ch">
+        <div>
+          <span class="small muted">학생 실습실 주소</span><br>
+          <a class="addr" href="http://1.201.120.29:8080/lab/" target="_blank" rel="noopener">http://1.201.120.29:8080/lab/</a>
+          <p class="small muted">폰 카메라로 QR을 찍거나 이 주소를 누르세요.</p>
+        </div>
+        <img src="materials/metadata-2026-2/server-client/img/qr-lab.svg" width="160" height="160" alt="학생 실습실 주소 http://1.201.120.29:8080/lab/ 의 QR 코드">
+      </div>
+      <ol class="steps">
+        <li>브라우저 <b>주소창</b>에 <a href="http://1.201.120.29:8080/lab/" target="_blank" rel="noopener"><code>http://1.201.120.29:8080/lab/</code></a>을 넣습니다. 아래 QR을 폰 카메라로 찍거나, 시연 첫 화면의 <b>학생 실습실</b> 칸을 눌러도 됩니다.</li>
+        <li><b>수업 코드</b>를 넣습니다. 칠판(화면)에 있는 것으로, 우리 반만 들어오게 하는 열쇠입니다.</li>
+        <li><b>아이디</b>를 정합니다. 영문 소문자로 시작하고 영문 소문자와 숫자로 3~12자입니다(예: <code>jhpark</code>, <code>reader07</code>). 이 아이디가 내 홈페이지 주소가 되므로 학번이나 전화번호처럼 나를 드러내는 것은 피합니다.</li>
+        <li><b>비밀번호</b>는 숫자 네 자리입니다. 은행이나 폰 잠금에 쓰는 번호는 쓰지 마세요. 이 서버는 <code>http</code>(자물쇠 없음)라서 연습용 번호만 씁니다. 잊으면 교수님이 초기화해 줍니다.</li>
+        <li>처음 들어올 때만 <b>이름</b>을 적습니다. 다음부터는 수업 코드, 아이디, 비밀번호만 넣으면 됩니다.</li>
+      </ol>
+
+      <h2 class="part" id="where">서버 안 내 자리</h2>
+      <p class="prose">들어가면 서버 안에 내 자리가 생깁니다. 시연에서 본 웹 루트처럼, 어떤 것은 주소로 열 수 있고 어떤 것은 열 수 없습니다. 실습실 첫 화면 아래에도 같은 표가 있습니다.</p>
+      <div class="map" aria-label="서버 폴더와 주소의 짝">
+        <div class="h">서버 안의 자리</div><div class="h">주소로 열 수 있나</div>
+        <div>/srv/class-lab/var/sites/아이디/</div><div>http://1.201.120.29:8080/u/아이디/ 로 누구나 열 수 있음 (A)</div>
+        <div>/srv/class-lab/var/mydb/아이디.db</div><div class="no">주소 없음. 실습실 화면에서 SQL로만 씀 (B)</div>
+        <div>/srv/class-lab/var/catalog.db</div><div class="no">주소 없음. 모두가 읽기만 하는 목록 DB (B)</div>
+        <div>/srv/class-lab/var/archive/자료번호/</div><div class="no">주소 없음. 로그인한 사람에게 실습실이 골라서 내어 줌 (C)</div>
+        <div>/srv/class-lab/var/backup/자료번호/</div><div class="no">주소 없음. 원본이 망가졌을 때 쓰는 사본 (C)</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="stage" id="a" style="scroll-margin-top:90px"><span class="tag">A, 약 30분</span><h3 class="sub" style="margin:0">내 홈페이지: 내가 올린 파일을 서버가 건넨다</h3></div>
+      <p class="prose">실습실의 <b>A 내 홈페이지</b>는 서버 안 내 폴더를 보여 주는 창입니다. 여기서 파일을 만들고, 고치고, 올리면 <code>/u/아이디/</code> 주소로 누구나 볼 수 있습니다. 시연에서 교수님이 FileZilla로 한 일을 여러분이 브라우저로 합니다. 화면의 <b>할 일</b> 일곱 개는 서버의 방문 기록을 보고 저절로 <b>완료</b>로 바뀝니다.</p>
+      <ol class="steps">
+        <li><b>내 주소를 열어 보기</b>: [내 주소]를 눌러 새 탭에서 엽니다. 서버가 내 폴더의 <code>index.html</code>을 보내 줍니다.</li>
+        <li><b>index.html 고쳐 저장하기</b>: 표에서 [고치기]를 누르고 글을 바꿔 [서버에 저장]합니다. 열어 둔 탭은 그대로입니다. <b>새로고침</b>해야 바뀝니다.</li>
+        <li><b>책 소개 페이지 만들기</b>: 권장도서를 몇 권 골라 <code>books.html</code>을 만듭니다. 같은 내용이 <code>books.json</code>으로도 생깁니다. 사람이 보는 HTML과 프로그램이 읽는 JSON을 나란히 열어 봅니다.</li>
+        <li><b>내 컴퓨터의 파일 올리기</b>: 사진이나 CSV를 올리고 주소로 엽니다. 파일 이름은 영문으로 짓습니다.</li>
+        <li><b>폰으로 열어 보기</b>: 화면의 QR을 폰 카메라로 찍습니다. 방문 기록에 폰이 찍힙니다.</li>
+        <li><b>없는 주소를 열어 404 보기</b>: <code>/u/아이디/nothing.html</code>처럼 없는 파일을 엽니다. 내 폴더에 <code>404.html</code>을 만들면 그 화면이 대신 나옵니다.</li>
+        <li><b>하위 폴더 안의 파일 열기</b>: [새 폴더]를 만들고 그 안에 파일을 넣어 <code>/u/아이디/폴더/파일</code>로 엽니다. 폴더 구조가 곧 주소 구조입니다.</li>
+      </ol>
+      <div class="check"><b>확인할 것</b>화면 아래 <b>방문 기록</b>은 웹 서버가 남기는 접속 기록(로그)입니다. 언제, 어떤 경로를, 어떤 상태 번호(200, 404, 301)로, 몇 바이트 보냈는지가 남습니다. <b>응답 머리</b>(헤더)에서는 서버가 파일 내용 앞에 붙여 보내는 <code>Content-Type</code>을 봅니다. 브라우저는 확장자가 아니라 이 값을 보고 HTML로 그릴지, 그림으로 보일지, 내려받을지 정합니다. PHP 파일을 올려도 실행되지 않고 글자로 보이는 것도 확인해 보세요(보안을 위해 학생 폴더에서는 막아 두었습니다).</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="stage" id="b" style="scroll-margin-top:90px"><span class="tag">B, 약 40분</span><h3 class="sub" style="margin:0">SQL 실습실: 서버 DB에 묻고, 함께 쓰고, 내 DB를 고친다</h3></div>
+      <p class="prose">3강의 브라우저 SQL 실습실은 DB가 <b>내 브라우저 안</b>에 있었습니다. 이번에는 DB가 <b>서버 안</b>에 있습니다. 여러분은 SQL 글자만 보내고, 서버가 실행한 결과만 돌려받습니다. 쓰는 곳은 넷이고, 곳마다 할 수 있는 일이 다릅니다. 문제를 풀면 서버가 정답 SQL의 결과와 견주어 바로 채점합니다. 쓰기 칸에서 <kbd>Ctrl</kbd>+<kbd>Enter</kbd>를 누르면 실행합니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>곳</th><th>DB</th><th>할 수 있는 일</th><th>배우는 것</th></tr></thead>
+          <tbody>
+            <tr><th>B1 목록 DB에 묻기 (10문제)</th><td><code>catalog.db</code>의 <code>book</code> 2,175권</td><td>읽기(SELECT)만</td><td>WHERE, LIKE, GROUP BY, 그리고 쪽수 칸에 숫자 아닌 값이 섞이고 펴낸해에 <code>2010-2016</code> 같은 값이 든 ‘더러운 데이터’</td></tr>
+            <tr><th>B2 지은이 칸 나누기 (8문제)</th><td>같은 DB의 <code>person</code>, <code>credit</code>, <code>role</code></td><td>읽기만</td><td>‘정은주 글 | 해랑 그림’처럼 뭉친 칸을 사람과 역할로 나눈 <b>정규화</b>, MARC 역할 부호(aut, ill, trl), 이름 찾기와 사람 찾기의 차이</td></tr>
+            <tr><th>B3 함께 쓰는 DB (4문제)</th><td><code>shared.db</code>의 <code>reading_log</code></td><td>넣기(INSERT)와 읽기만</td><td>여러 사람이 한 DB를 함께 쓰기. 내가 넣은 기록이 친구 화면에 바로 나옴. 넣은 사람 칸은 서버가 채움</td></tr>
+            <tr><th>B4 내 DB (7문제)</th><td><code>mydb/아이디.db</code> (목록 DB 복사본)</td><td>무엇이든 (CREATE, UPDATE, DELETE, ALTER)</td><td>테이블 만들기, 오타 바로잡기, 출판사 표를 떼어 내는 정규화, 뷰. 망가지면 [처음으로 되돌리기]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="check"><b>확인할 것</b>B1에서 <code>DELETE FROM book</code>을 실행해 보세요. 서버가 실행하지 않고 거절합니다. 같은 SQL도 <b>누가, 어느 DB에</b> 보내느냐에 따라 서버가 허락하거나 거절합니다. 이것이 권한입니다. B2의 이현 문제(지은이 칸에서 ‘이현’으로 찾은 책과 이름이 정확히 ‘이현’인 사람의 책 수)는 두 수가 왜 다른지 꼭 설명해 보세요. 권위 제어가 왜 필요한지 보여 줍니다.</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="stage" id="c" style="scroll-margin-top:90px"><span class="tag">C, 약 50분</span><h3 class="sub" style="margin:0">우리 반 아카이브: 사진, 소리, 영상을 받아 보존한다</h3></div>
+      <p class="prose">디지털 아카이브는 파일을 ‘저장’만 하지 않습니다. 받은 파일이 보낸 것과 같은지 확인하고, 무엇인지 알아보고, 사본을 두고, 보기 쉬운 이용본을 만들고, 그 모든 일을 기록합니다. 실습실의 <b>C 우리 반 아카이브</b>가 이 일을 서버에서 합니다. 기계가 할 수 있는 일은 서버가, 사람만 알 수 있는 일(제목, 설명, 권리)은 여러분이 합니다.</p>
+      <ol class="steps">
+        <li><b>보기 파일 받기</b>: 아카이브 화면 오른쪽 ‘보기 파일 묶음’에서 파일을 내 컴퓨터로 받습니다. 아래 <a href="materials/metadata-2026-2/server-client/lab.html#samples">보기 파일</a> 표에서 무엇을 볼지 미리 읽습니다.</li>
+        <li><b>올리기</b>: 파일을 끌어다 놓습니다. 올리기 전에 <b>내 컴퓨터가</b> 파일의 SHA-256 체크섬(파일 지문)을 잽니다. 서버도 받은 파일을 다시 잽니다. 두 값이 같으면 오는 길에 한 비트도 바뀌지 않았다는 뜻입니다(전송 고정성).</li>
+        <li><b>보존 기록 읽기</b>: 자료 화면 아래 ‘보존 기록’에 받음, 체크섬 계산, 전송 고정성 확인, 형식 식별, 사본 만들기, 기술 메타데이터 추출, 이용본 만들기가 차례로 남습니다. PREMIS의 사건(event)과 같은 생각입니다.</li>
+        <li><b>기술 메타데이터 보기</b>: 서버가 <code>exiftool</code>과 <code>ffprobe</code>로 파일 속을 읽어 너비, 높이, 길이, 코덱, 카메라, 촬영 때, 위치를 뽑습니다. 여러분이 적지 않았는데도 파일 안에 이미 들어 있던 정보입니다.</li>
+        <li><b>더블린 코어 달기</b>: 제목, 만든이, 날짜, 주제어, 설명, 권리를 적습니다. 관계 칸에서는 이 자료와 이어지는 권장도서를 고릅니다. 유형, 형식, 식별자는 서버가 채웁니다. 목록 화면의 ‘메타데이터 6/6’이 다 단 표시입니다.</li>
+        <li><b>고정성 검사와 되살리기</b>: [고정성 검사]로 원본과 사본을 다시 잽니다. [비트 하나 바꾸기]를 누르면 원본의 비트 하나가 바뀝니다(손상 연습). 다시 검사하면 원본은 ‘불일치’, 사본은 ‘일치’가 나옵니다. [사본으로 되살리기]로 고친 뒤 다시 검사합니다.</li>
+        <li><b>내보내기</b>: 더블린 코어 XML(oai_dc), JSON, 그리고 <b>BagIt</b> 꾸러미(zip)를 받아 엽니다. BagIt 안의 <code>manifest-sha256.txt</code>에 원본의 체크섬이 적혀 있습니다. 다른 기관으로 자료를 넘길 때 받는 쪽이 이 값으로 다시 확인합니다.</li>
+        <li><b>내가 찍은 것 넣기</b>: 도서관 서가 사진, 내 목소리로 녹음한 책 소개(30초), 열람실 20초 영상을 하나씩 넣고 메타데이터를 답니다. 다른 사람의 얼굴이나 목소리가 들어가면 먼저 동의를 받습니다.</li>
+      </ol>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>실습실에서</th><th>OAIS에서 부르는 이름</th><th>뜻</th></tr></thead>
+          <tbody>
+            <tr><th>내가 올린 파일과 내 컴퓨터의 체크섬</th><td>제출 정보 꾸러미(SIP)</td><td>생산자가 아카이브에 넘기는 것</td></tr>
+            <tr><th>서버의 원본, 사본, 체크섬, 기술 메타데이터, 보존 기록</th><td>보존 정보 꾸러미(AIP)</td><td>아카이브가 오래 지키는 것</td></tr>
+            <tr><th>이용본(작은 JPEG, MP3, MP4), 내보낸 XML과 BagIt</th><td>배포 정보 꾸러미(DIP)</td><td>이용자에게 건네는 것</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="check"><b>확인할 것</b>원본은 올린 사람과 교수님만 내려받습니다. 다른 사람은 이용본만 봅니다. 이용본에는 촬영 위치와 카메라 정보를 넣지 않습니다. 아카이브는 원본을 그대로 지키되, 이용자에게 건넬 때는 개인정보를 걸러 냅니다. 영상 이용본은 폰에서도 바로 틀 수 있게 H.264와 AAC로 바꾸고 세로 480px 이하로 줄입니다(형식 이전, migration).</div>
+
+      <h3 class="sub" id="samples" style="scroll-margin-top:90px">보기 파일: 무엇을 볼까</h3>
+      <p class="prose">수업용으로 만든 파일입니다. 사진은 그림으로 그렸고, 녹음은 컴퓨터 음성(TTS)으로 만들었으며, 위치 정보는 연습용 값입니다. 일부러 문제가 있는 파일을 섞었습니다.</p>
+      <div class="wrapt">
+        <table class="cmp">
+          <thead><tr><th>파일</th><th>올려 보면</th></tr></thead>
+          <tbody>
+            <tr><th><code>library-shelf.jpg</code></th><td>카메라 제조사, 모델, 촬영 때, <b>위도와 경도</b>가 뽑힙니다. 보존 기록에 ‘개인정보 확인’ 경고가 남고, 이용본에서는 위치가 지워집니다.</td></tr>
+            <tr><th><code>reading-room.png</code></th><td>무손실 PNG. 카메라 정보가 없습니다. 같은 그림을 JPEG 이용본으로 바꾸면 크기가 어떻게 달라지는지 봅니다.</td></tr>
+            <tr><th><code>cover-scan.jpg</code></th><td>이름은 <code>.jpg</code>인데 속은 PNG입니다. 서버가 확장자가 아니라 <b>파일 속</b>을 보고 형식을 알아내 ‘확장자와 다름’ 경고를 냅니다.</td></tr>
+            <tr><th><code>broken-photo.jpg</code></th><td>뒤쪽이 잘려 나간 사진입니다. 체크섬은 맞는데(보낸 그대로 받았으니까) 그림 아래쪽이 비거나 이용본이 만들어지지 않습니다. 고정성과 ‘쓸 수 있음’은 다른 문제입니다.</td></tr>
+            <tr><th><code>우리 도서관 사진 (최종) 진짜최종.JPG</code></th><td>한글, 띄어쓰기, 괄호가 든 이름입니다. 서버는 원래 이름을 메타데이터로 남기고, 실제로는 <code>original.jpg</code>처럼 안전한 이름으로 저장합니다.</td></tr>
+            <tr><th><code>book-talk.wav</code></th><td>무압축 소리(44.1kHz, 16비트, 모노). 표본 추출률, 비트 깊이, 길이가 뽑히고, MP3 이용본과 파형 그림이 생깁니다. 원본과 이용본 크기를 견주어 봅니다.</td></tr>
+            <tr><th><code>library-tour.mp4</code></th><td>위 사진 두 장과 녹음을 이어 붙인 20초 영상. 컨테이너, 영상 코덱, 소리 코덱, 초당 프레임, 만든 때와 제목(파일 안에 든 메타데이터)이 뽑힙니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="part" id="done" style="margin-top:0">다 했는지 보기</h2>
+      <p class="prose">실습실 첫 화면에 A, B, C 진도가 막대로 나옵니다. 교수님은 교수 화면에서 같은 값을 봅니다. 과제 기준은 수업 시간에 따로 알려 줍니다.</p>
+      <ul class="prose">
+        <li><b>A</b>: 할 일 일곱 개 가운데 몇 개를 마쳤는지. 내 홈페이지 주소 <code>/u/아이디/</code>는 학기 동안 열려 있습니다.</li>
+        <li><b>B</b>: B1~B4에서 푼 문제 수(모두 29문제).</li>
+        <li><b>C</b>: 넣은 자료 수와, 그 가운데 메타데이터 여섯 칸(제목, 만든이, 날짜, 주제어, 설명, 권리)을 다 단 자료 수. 사진, 소리, 영상을 하나씩은 넣어 보세요. 한 사람이 20건까지, 파일 하나는 100MB까지입니다.</li>
+      </ul>
+      <div class="notice" style="max-width:64ch">
+        <strong>학기가 끝나면</strong>
+        실습 서버와 학생 자료는 학기가 끝나면 지웁니다. 남기고 싶은 홈페이지 파일은 내 컴퓨터로 받아 두고, 아카이브 자료는 BagIt으로 내보내 두세요.
+      </div>
+
+      <h2 class="part" id="quiz">확인 문제</h2>
+      <details class="qa"><summary>1. A에서 index.html을 저장했는데 열어 둔 탭은 그대로였습니다. 왜일까요?</summary><p>서버는 파일이 바뀌었다고 먼저 알리지 않습니다. 브라우저가 다시 요청(새로고침)해야 새 파일을 받습니다. 시연 1단계와 같은 이유입니다.</p></details>
+      <details class="qa"><summary>2. B1에서는 안 되던 DELETE가 B4에서는 됩니다. 같은 서버, 같은 SQL인데 무엇이 다른가요?</summary><p>B1은 모두가 함께 읽는 목록 DB라 서버가 읽기만 허락하고, B4는 나만 쓰는 복사본이라 모두 허락합니다. 서버는 SQL을 실행하기 전에 누가, 어느 DB에, 무엇을 하려는지 보고 허락할지 정합니다. 실제 도서관 시스템에서도 이용자는 목록을 찾기만 하고, 목록 사서만 고칠 수 있는 것과 같습니다.</p></details>
+      <details class="qa"><summary>3. cover-scan.jpg는 확장자가 jpg인데 서버는 PNG라고 했습니다. 어느 쪽을 믿어야 하나요?</summary><p>파일 속입니다. 확장자는 사람이 붙인 이름표라 언제든 잘못 붙을 수 있습니다. 서버는 파일 앞부분의 서명(PNG는 <code>89 50 4E 47</code>)을 읽어 형식을 알아냅니다. 디지털 보존에서 형식 식별을 따로 하는 까닭입니다. 실제 아카이브에서는 DROID나 Siegfried 같은 도구가 PRONOM 형식 목록과 견주어 이 일을 합니다.</p></details>
+      <details class="qa"><summary>4. broken-photo.jpg는 체크섬이 ‘일치’인데 그림이 깨졌습니다. 체크섬이 틀린 것인가요?</summary><p>아닙니다. 체크섬은 ‘보낸 것과 받은 것이 같은가’만 알려 줍니다. 처음부터 깨진 파일을 보냈다면 깨진 그대로 같게 받습니다. 그래서 아카이브는 고정성 확인과 별도로 형식 검증과 이용본 만들기로 파일을 실제로 쓸 수 있는지 봅니다.</p></details>
+      <details class="qa"><summary>5. 손상 연습에서 원본이 망가졌는데 어떻게 되살릴 수 있었나요? 사본까지 망가졌다면요?</summary><p>받을 때 만든 사본의 체크섬이 처음 값과 같았기 때문에, 그 사본으로 원본을 덮었습니다. 사본까지 망가지면 되살릴 수 없습니다. 그래서 실제 아카이브는 사본을 여러 곳(다른 디스크, 다른 건물, 다른 지역)에 두고 정기적으로 고정성 검사를 합니다(LOCKSS, ‘많은 사본이 자료를 지킨다’).</p></details>
+      <details class="qa"><summary>6. 사진의 촬영 때와 위치는 내가 적지 않았는데 어디서 왔나요? 더블린 코어의 날짜와는 무엇이 다른가요?</summary><p>카메라나 폰이 찍는 순간 파일 안(EXIF)에 적어 둔 기술 메타데이터입니다. 기계가 만들고 기계가 읽습니다. 더블린 코어의 날짜는 사람이 이 자료를 설명하려고 정해 적는 기술(記述) 메타데이터라, 예를 들어 옛 사진을 스캔한 자료라면 스캔한 날이 아니라 사진을 찍은 해를 적을 수 있습니다.</p></details>
+
+      <h2 class="part" style="font-size:1rem; font-family:inherit">출처와 만든 방법</h2>
+      <p class="src">책 목록은 <a href="https://www.childbook.org/book/recommend_list.html" target="_blank" rel="noopener">(사)어린이도서연구회 ‘추천 목록’</a>의 서지 사항(소개글 제외)입니다. 지은이 칸을 사람과 역할로 나눈 표(person, credit, role)는 이 실습을 위해 프로그램으로 나눈 것이며, 나누기 어려운 18건은 역할을 ‘(확인 필요)’로 두었습니다. 실습실은 가비아 클라우드의 우분투 서버에서 PHP 내장 웹 서버, SQLite, ffmpeg, ExifTool로 돌아갑니다. 실습실 프로그램은 <a href="materials/metadata-2026-2/server-client/class-lab.zip" download>class-lab.zip</a>의 <code>lib</code>, <code>www/lab</code>, <code>setup</code> 폴더에 있습니다. 보기 파일은 수업용으로 만든 것입니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>
