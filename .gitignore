@@ -5,3 +5,6 @@ desktop.ini
 
 # 원본 자료 — 사이트에 올리지 않음
 제공 자료/
+
+# 서버 실습의 학생 실습실 자료(서버에서만 생김)
+materials/metadata-2026-2/server-client/class-lab/var/
