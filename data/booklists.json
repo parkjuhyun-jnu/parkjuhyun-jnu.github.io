@@ -1,5 +1,5 @@
 {
-  "_설명": "자료실 > 권장도서목록(booklists.html) 목록. 새 목록은 맨 위에 넣습니다. file 은 내려받을 엑셀, data 는 페이지 검색 표에 쓰는 JSON(엑셀에서 만듦, NOTES.md 참고).",
+  "_설명": "자료실 > 권장도서목록(booklists.html) 목록. 새 목록은 맨 위에 넣습니다. file 은 내려받을 엑셀, data 는 페이지 검색 표에 쓰는 JSON(python tools/xlsx-to-booklist.py <엑셀> data/booklists/<id>.json 으로 만듦).",
   "lists": [
     {
       "id": "age9",
