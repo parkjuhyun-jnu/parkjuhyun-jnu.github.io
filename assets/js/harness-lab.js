@@ -386,8 +386,18 @@
   function renderPrompts() {
     var r = S.rules, chars = liveChars(), first = chars[0] ? charName(chars[0]) : '주인공', second = chars[1] ? charName(chars[1]) : first;
     var parallel = S.kind !== 'game' ? '\n- 이 게임은 ' + kindWord() + ' 본편과 다른 "평행 세계"로 둔다. 게임에서 생긴 일은 정본과 사건 기록에 넣지 않는다.' : '';
+    var knows = chars.length ? chars.map(function (c) { return charName(c) + ' (안다/모른다)'; }).join(', ') : '인물마다 (안다/모른다)';
+    $('#p-draft').textContent = [
+      '1단계 초안이야. 이 초안은 내가 승인한다.',
+      '- 1장면(장소, 시각): (누가 무엇을 알리고, ' + first + josa(first, '이', '가') + ' 무엇을 하려 하는가). 선택: (가) / (나)',
+      '- 2장면(장소): (무슨 일이 일어나는가). 선택: (가) / (나)',
+      '- 3장면(장소): (누구를 만나고 무엇을 듣는가). 선택: (가) / (나)',
+      '- 4장면(장소): (결말 몇 개와 각 결말의 조건). 미상인 것은 끝까지 밝히지 않는다.',
+      '- (시간이나 점수처럼 게임이 세는 것이 있으면 규칙을 적는다)',
+      '- 새 사건이 생기면 승인한다: "(일어난 일)", (장면), known_by: ' + knows,
+      '이 초안으로 2단계와 3단계(장면 설계)를 진행해서 장면 설계를 표로 보여 줘. 내가 승인하면 그때 코드를 만들어.'].join('\n');
     $('#p-build').textContent = [
-      '하네스를 지켜서 「' + titleOr() + '」의 정본과 사건 기록으로 브라우저 미니 게임(텍스트 어드벤처)의 첫 시험판을 만들어 줘.',
+      '내가 승인한 초안과 장면 설계대로, 하네스를 지켜서 「' + titleOr() + '」의 정본과 사건 기록으로 브라우저 미니 게임(텍스트 어드벤처)의 첫 시험판을 만들어 줘.',
       '- 브라우저에서 바로 열리는 HTML 파일 하나로 만든다. 외부 라이브러리, 외부 이미지, 인터넷 연결 없이 돌아가게 한다.',
       '- 휴대폰 ' + r.width + 'px 폭에서 확대 없이 할 수 있게 하고, 글자는 ' + r.minFont + 'px 이상으로 한다.',
       '- 분량: ' + (r.unit.trim() || '장면 3~4개, 장면마다 선택지 2~3개') + '.',
@@ -421,12 +431,16 @@
     frame.srcdoc = code.value;
   }
   $('#play-run').addEventListener('click', run);
-  $('#play-sample').addEventListener('click', function () {
-    if (code.value.trim() && !confirm('붙여 넣은 코드 대신 예시 게임을 불러올까요?')) return;
-    fetch('assets/files/harness-sample-game.html').then(function (r) { return r.text(); }).then(function (t) {
+  function loadGame(url, what) {
+    if (code.value.trim() && !confirm('붙여 넣은 코드 대신 ' + what + ' 불러올까요?')) return;
+    fetch(url).then(function (r) { if (!r.ok) throw r; return r.text(); }).then(function (t) {
       code.value = t; try { localStorage.setItem(CODE_KEY, t); } catch (e) {} run();
-    }).catch(function () { $('#play-msg').textContent = '예시 게임을 불러오지 못했습니다.'; });
-  });
+      $('#play').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }).catch(function () { $('#play-msg').textContent = what + ' 불러오지 못했습니다.'; });
+  }
+  $('#play-sample').addEventListener('click', function () { loadGame('assets/files/harness-sample-game.html', '예시 게임을'); });
+  var trialBtn = $('#trial-load');
+  if (trialBtn) trialBtn.addEventListener('click', function () { loadGame('assets/files/harness-trial-gpt-v2.html', 'AI 시험판 v2를'); });
   $('#play-clear').addEventListener('click', function () { code.value = ''; frame.srcdoc = ''; try { localStorage.removeItem(CODE_KEY); } catch (e) {} });
   $$('[data-w]').forEach(function (b) {
     b.addEventListener('click', function () {
