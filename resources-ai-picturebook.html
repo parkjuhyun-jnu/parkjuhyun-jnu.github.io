@@ -66,6 +66,9 @@
 .pb-gallery figcaption b { color: var(--ink); }
 .pb-gallery .wide { grid-column: span 2; }
 @media (max-width: 460px) { .pb-gallery .wide { grid-column: auto; } }
+.pb-video { margin: 0; width: 100%; max-width: 860px; display: grid; grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+.pb-video video { display: block; width: 100%; height: auto; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #1b140e; }
+.pb-video figcaption { font-size: .86rem; color: var(--ink-soft); line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -257,6 +260,15 @@
         <a class="btn btn--ghost" href="assets/files/picturebook-public-library-20261126.pdf" target="_blank" rel="noopener">완성한 그림책 보기 (PDF, 18쪽, 3MB)</a>
         <span style="font-size:.86rem; color:var(--ink-soft)">표지, 장면 그림과 글 여덟 쌍, 끝쪽으로 엮었습니다. 글은 ChatGPT가 쓴 이야기 그대로입니다.</span>
       </p>
+
+      <h3 style="font-family:var(--font-serif); font-size:1.1rem; margin:1.6rem 0 .7rem">영상으로 보기</h3>
+      <figure class="pb-video">
+        <video controls preload="metadata" playsinline width="1280" height="720" poster="assets/img/resources/picturebook/video-poster.jpg">
+          <source src="assets/files/picturebook-public-library-blender.mp4" type="video/mp4">
+          이 브라우저에서는 영상을 재생할 수 없습니다. <a href="assets/files/picturebook-public-library-blender.mp4">영상 파일(mp4)</a>을 내려받아 보세요.
+        </video>
+        <figcaption>완성한 그림책을 블렌더(Blender)로 책상 위에 펼친 책처럼 꾸며 영상으로 엮었습니다(약 7분 40초). 카메라가 장면 그림을 천천히 따라가고, 장이 끝나면 쪽을 넘깁니다. 글은 ChatGPT가 쓴 이야기 그대로이고, 내레이션은 음성 합성(edge-tts)으로 만들고 같은 글을 자막으로 얹었습니다. 2026. 11. 26.</figcaption>
+      </figure>
 
       <h3 style="font-family:var(--font-serif); font-size:1.1rem; margin:1.6rem 0 .7rem">만든 그림</h3>
       <div class="pb-gallery">
