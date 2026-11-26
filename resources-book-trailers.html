@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인기 북트레일러 분석 | 박주현</title>
+<meta name="description" content="유튜브에서 많이 본 북트레일러 10편(국외 5편, 국내 5편)을 영상별 카드와 기법 비교표로 정리하고, 북트레일러를 만들 때 참고할 점을 뽑은 자료입니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 8h6.2c.9 0 1.8.7 1.8 1.7V24c0-.9-.8-1.6-1.8-1.6H9z' fill='%23fbfaf6'/%3E%3Cpath d='M23 8h-6.2c-.9 0-1.8.7-1.8 1.7V24c0-.9.8-1.6 1.8-1.6H23z' fill='%23a8742f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+/* 이 페이지만 쓰는 부품. 색은 모두 사이트 공통 변수(assets/css/style.css :root)에서 가져옵니다.
+   틀은 resources-lis-videos.html(문헌정보학과 소개 영상 분석)과 같습니다. */
+.bt-method { font-size: .88rem; color: var(--ink-soft); border-left: 3px solid var(--line); padding-left: .9rem; max-width: 70ch; margin-top: 1rem; }
+.bt-back { font-size: .9rem; }
+.bt-filters { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: 1.6rem; }
+.bt-filters > span { font-size: .87rem; color: var(--ink-faint); margin-right: .2rem; }
+.bt-chip { font: inherit; font-size: .9rem; padding: .38rem .95rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.bt-chip[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: var(--paper); }
+.bt-chip:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+.bt-legend { display: flex; flex-wrap: wrap; gap: 1rem; font-size: .85rem; color: var(--ink-soft); margin-top: .6rem; }
+.bt-legend b { color: var(--ink); }
+
+.bt-rank { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.bt-rank li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: .6rem; align-items: center; font-size: .92rem; }
+.bt-rank .no { font-variant-numeric: tabular-nums; color: var(--ink-faint); text-align: right; }
+.bt-rank .bar { position: relative; height: 1.9rem; border-radius: var(--radius-sm); background: var(--line-soft); overflow: hidden; }
+.bt-rank .bar i { position: absolute; inset: 0 auto 0 0; background: var(--navy-wash); border-right: 3px solid var(--navy); }
+.bt-rank .bar i.kr { border-right-color: var(--gold); background: var(--gold-wash); }
+.bt-rank .bar a { position: relative; display: block; padding: .3rem .65rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.bt-rank .views { font-variant-numeric: tabular-nums; font-size: .85rem; color: var(--ink-soft); min-width: 5.2rem; text-align: right; }
+
+.bt-table-box { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.bt-table { border-collapse: collapse; width: 100%; min-width: 940px; font-size: .84rem; }
+.bt-table th, .bt-table td { border-bottom: 1px solid var(--line-soft); padding: .5rem .35rem; text-align: center; vertical-align: middle; }
+.bt-table thead th { font-weight: 600; color: var(--ink-soft); font-size: .76rem; line-height: 1.35; vertical-align: bottom; width: 66px; }
+.bt-table .name { text-align: left; position: sticky; left: 0; background: var(--surface); padding-left: .9rem; min-width: 160px; z-index: 1; }
+.bt-table td.name a { color: var(--ink); font-weight: 600; }
+.bt-table td.name a:hover { color: var(--navy); }
+.bt-table td.name small { display: block; color: var(--ink-faint); font-weight: 400; font-size: .76rem; }
+.bt-table tbody tr:hover td { background: var(--navy-wash); }
+.bt-table tfoot td { font-size: .78rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; border-bottom: 0; }
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: middle; }
+.dot.full { background: var(--navy); }
+.dot.half { border: 2px solid var(--navy); }
+.dot.none { width: 10px; height: 2px; border-radius: 0; background: var(--line); }
+
+.bt-lessons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; counter-reset: lesson; }
+@media (max-width: 760px) { .bt-lessons { grid-template-columns: minmax(0, 1fr); } }
+.bt-lessons .card { display: grid; gap: .45rem; align-content: start; }
+.bt-lessons h3 { font-family: var(--font-serif); font-size: 1.08rem; margin: 0; }
+.bt-lessons h3::before { counter-increment: lesson; content: counter(lesson) ". "; color: var(--gold); }
+.bt-lessons p { margin: 0; font-size: .93rem; }
+.bt-lessons .ex { font-size: .84rem; color: var(--ink-soft); }
+
+.bt-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem; }
+@media (max-width: 760px) { .bt-cards { grid-template-columns: minmax(0, 1fr); } }
+.vcard { display: grid; gap: .85rem; align-content: start; scroll-margin-top: 90px; }
+.vcard:target { border-color: var(--navy); box-shadow: 0 0 0 3px var(--navy-wash); }
+.vcard h3 { font-family: var(--font-serif); font-size: 1.2rem; margin: 0; }
+.vcard p { margin: 0; }
+.vcard .callno { display: flex; justify-content: space-between; gap: .5rem; flex-wrap: wrap; font-size: .8rem; color: var(--ink-faint); border-bottom: 1px dashed var(--line); padding-bottom: .5rem; font-variant-numeric: tabular-nums; }
+.vcard .callno .type { color: var(--gold); font-weight: 700; letter-spacing: .04em; }
+.vcard .book { font-size: .88rem; color: var(--ink-soft); }
+.vcard .chan { font-size: .86rem; color: var(--ink-soft); }
+.vcard .core { font-weight: 500; background: var(--navy-wash); border-radius: var(--radius-sm); padding: .7rem .85rem; }
+.vcard .fmt { font-size: .86rem; color: var(--ink-soft); }
+.vcard .fmt b { color: var(--ink); }
+.vcard ul.points { margin: 0; padding-left: 1.1rem; display: grid; gap: .25rem; font-size: .93rem; }
+.vcard .tags { display: grid; gap: .4rem; }
+.vcard .tagrow { display: flex; flex-wrap: wrap; gap: .35rem; align-items: baseline; }
+.vcard .tagrow > em { font-style: normal; font-size: .76rem; color: var(--ink-faint); width: 44px; flex: none; }
+.vcard .tag { white-space: normal; }
+.vcard .note { font-size: .86rem; color: var(--warn); background: var(--gold-wash); border-radius: var(--radius-sm); padding: .55rem .8rem; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">박주현<small>전남대학교 문헌정보학과</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="메뉴 열기">☰</button>
+    <nav class="nav" id="nav">
+      <a href="about.html">소개</a>
+      <a href="research.html">연구</a>
+      <a href="courses.html">수업</a>
+      <a href="media.html">미디어</a>
+      <a href="gallery.html">결과물</a>
+      <a href="surveys.html">설문</a>
+      <a href="resources.html" aria-current="page">자료실</a>
+      <a href="bk21.html">BK21</a>
+      <a href="en.html" class="nav-en" lang="en" aria-label="English">EN</a>
+      <button class="theme-toggle" type="button"></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="wrap">
+      <p class="bt-back"><a href="resources.html">← 자료실</a></p>
+      <p class="eyebrow">자료실 / 북트레일러</p>
+      <h1 style="font-family:var(--font-serif)">많이 본 북트레일러는 어떻게 만들었나</h1>
+      <p style="max-width:62ch; font-size:1.05rem; color:var(--ink-soft)">
+        유튜브에서 조회수가 높은 북트레일러를 국외 5편, 국내 5편 골라 무엇을 어떻게 보여 주는지 정리했습니다.
+        조회수 순위, 만들 때 참고할 점, 기법 비교표, 영상별 카드 순서로 보면 됩니다.
+      </p>
+      <p class="bt-method">2026. 11. 26. 유튜브에서 'book trailer', 'official book trailer', 'picture book trailer', '북트레일러', '북 트레일러' 등으로 조회수순 검색을 했습니다.
+        책을 원작으로 한 영화 예고편은 빼고, 같은 시리즈나 같은 작가의 영상은 가장 많이 본 한 편만 남긴 뒤 국외와 국내에서 각각 상위 5편을 골랐습니다.
+        내용은 영상을 9~12개 장면으로 나눠 보고 자동 생성 자막과 설명란을 읽어 정리한 것이라 원문 그대로의 인용이 아닙니다.
+        조회수는 같은 날 기준이고, 게시일은 한국 시간입니다. 바로 다음 순위는 국외 「Red Queen」(Epic Reads, 조회 111만), 국내 「태양의 아이들」(SMTOWN, 조회 22만)입니다.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>조회수 순위</h2>
+        <p>막대 길이는 가장 많이 본 영상(652만)에 견준 비율입니다. 파란 막대는 국외, 금색 막대는 국내 영상입니다.</p>
+      </div>
+      <ol class="bt-rank" id="rank"></ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>북트레일러를 만들 때 참고할 점</h2>
+        <p>10편에서 되풀이해 보이는 방법과 눈에 띄는 예외를 정리했습니다. 괄호 안은 그 예가 되는 영상입니다.</p>
+      </div>
+      <div class="bt-lessons">
+        <div class="card">
+          <h3>1분 안팎으로 짧게</h3>
+          <p>10편 가운데 7편이 2분이 안 되고, 5편은 1분도 안 됩니다. 가장 많이 본 두 편도 45초와 54초입니다.</p>
+          <p class="ex">예: 『작별인사』 0:46, Pete the Cat 0:54, Dog Man 0:48, The Victory Garden 0:17</p>
+        </div>
+        <div class="card">
+          <h3>책이 가진 재료로 만든다</h3>
+          <p>그림책과 만화는 책 그림을 그대로 움직이고, 소설은 실사 연기나 사진 질감으로 표지의 분위기를 옮깁니다. 새 그림을 따로 그리기보다 책의 얼굴을 반복해 보여 줍니다.</p>
+          <p class="ex">예: Pete the Cat, Dog Man(작가가 직접 애니메이션), 『걱정이 너무 많아』 / The One, 『작별인사』</p>
+        </div>
+        <div class="card">
+          <h3>처음에 질문을 던지고 답은 숨긴다</h3>
+          <p>소설 북트레일러는 줄거리를 설명하지 않고 갈등 하나를 질문으로 남깁니다. "아빠, 전 누구예요?", "애스펀인가 맥슨인가?" 같은 한 줄이 영상 전체를 끌고 갑니다.</p>
+          <p class="ex">예: 『작별인사』, The One, From Bad to Cursed, 『악당 아빠를 입양했다』</p>
+        </div>
+        <div class="card">
+          <h3>짧은 카피 한 문장을 나눠 띄운다</h3>
+          <p>말 대신 자막 카피를 쓰는 영상이 많습니다. 한 문장을 장면마다 나눠 띄우면 소리 없이 보는 사람에게도 전달됩니다.</p>
+          <p class="ex">예: The Victory Garden("A woman during wartime / must see the world with new eyes / and an open heart"), 『악당 아빠를 입양했다』</p>
+        </div>
+        <div class="card">
+          <h3>끝은 표지와 '어디서 볼 수 있는지'</h3>
+          <p>7편이 표지를 크게 보여 주며 끝나고, 대부분 출간일, 판매처, 플랫폼 이름을 함께 붙입니다. 마지막 몇 초가 곧 구매 안내입니다.</p>
+          <p class="ex">예: Pete the Cat(판매일, 노래 무료 내려받기), 『작별인사』(밀리의 서재 단독 공개), 『해나의 기적』(출간 예정일)</p>
+        </div>
+        <div class="card">
+          <h3>조회수는 영상 바깥의 힘이 크게 좌우한다</h3>
+          <p>배우(박정민, 젠데이아), 시리즈 팬덤(The Selection, Dog Man), 인기 캐릭터(푸바오), 방송 화제성(휴먼다큐 사랑)이 조회수를 끌었습니다. 17초짜리 광고형 영상처럼 광고 노출이 섞였을 수 있는 경우도 있어, 수업에서는 조회수보다 구성을 배우는 편이 낫습니다.</p>
+          <p class="ex">국외 상위 5편은 모두 2011~2019년 영상이고 출판사나 작가가 올렸습니다. 국내는 전자책 구독 플랫폼, 놀이공원, 웹소설 출판사 같은 곳이 올린 영상이 상위에 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="bt-filters" role="group" aria-label="영상 거르기">
+        <span>보기</span>
+        <button class="bt-chip" data-f="all" aria-pressed="true">전체 10편</button>
+        <button class="bt-chip" data-f="intl" aria-pressed="false">국외 5편</button>
+        <button class="bt-chip" data-f="kr" aria-pressed="false">국내 5편</button>
+      </div>
+
+      <div class="section-head">
+        <h2>기법 비교표</h2>
+        <p>영상마다 12가지 기법을 얼마나 썼는지 표시했습니다. 맨 아래 줄은 그 기법을 쓴 영상 수(중심으로 쓴 수 / 조금이라도 쓴 수)입니다.</p>
+        <div class="bt-legend">
+          <span><span class="dot full"></span> <b>중심</b> 영상의 뼈대로 씀</span>
+          <span><span class="dot half"></span> <b>일부</b> 짧게 쓰거나 곁들임</span>
+          <span><span class="dot none"></span> <b>없음</b></span>
+        </div>
+      </div>
+      <div class="bt-table-box">
+        <table class="bt-table">
+          <thead><tr id="thead-row"><th class="name" scope="col">책</th></tr></thead>
+          <tbody id="tbody"></tbody>
+          <tfoot><tr id="tfoot-row"><td class="name">쓴 영상 수</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>영상별 분석</h2>
+        <p>국외 5편, 국내 5편을 각각 조회수가 많은 순서로 놓았습니다. 영상 제목을 누르면 유튜브가 새 창으로 열립니다.</p>
+      </div>
+      <div class="bt-cards" id="cards"></div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+(function () {
+const THEMES = ["실사 촬영", "책 그림 활용", "유명인, 인기 캐릭터", "목소리 (내레이션, 대사)", "음악, 노래 중심", "자막 카피", "결말 숨기고 질문 남김", "줄거리 끝까지 공개", "작가 등장, 작가 이름값", "표지 노출", "출간, 구매 안내", "시리즈, 원작 연계"];
+
+const V = [
+ { id:"pete", book:"Pete the Cat: Rocking in My School Shoes", type:"intl", n:5912254,
+   meta:"에릭 리트윈 글, 제임스 딘 그림 / HarperCollins / 그림책",
+   ch:"HarperKids", yt:"lUVgSWsyIE8",
+   title:"PETE THE CAT: Rocking in My School Shoes | Book Trailer & Music Video",
+   len:"0:54", views:"5,912,254", date:"2011. 7. 19.", m:"020221010221",
+   fmt:"책 그림을 움직인 애니메이션에 내레이션과 노래를 얹은 뮤직비디오형",
+   core:"학교 곳곳을 다니며 \"I'm rockin' in my school shoes\"를 부르는 피트를 따라가며, 책의 반복 노래를 그대로 들려줍니다.",
+   pts:["빨간 운동화를 신은 발에서 시작해 도시락, 스쿨버스, 기타를 든 고양이 밴드로 이어지며 책 속 그림을 그대로 움직입니다.",
+        "내레이터가 줄거리를 짧게 잇고 후렴은 노래로 부릅니다. 아이들이 따라 부르기 쉬운 반복 구조가 책의 구조와 같습니다.",
+        "엄마가 \"오늘 학교에서 뭐 했니?\" 하고 묻자 피트가 후렴으로 답하며 끝을 맺습니다.",
+        "마지막 화면은 표지, 판매일(2011년 7월 26일), 노래를 홈페이지에서 무료로 받을 수 있다는 안내입니다."],
+   genre:["그림책","시리즈 2권","어린이"],
+   tech:["애니메이션","노래","내레이션","반복 후렴"],
+   note:"같은 시리즈의 북트레일러 여러 편이 조회 187만~591만으로 검색 상위권을 차지합니다. 아이들이 노래 영상으로 되풀이해 본 것이 조회수를 키운 것으로 보입니다." },
+
+ { id:"cursed", book:"Bad Girls Don't Die: From Bad to Cursed", type:"intl", n:2874819,
+   meta:"케이티 앨린더 / Hyperion / 청소년 공포 소설(시리즈 2권)",
+   ch:"Katie Alender(작가 채널)", yt:"6ID1jz0A8LU",
+   title:"Zendaya - From Bad to Cursed - Book Trailer in High Quality HD",
+   len:"1:37", views:"2,874,819", date:"2011. 6. 13.", m:"202210200211",
+   fmt:"배우 젠데이아가 연기하는 한 장면 실사 영상. 거울 앞에서 화장하는 소녀 위로 '선샤인 클럽' 규칙을 읽는 목소리가 흐릅니다.",
+   core:"늘 완벽해 보여야 한다는 클럽 규칙을 들려주다가 거울 속 얼굴에 상처가 드러나며 '저주'로 넘어갑니다.",
+   pts:["소녀가 거울 앞에서 화장을 하는 동안 목소리는 \"언제나 완벽해 보여야 한다\", \"울거나 땀 흘리는 모습을 보이지 마라\" 같은 규칙을 읊습니다.",
+        "\"진정한 아름다움은 네 안에 있다\"는 말이 끝나면 음악이 바뀌고 얼굴에 상처가 나타납니다. 겉모습과 속의 대비를 한 장면으로 보여 줍니다.",
+        "줄거리는 설명하지 않고 분위기와 반전 하나로 궁금증을 남깁니다.",
+        "마지막은 표지와 \"Available wherever books are sold\"입니다. 설명란에 배우와 음악 출처를 밝혔습니다."],
+   genre:["청소년 소설","공포","시리즈 2권"],
+   tech:["실사 연기","유명 배우","보이스오버","반전 한 장면"],
+   note:"작가가 자기 채널에 올린 영상입니다. 2011년 당시 디즈니 채널 배우였던 젠데이아의 인지도가 조회수를 끈 사례로 볼 수 있습니다." },
+
+ { id:"theone", book:"The One (The Selection 시리즈 3권)", type:"intl", n:2388647,
+   meta:"키에라 카스 / HarperTeen / 청소년 로맨스 소설",
+   ch:"Epic Reads(하퍼콜린스 청소년 독자 채널)", yt:"qVDfV7gCCFE",
+   title:"THE ONE by Kiera Cass | Official Book Trailer",
+   len:"1:13", views:"2,388,647", date:"2014. 4. 18.", m:"200211201212",
+   fmt:"드레스를 입은 배우의 실사 영상에 책 속 대사를 목소리로 입힌 영화 예고편형",
+   core:"두 남자 사이에서 선택해야 하는 주인공의 마음을 대사로 들려주고 \"애스펀인가 맥슨인가\"라는 질문으로 끝냅니다.",
+   pts:["\"From Kiera Cass, #1 New York Times bestselling author of The Selection\"으로 작가와 앞선 책의 이름값을 먼저 내세웁니다.",
+        "서재와 창가에서 화려한 드레스를 입은 인물을 보여 주며 표지의 분위기를 실사로 옮깁니다.",
+        "두 남자 주인공의 고백 대사를 번갈아 들려주어 보는 사람이 '어느 편'인지 고르게 만듭니다.",
+        "결말은 숨기고 표지, '시리즈 3권', 출판사 정보로 닫습니다."],
+   genre:["청소년 소설","로맨스","시리즈 3권"],
+   tech:["실사 연기","대사 목소리","작가 이름값","선택 질문"],
+   note:"설명란도 '맥슨 편인지 애스펀 편인지'를 묻는 팬덤의 말투로 썼습니다. 같은 시리즈의 The Selection, The Heir, The Crown 북트레일러도 각각 조회 100만이 넘습니다." },
+
+ { id:"dogman", book:"Dog Man and Cat Kid (Dog Man 4권)", type:"intl", n:1360161,
+   meta:"대브 필키 / Scholastic / 어린이 그래픽 노블",
+   ch:"Dav Pilkey(작가 채널)", yt:"GISaX1jxwVI",
+   title:"Dog Man and Cat Kid Book Trailer",
+   len:"0:48", views:"1,360,161", date:"2018. 2. 19.", m:"020020102202",
+   fmt:"작가가 직접 그린 그림을 직접 애니메이션으로 만든 48초 영상. 말과 자막 없이 음악만 씁니다.",
+   core:"대사 없이 영웅 콤비가 도시를 달리는 장면만으로 만화책의 속도감과 유머를 보여 줍니다.",
+   pts:["설명란에 \"Animation and art by Dav Pilkey\"라고 밝혔습니다. 작가가 손수 만든 영상입니다.",
+        "도그맨과 캣키드가 망토를 휘날리며 등장하고, 자동차를 타고 밤거리를 달리는 추격 장면이 이어집니다.",
+        "말이나 자막이 없어 글을 막 읽기 시작한 어린이도 그림만으로 따라갈 수 있습니다.",
+        "마지막 표지에 '캡틴 언더팬츠를 만든 작가'라는 문구를 넣어 앞선 인기작의 독자를 끌어옵니다."],
+   genre:["그래픽 노블","어린이","시리즈 4권"],
+   tech:["작가 직접 애니메이션","음악만","캐릭터 중심"],
+   note:"줄거리 정보는 거의 없고 캐릭터와 그림체를 알리는 데 집중합니다." },
+
+ { id:"victory", book:"The Victory Garden", type:"intl", n:1185715,
+   meta:"리스 보언 / Lake Union(아마존 출판) / 역사 로맨스 소설",
+   ch:"Amazon Publishing", yt:"5ciXaYTkn8M",
+   title:"The Victory Garden by Rhys Bowen | Official Book Trailer",
+   len:"0:17", views:"1,185,715", date:"2019. 2. 13.", m:"100012101220",
+   fmt:"빛바랜 사진 같은 영상 위에 한 문장 카피를 세 번에 나눠 띄우는 17초 광고형",
+   core:"\"A woman during wartime / must see the world with new eyes / and an open heart\" 한 문장으로 소설의 정서를 압축합니다.",
+   pts:["복엽기, 책 읽는 여인, 꽃을 든 손 같은 장면을 오래된 사진 질감으로 이어 붙여 1차 세계대전 무렵의 분위기를 냅니다.",
+        "말은 없고 자막 카피 한 문장이 내용의 전부입니다.",
+        "17초 가운데 마지막 4초가 표지, Amazon.com 주소, 출판 브랜드 로고입니다."],
+   genre:["역사 소설","로맨스"],
+   tech:["자막 카피","사진 질감","초단편"],
+   note:"17초 길이로 보아 광고용으로 만든 영상으로 보이며, 조회수에 광고 노출이 섞였을 수 있습니다." },
+
+ { id:"farewell", book:"작별인사", type:"kr", n:6519669,
+   meta:"김영하 / 밀리의 서재 오리지널(전자책, 오디오북 먼저 공개) / 장편소설",
+   ch:"밀리의서재", yt:"QGQzjpQ7V50",
+   title:"배우 박정민 주연 | 김영하 7년 만의 장편소설 '작별 인사' 북트레일러(45's)",
+   len:"0:46", views:"6,519,669", date:"2020. 2. 14.", m:"202212202221",
+   fmt:"배우 박정민이 나오는 영화 예고편형 실사 영상(45초)",
+   core:"\"아빠, 전 누구예요?\"라는 질문 하나로 믿던 세계가 무너지는 이야기를 예고하고 밀리의 서재 단독 공개로 끝냅니다.",
+   pts:["어두운 화면 속 박정민의 얼굴, 수술등, 빛 속을 달리는 인물로 SF 분위기를 만듭니다.",
+        "자막 카피 \"그날, 믿고 있던 모든 것이 무너졌다\"와 대사로 갈등만 보여 주고 줄거리는 숨깁니다.",
+        "중간에 배우가 서재에서 헤드폰을 끼고 책을 읽는 장면을 넣어 전자책과 오디오북을 함께 알립니다.",
+        "\"김영하 작가, 7년 만의 장편소설\" 문구로 작가의 이름값을 내세웁니다.",
+        "마지막은 휴대폰 속 앱 화면과 책, 네이버 검색창 모양의 '밀리의 서재' 검색 유도입니다."],
+   genre:["장편소설","SF"],
+   tech:["실사 연기","유명 배우","질문 카피","작가 이름값","플랫폼 안내"],
+   note:"10편 가운데 조회수가 가장 많습니다(652만). 출판사가 아닌 전자책 구독 플랫폼이 만든 영상으로, 책 홍보와 구독 서비스 광고를 겸합니다." },
+
+ { id:"hannah", book:"해나의 기적", type:"kr", n:781434,
+   meta:"이영미 / 아우름(문학동네) / 에세이",
+   ch:"문학동네", yt:"SpnoIk9bqr0",
+   title:"에세이 『해나의 기적』 MBC '휴먼다큐 사랑' 감동실화 | 이영미 | 북트레일러",
+   len:"0:58", views:"781,434", date:"2013. 6. 10.", m:"200122010222",
+   fmt:"MBC 다큐멘터리 화면을 엮고 자막으로 사연을 전하는 58초 영상",
+   core:"기도(숨관) 없이 태어난 아이 해나의 사연을 방송 장면으로 다시 보여 주고, 방송을 본 사람들의 감동을 책으로 이어 갑니다.",
+   pts:["'기도 없이 태어난 해나', '출생 후 2개월 시한부 판정', '세계 최초 줄기세포 인공기도 이식수술' 같은 자막으로 사연을 차례로 짚습니다.",
+        "웃는 얼굴, 우는 얼굴, 수술 뒤 누워 있는 모습을 번갈아 보여 주며 감정을 끌어올립니다.",
+        "\"2013, 다시 찾아온 큰 감동\"과 \"기적의 아이, 해나의 이야기를 책으로 만나 보세요\"로 방송에서 책으로 넘어갑니다.",
+        "마지막은 표지와 '2013년 6월 20일 출간 예정'입니다."],
+   genre:["에세이","실화","방송 원작"],
+   tech:["다큐 화면","자막 해설","음악","출간 예정 안내"],
+   note:"설명란에 책의 인세와 출판사 수익금 전액을 해나의 치료비로 기부한다고 밝혔습니다. 방송의 화제성을 책 홍보로 이은 사례입니다." },
+
+ { id:"fubao", book:"전지적 푸바오 시점", type:"kr", n:401351,
+   meta:"송영관 글, 류정훈 사진 / 위즈덤하우스 / 사진 에세이",
+   ch:"에버랜드 - EVERLAND", yt:"BYcJXtvZrh0",
+   title:"[ENG][북트레일러] 송바오가 전하는 뚠빵한 하루 『전지적 푸바오 시점』│#에버랜드 #Panda #Fubao",
+   len:"9:36", views:"401,351", date:"2023. 11. 14.", m:"202212002101",
+   fmt:"작가 인터뷰를 문답 자막으로 묶은 9분 36초 제작기형 영상(영어 자막 포함)",
+   core:"푸바오를 돌본 사육사가 왜 푸바오의 눈으로 책을 썼는지 직접 말하고, 책을 만든 과정과 사람들을 보여 줍니다.",
+   pts:["\"책을 엮게 된 계기\", \"첫 출간의 어려움\" 같은 질문을 자막으로 띄우고 송영관 사육사가 답하는 문답 구성입니다.",
+        "동물원 커뮤니티와 브런치에 쓰던 글이 쌓여 책이 되었다고 말합니다.",
+        "출판사 편집자 인터뷰와 표지, 본문 디자인을 고르는 장면으로 책을 만드는 과정을 보여 줍니다.",
+        "중간중간 푸바오 영상과 사진을 넣어 팬이 끝까지 보게 만듭니다.",
+        "처음에 책 속 문장을 영어 자막과 함께 보여 주고 제목에 [ENG]를 달아 해외 팬도 겨냥했습니다."],
+   genre:["사진 에세이","동물"],
+   tech:["작가 인터뷰","문답 자막","제작 과정","인기 캐릭터"],
+   note:"출판사가 아니라 에버랜드가 자기 채널에 올렸습니다. 판다 팬층이 그대로 책 독자로 이어진 사례이고, 10편 가운데 가장 깁니다. 판매처는 영상이 아니라 설명란에서 안내합니다." },
+
+ { id:"villain", book:"악당 아빠를 입양했다", type:"kr", n:250105,
+   meta:"신영미디어 / 카카오페이지 연재 / 로맨스 판타지 웹소설",
+   ch:"신영미디어", yt:"Ib3f9v23BHk",
+   title:"[악당 아빠를 입양했다] 북트레일러",
+   len:"2:02", views:"250,105", date:"2020. 4. 6.", m:"020022200001",
+   fmt:"일러스트 여러 장을 천천히 움직이며 자막 카피로 줄거리를 잇는 웹소설 홍보형(목소리 없음)",
+   core:"'소설 속에 빙의한 주인공이 악당이 될 최애 캐릭터를 아빠로 입양한다'는 설정을 한눈에 알립니다.",
+   pts:["\"가시밭길을 걷는 소설에 빙의했다\"로 시작해 빙의, 최애, 육아처럼 웹소설 독자에게 익숙한 말로 설정을 소개합니다.",
+        "장면마다 자막 카피를 하나씩 띄우고 \"큰 위기가 남아 있었으니……\", \"이게 어떻게 된 거지……?\"처럼 말줄임으로 궁금증을 남깁니다.",
+        "말풍선을 넣은 만화 칸(\"10년 후가 기대된다\", \"드디어 미중년이 될 테니까\")으로 인물의 말투와 유머를 보여 줍니다.",
+        "끝에서 \"두 마리 토끼 육아 로맨스 코미디!\"로 갈래를 한 줄로 정리합니다."],
+   genre:["웹소설","로맨스 판타지"],
+   tech:["일러스트","자막 카피","말줄임 갈고리","갈래 한 줄 정리"],
+   note:"설명란 첫 줄이 카카오페이지 작품 링크입니다. 종이책보다 웹소설 연재 플랫폼으로 독자를 보내는 영상입니다." },
+
+ { id:"worry", book:"걱정이 너무 많아", type:"kr", n:242031,
+   meta:"김영진 글, 그림 / 길벗어린이 / 그림책",
+   ch:"길벗어린이", yt:"gLmYOeQUGxY",
+   title:"[북트레일러] 걱정쟁이 그린이의 걱정 탈출기! 『걱정이 너무 많아』 김영진 글 ·그림",
+   len:"5:39", views:"242,031", date:"2020. 8. 13.", m:"020212021102",
+   fmt:"그림책 장면을 차례로 넘기며 본문을 읽어 주는 5분 39초 낭독형",
+   core:"걱정 괴물이 하나씩 달라붙는 그린이의 이야기를 처음부터 끝까지 들려주어, 그림책 한 권을 영상으로 보여 줍니다.",
+   pts:["바지가 터지고 휴대폰을 잃어버린 뒤 걱정이 생길 때마다 걱정 괴물이 달라붙는 장면부터 시작합니다.",
+        "할머니가 알려 준 방법(걱정 괴물을 집 앞 나무에 매달기), 친구에게 사과하기, 아파트 이웃들이 함께 걱정을 매다는 결말까지 다 보여 줍니다.",
+        "본문 문장을 화면 아래 자막으로 함께 띄워 그림과 글을 같이 읽게 합니다.",
+        "마지막에 '우리 가족의 이야기를 담아낸 김영진 작가의 그림책 시리즈'를 알립니다."],
+   genre:["그림책","유아, 어린이","시리즈 12권째"],
+   tech:["책 그림","낭독","본문 자막","결말 공개"],
+   note:"결말까지 공개하므로 예고편보다는 낭독 영상에 가깝습니다. 교실에서 읽어 주기 자료로 쓰기 좋지만, 책을 직접 펼쳐 볼 이유는 줄어들 수 있습니다." }
+];
+
+const TYPE_LABEL = { intl:"국외", kr:"국내" };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dot = v => v === "2" ? '<span class="dot full" aria-label="중심"></span>' : v === "1" ? '<span class="dot half" aria-label="일부"></span>' : '<span class="dot none" aria-label="없음"></span>';
+const man = n => n >= 10000 ? (n / 10000).toFixed(n >= 1000000 ? 0 : 1).replace(/\.0$/, "") + "만" : n.toLocaleString("ko-KR");
+
+// 조회수 순위(필터와 관계없이 10편 모두)
+const max = Math.max(...V.map(v => v.n));
+document.getElementById("rank").innerHTML = V.slice().sort((a, b) => b.n - a.n).map((v, i) => `
+  <li><span class="no">${i + 1}</span>
+    <span class="bar"><i class="${v.type}" style="width:${(v.n / max * 100).toFixed(1)}%"></i><a href="#v-${v.id}">${esc(v.book)} <small style="color:var(--ink-faint);font-weight:400">${TYPE_LABEL[v.type]}, ${v.len}</small></a></span>
+    <span class="views">조회 ${man(v.n)}</span></li>`).join("");
+
+document.getElementById("thead-row").insertAdjacentHTML("beforeend", THEMES.map(t => `<th scope="col">${esc(t)}</th>`).join(""));
+
+function render(filter) {
+  const list = V.filter(v => filter === "all" || v.type === filter);
+  document.getElementById("tbody").innerHTML = list.map(v =>
+    `<tr><td class="name"><a href="#v-${v.id}">${esc(v.book)}</a><small>${TYPE_LABEL[v.type]}, ${v.len}</small></td>${[...v.m].map(x => `<td>${dot(x)}</td>`).join("")}</tr>`).join("");
+  const foot = THEMES.map((_, i) => {
+    const full = list.filter(v => v.m[i] === "2").length;
+    const any = list.filter(v => v.m[i] !== "0").length;
+    return `<td>${full} / ${any}</td>`;
+  }).join("");
+  document.getElementById("tfoot-row").innerHTML = `<td class="name">쓴 영상 수</td>${foot}`;
+  document.getElementById("cards").innerHTML = list.map(v => `
+    <article class="card vcard" id="v-${v.id}">
+      <div class="callno"><span class="type">${TYPE_LABEL[v.type]}</span><span>${v.date} / ${v.len} / 조회 ${v.views}</span></div>
+      <div style="display:grid;gap:4px">
+        <h3>${esc(v.book)}</h3>
+        <p class="book">${esc(v.meta)}</p>
+        <p class="chan"><a href="https://www.youtube.com/watch?v=${v.yt}" target="_blank" rel="noopener">${esc(v.title)}</a><br>채널: ${esc(v.ch)}</p>
+      </div>
+      <p class="fmt"><b>형식</b> ${esc(v.fmt)}</p>
+      <p class="core">${esc(v.core)}</p>
+      <ul class="points">${v.pts.map(p => `<li>${esc(p)}</li>`).join("")}</ul>
+      <div class="tags">
+        <div class="tagrow"><em>갈래</em>${v.genre.map(c => `<span class="tag">${esc(c)}</span>`).join("")}</div>
+        <div class="tagrow"><em>기법</em>${v.tech.map(c => `<span class="tag">${esc(c)}</span>`).join("")}</div>
+      </div>
+      <p class="note">${esc(v.note)}</p>
+    </article>`).join("");
+}
+
+// 국외, 국내 각각 조회수 순서로 카드를 놓습니다.
+V.sort((a, b) => (a.type === b.type ? b.n - a.n : (a.type === "intl" ? -1 : 1)));
+
+document.querySelectorAll(".bt-chip").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".bt-chip").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  render(b.dataset.f);
+  try { localStorage.setItem("book-trailer-filter", b.dataset.f); } catch (e) {}
+}));
+
+let start = "all";
+try { start = localStorage.getItem("book-trailer-filter") || "all"; } catch (e) {}
+if (!["all","intl","kr"].includes(start)) start = "all";
+document.querySelectorAll(".bt-chip").forEach(x => x.setAttribute("aria-pressed", x.dataset.f === start ? "true" : "false"));
+render(start);
+if (location.hash) { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }
+})();
+</script>
+</body>
+</html>
