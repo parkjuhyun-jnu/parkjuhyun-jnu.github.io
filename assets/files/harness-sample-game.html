@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>마감 10분 전 (하네스 실습 예시 게임)</title>
+<style>
+  :root { --bg:#f7f3ea; --card:#fffdf8; --ink:#22252b; --soft:#5d636c; --line:#e3dccd; --navy:#1f3a5f; --gold:#a8742f; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.7 "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", sans-serif; word-break: keep-all; }
+  main { max-width: 430px; margin: 0 auto; padding: 16px; }
+  header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+  h1 { font-size: 20px; margin: 0; }
+  .clock { font-weight: 700; color: var(--gold); font-size: 17px; white-space: nowrap; }
+  .scene { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .place { font-size: 16px; color: var(--soft); margin: 0 0 6px; }
+  .who { font-weight: 700; color: var(--navy); }
+  .line { margin: 0 0 10px; }
+  .choices { display: grid; gap: 8px; margin-top: 14px; }
+  button { font: inherit; font-size: 17px; text-align: left; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--navy); background: #fff; color: var(--navy); cursor: pointer; }
+  button:hover, button:focus-visible { background: #eaeff7; outline: none; }
+  .note { margin-top: 14px; background: #fff; border: 1px dashed var(--line); border-radius: 10px; padding: 10px 12px; font-size: 16px; }
+  .note h2 { font-size: 16px; margin: 0 0 4px; }
+  .note ul { margin: 0; padding-left: 18px; }
+  .stat { font-size: 16px; color: var(--soft); margin-top: 8px; }
+  footer { margin-top: 16px; font-size: 16px; color: var(--soft); }
+</style>
+</head>
+<body>
+<main>
+  <header><h1>마감 10분 전</h1><span class="clock" id="clock">21:50</span></header>
+  <section class="scene" id="scene" aria-live="polite"></section>
+  <div class="note"><h2>서윤의 수첩</h2><ul id="notes"><li>아직 적은 것이 없다.</li></ul></div>
+  <p class="stat" id="stat"></p>
+  <footer>예시 게임입니다. 박주현 × Claude 공동작업. 등장인물과 책 제목은 모두 지어낸 것입니다.</footer>
+</main>
+<script>
+// 정본(canon)에서 온 인물: 서윤(주인공, 문헌정보학과 2학년 근로학생), 한정은(자료실 사서, 다른 이름: 한 선생님), 도윤(열람실 단골 대학원생).
+// 미해결 사항: 책을 옮긴 사람은 '미상'이다. 게임은 이것을 지어내지 않는다.
+var state = { min: 50, clues: 0, trust: 0, notes: [] };
+var S = {
+  start: {
+    place: '1층 대출반납대',
+    lines: [['', '대학도서관 마감 10분 전. 반납함을 비우던 서윤이 고개를 갸웃한다.'],
+            ['한정은', '서윤 씨, 오후에 들어온 『바다를 건너는 지도』가 목록에는 있는데 반납함에 없어요.'],
+            ['서윤', '제가 찾아볼게요. 마감 전에요.']],
+    choices: [
+      ['반납 목록을 먼저 확인한다 (2분)', 2, function () { state.clues++; note('목록: 17시 12분 반납 처리됨'); return 'list'; }],
+      ['바로 3층 열람실로 올라간다 (1분)', 1, function () { return 'reading'; }]
+    ]
+  },
+  list: {
+    place: '1층 대출반납대',
+    lines: [['', '반납 기록 옆에 "3층 열람실 반납 카트로 옮김"이라는 손글씨 메모가 있다. 누가 썼는지는 적혀 있지 않다.'],
+            ['한정은', '카트로 옮겼다면 아직 열람실에 있을 거예요.']],
+    choices: [
+      ['한정은 선생님께 메모를 보여 드린다 (1분)', 1, function () { state.trust++; note('메모: 3층 반납 카트로 옮김(쓴 사람 미상)'); return 'reading'; }],
+      ['메모를 사진으로만 남기고 올라간다 (1분)', 1, function () { note('메모 사진 있음'); return 'reading'; }]
+    ]
+  },
+  reading: {
+    place: '3층 열람실',
+    lines: [['', '열람실에는 도윤 혼자 남아 노트북을 덮고 있다. 큰 헤드폰을 목에 걸었다.'],
+            ['도윤', '아, 서윤 씨. 마감이죠? 금방 나갈게.'],
+            ['서윤', '혹시 반납 카트에서 파란 표지 지도책 보셨어요?']],
+    choices: [
+      ['도윤에게 차분히 사정을 설명한다 (2분)', 2, function () { state.trust++; state.clues++; note('도윤: 파란 책을 서고 끝 책상에서 봄(제목은 모름)'); return 'stacks'; }],
+      ['카트부터 직접 뒤진다 (3분)', 3, function () { note('카트에는 없음'); return 'stacks'; }]
+    ]
+  },
+  stacks: {
+    place: '3층 서고 끝',
+    lines: [['', '서고 끝 책상 위에 파란 표지의 책이 한 권 놓여 있다. 청구기호 띠지가 반쯤 떨어져 있다.']],
+    choices: [
+      ['청구기호를 확인하고 서가 자리를 기록한다 (2분)', 2, function () { state.clues++; note('서고 끝 책상에서 발견, 띠지 손상'); return 'end'; }],
+      ['책만 들고 서둘러 내려간다 (1분)', 1, function () { return 'end'; }]
+    ]
+  }
+};
+function note(t) { state.notes.push(t); }
+function clock() { var m = state.min; return '21:' + (m < 10 ? '0' : '') + m; }
+function el(tag, text, cls) { var e = document.createElement(tag); if (text) e.textContent = text; if (cls) e.className = cls; return e; }
+function render(id) {
+  var box = document.getElementById('scene'); box.innerHTML = '';
+  if (id === 'end' || state.min >= 60) return ending(box);
+  var s = S[id];
+  box.appendChild(el('p', s.place, 'place'));
+  s.lines.forEach(function (l) {
+    var p = el('p', null, 'line');
+    if (l[0]) { p.appendChild(el('span', l[0] + ': ', 'who')); }
+    p.appendChild(document.createTextNode(l[1])); box.appendChild(p);
+  });
+  var c = el('div', null, 'choices');
+  s.choices.forEach(function (ch) {
+    var b = el('button', ch[0]); b.type = 'button';
+    b.onclick = function () { state.min += ch[1]; var next = ch[2](); show(); render(next); };
+    c.appendChild(b);
+  });
+  box.appendChild(c);
+}
+function ending(box) {
+  var late = state.min >= 60, t;
+  if (late) t = '22시. 마감 방송이 나온다. 책은 내일 다시 찾기로 하고 수첩을 한정은 선생님께 넘긴다.';
+  else if (state.clues >= 3) t = '마감 전에 책을 찾았다. 서윤이 수첩에 적은 경로 덕분에 한정은 선생님이 반납 처리 과정을 바로 고친다.';
+  else t = '마감 전에 책을 찾았다. 다만 어디서 어떻게 찾았는지 적어 둔 것이 적어, 내일 같은 일이 또 생길지도 모른다.';
+  box.appendChild(el('p', late ? '마감' : '찾았다', 'place'));
+  box.appendChild(el('p', t, 'line'));
+  box.appendChild(el('p', '누가 책을 서고 끝으로 옮겼는지는 아직 아무도 모른다.', 'line'));
+  var b = el('button', '처음부터 다시'); b.type = 'button';
+  b.onclick = function () { state = { min: 50, clues: 0, trust: 0, notes: [] }; show(); render('start'); };
+  var c = el('div', null, 'choices'); c.appendChild(b); box.appendChild(c);
+}
+function show() {
+  document.getElementById('clock').textContent = state.min >= 60 ? '22:00' : clock();
+  var ul = document.getElementById('notes'); ul.innerHTML = '';
+  (state.notes.length ? state.notes : ['아직 적은 것이 없다.']).forEach(function (n) { ul.appendChild(el('li', n)); });
+  document.getElementById('stat').textContent = '단서 ' + state.clues + '개, 신뢰 ' + state.trust;
+}
+show(); render('start');
+</script>
+</body>
+</html>
