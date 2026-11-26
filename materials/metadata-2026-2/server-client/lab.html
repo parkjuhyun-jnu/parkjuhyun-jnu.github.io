@@ -13,7 +13,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="materials/metadata-2026-2/server-client/sc.css?v=20261123">
+<link rel="stylesheet" href="materials/metadata-2026-2/server-client/sc.css?v=20261126">
 </head>
 <body>
 
@@ -63,8 +63,16 @@
         <strong>준비물</strong>
         노트북을 권합니다(B의 SQL은 자판으로 쓰는 것이 편합니다). 폰도 됩니다. 크롬, 엣지, 사파리 가운데 아무것이나 씁니다. 설치할 것은 없습니다.
       </div>
+      <div class="addrbox" style="max-width:64ch">
+        <div>
+          <span class="small muted">학생 실습실 주소</span><br>
+          <a class="addr" href="http://1.201.120.29:8080/lab/" target="_blank" rel="noopener">http://1.201.120.29:8080/lab/</a>
+          <p class="small muted">폰 카메라로 QR을 찍거나 이 주소를 누르세요.</p>
+        </div>
+        <img src="materials/metadata-2026-2/server-client/img/qr-lab.svg" width="160" height="160" alt="학생 실습실 주소 http://1.201.120.29:8080/lab/ 의 QR 코드">
+      </div>
       <ol class="steps">
-        <li>교수님이 띄운 주소 <code>http://서버주소:8080/lab/</code>을 브라우저 <b>주소창</b>에 넣습니다. 시연 첫 화면의 <b>학생 실습실</b> 칸을 눌러도 됩니다.</li>
+        <li>브라우저 <b>주소창</b>에 <a href="http://1.201.120.29:8080/lab/" target="_blank" rel="noopener"><code>http://1.201.120.29:8080/lab/</code></a>을 넣습니다. 아래 QR을 폰 카메라로 찍거나, 시연 첫 화면의 <b>학생 실습실</b> 칸을 눌러도 됩니다.</li>
         <li><b>수업 코드</b>를 넣습니다. 칠판(화면)에 있는 것으로, 우리 반만 들어오게 하는 열쇠입니다.</li>
         <li><b>아이디</b>를 정합니다. 영문 소문자로 시작하고 영문 소문자와 숫자로 3~12자입니다(예: <code>jhpark</code>, <code>reader07</code>). 이 아이디가 내 홈페이지 주소가 되므로 학번이나 전화번호처럼 나를 드러내는 것은 피합니다.</li>
         <li><b>비밀번호</b>는 숫자 네 자리입니다. 은행이나 폰 잠금에 쓰는 번호는 쓰지 마세요. 이 서버는 <code>http</code>(자물쇠 없음)라서 연습용 번호만 씁니다. 잊으면 교수님이 초기화해 줍니다.</li>
@@ -75,7 +83,7 @@
       <p class="prose">들어가면 서버 안에 내 자리가 생깁니다. 시연에서 본 웹 루트처럼, 어떤 것은 주소로 열 수 있고 어떤 것은 열 수 없습니다. 실습실 첫 화면 아래에도 같은 표가 있습니다.</p>
       <div class="map" aria-label="서버 폴더와 주소의 짝">
         <div class="h">서버 안의 자리</div><div class="h">주소로 열 수 있나</div>
-        <div>/srv/class-lab/var/sites/아이디/</div><div>http://서버주소:8080/u/아이디/ 로 누구나 열 수 있음 (A)</div>
+        <div>/srv/class-lab/var/sites/아이디/</div><div>http://1.201.120.29:8080/u/아이디/ 로 누구나 열 수 있음 (A)</div>
         <div>/srv/class-lab/var/mydb/아이디.db</div><div class="no">주소 없음. 실습실 화면에서 SQL로만 씀 (B)</div>
         <div>/srv/class-lab/var/catalog.db</div><div class="no">주소 없음. 모두가 읽기만 하는 목록 DB (B)</div>
         <div>/srv/class-lab/var/archive/자료번호/</div><div class="no">주소 없음. 로그인한 사람에게 실습실이 골라서 내어 줌 (C)</div>

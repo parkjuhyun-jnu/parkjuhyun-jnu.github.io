@@ -84,3 +84,10 @@ ul.todo li.done > span { color: var(--ink-faint); text-decoration: line-through;
 .qrbox input { font: inherit; padding: .45rem .6rem; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); width: min(100%, 22rem); }
 #qr { background: #fff; padding: 12px; border-radius: 12px; display: inline-block; min-width: 1px; }
 #qr:empty { display: none; }
+
+/* 수업 서버 주소와 QR (학생 안내 맨 위) */
+.addrbox { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: .8rem; padding: .9rem 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.addrbox > div { flex: 1 1 15rem; min-width: 0; }
+.addrbox .addr { font-size: clamp(1.15rem, 4.6vw, 1.5rem); font-weight: 800; overflow-wrap: anywhere; }
+.addrbox p { margin: .4rem 0 0; }
+.addrbox img { background: #fff; border-radius: 8px; flex: 0 0 auto; }

@@ -51,6 +51,8 @@
   unzip -o class-lab.zip && sudo bash class-lab/setup/install.sh
   → 끝에 학생 입장 코드와 교수 코드가 나옵니다. 가비아 콘솔 방화벽에서 TCP 8080 을 엽니다.
   → 시연: http://공인IP:8080/      학생 실습실: http://공인IP:8080/lab/
+  → 우리 수업 서버(refstd) 공인 IP는 1.201.120.29 입니다.
+     시연: http://1.201.120.29:8080/      학생 실습실: http://1.201.120.29:8080/lab/
 
 [3단계 시연: 목록을 데이터베이스에 넣기]
   cd /srv/class-lab/data
