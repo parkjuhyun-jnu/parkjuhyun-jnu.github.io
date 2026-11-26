@@ -77,6 +77,10 @@ echo
 echo "설치 끝. 서버 안에서 열어 본 결과: 처음 화면 ${code}, 학생 실습실 ${lab} (둘 다 200이면 정상)"
 echo "도구: ffmpeg $(command -v ffmpeg >/dev/null && echo 있음 || echo 없음), exiftool $(command -v exiftool >/dev/null && echo 있음 || echo 없음), heif-convert $(command -v heif-convert >/dev/null && echo 있음 || echo 없음)"
 echo
+echo "== 자체 점검 (1~2분)"
+sudo -u www-data php "$DIR/setup/selftest.php" "$PORT" || true
+echo
+echo "---- 아래 두 줄은 화면 공유나 캡처에 넣지 마세요 ----"
 sudo -u www-data php -r 'require "/srv/class-lab/lib/app.php"; $s = settings(); echo "학생 입장 코드: {$s["class_code"]}\n교수 코드:      {$s["teacher_code"]}  (학생에게 알리지 마세요)\n";'
 echo
 echo "다음: 가비아 콘솔의 방화벽(보안 그룹)에서 TCP ${PORT}번이 열려 있는지 보고,"

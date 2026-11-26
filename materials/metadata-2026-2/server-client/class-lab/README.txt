@@ -38,6 +38,7 @@
     check.sh           서버 상태 점검 (읽기만 함)
     install.sh         실습용 웹 서버 설치 (다시 실행해도 됨, 기본 8080번 문)
     lab-init.php       학생 실습실 준비 (install.sh가 부름. --codes 로 입장 코드와 교수 코드 새로 만들기)
+    selftest.php       자체 점검 (install.sh가 끝에 부름. 다시 하려면: sudo -u www-data php /srv/class-lab/setup/selftest.php)
     demo-reset.sh      수업 직전: 2, 3단계를 ‘아직 없음’으로 되돌리기
     demo-ready.sh      2, 3단계를 한 번에 준비하기 (시연을 건너뛸 때, 수업 뒤)
     uninstall.sh       학기 끝: 실습 서버 끄기 (--files 를 붙이면 폴더와 학생 자료도 지움)
