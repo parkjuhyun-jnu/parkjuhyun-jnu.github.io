@@ -432,7 +432,9 @@ try { start = localStorage.getItem("book-trailer-filter") || "all"; } catch (e) 
 if (!["all","intl","kr"].includes(start)) start = "all";
 document.querySelectorAll(".bt-chip").forEach(x => x.setAttribute("aria-pressed", x.dataset.f === start ? "true" : "false"));
 render(start);
-if (location.hash) { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }
+// 머리 메뉴와 글꼴이 다 그려진 뒤에 옮겨야 제목이 메뉴 밑에 가리지 않습니다.
+const goHash = () => { if (location.hash) { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); } };
+if (document.readyState === "complete") goHash(); else window.addEventListener("load", goHash);
 })();
 </script>
 </body>
